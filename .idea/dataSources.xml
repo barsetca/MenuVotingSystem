@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="HSQLDB" uuid="fc75e6e5-3b63-4cd8-b7d9-2919de492db4">
+      <driver-ref>hsqldb.local</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.hsqldb.jdbc.JDBCDriver</jdbc-driver>
+      <jdbc-url>jdbc:hsqldb:mem:menuvotingsystem</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="HSQLDB (Local)" uuid="dd4a7764-8cec-4b09-848d-5d83a7474aff">
+      <driver-ref>hsqldb.local</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.hsqldb.jdbc.JDBCDriver</jdbc-driver>
+      <jdbc-url>jdbc:hsqldb:file:$PROJECT_DIR$/../../temp/menuvotingsystem</jdbc-url>
+    </data-source>
+  </component>
+</project>
