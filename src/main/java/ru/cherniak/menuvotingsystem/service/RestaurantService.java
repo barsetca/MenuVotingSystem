@@ -13,26 +13,26 @@ import java.util.List;
 @Service
 public class RestaurantService {
 
-    private final Logger log = LoggerFactory.getLogger(RestaurantService.class);
+    protected final Logger log = LoggerFactory.getLogger(RestaurantService.class);
 
 
-    private final  RestaurantRepository restaurantRepository;
+    private final RestaurantRepository repository;
 
     @Autowired
-    public RestaurantService(RestaurantRepository restaurantRepository) {
-        this.restaurantRepository = restaurantRepository;
+    public RestaurantService(RestaurantRepository repository) {
+        this.repository = repository;
     }
 
-    public Restaurant get(long id){
-        log.info("get {}" , id);
+    public Restaurant get(long id) {
+        log.info("get {}", id);
         // return checkNotFoundWithId(restaurantRepository.get(id), id);
-       return restaurantRepository.get(id);
+        return repository.get(id);
     }
 
     public Restaurant create(Restaurant restaurant) {
         log.info("create {}", restaurant);
         Assert.notNull(restaurant, "user must not be null");
-        return restaurantRepository.save(restaurant);
+        return repository.save(restaurant);
 
     }
 
@@ -40,25 +40,25 @@ public class RestaurantService {
         log.info("update {}", restaurant);
         Assert.notNull(restaurant, "user must not be null");
         // checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
-        return restaurantRepository.save(restaurant);
+        return repository.save(restaurant);
 
     }
 
-    public void delete(long id){
+    public void delete(long id) {
         log.info("delete {}", id);
         //checkNotFoundWithId(repository.delete(id), id);
-        restaurantRepository.delete(id);
+        repository.delete(id);
     }
 
-    public Restaurant getByName(String name){
+    public Restaurant getByName(String name) {
         log.info("getByName {}", name);
         Assert.notNull(name, "name must not be null");
         // return checkNotFound(restaurantRepository.getByName(name), "name=" + name);
-        return restaurantRepository.getByName(name);
+        return repository.getByName(name);
     }
 
-   public List<Restaurant> getAll(){
+    public List<Restaurant> getAll() {
         log.info("getAll");
-        return restaurantRepository.getAll();
+        return repository.getAll();
     }
 }
