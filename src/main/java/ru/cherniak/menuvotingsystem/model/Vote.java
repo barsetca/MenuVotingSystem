@@ -32,12 +32,12 @@ public class Vote extends AbstractBase {
     private LocalDate date;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Restaurant.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Restaurant.class)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
     private Restaurant restaurant;
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     private User user;
