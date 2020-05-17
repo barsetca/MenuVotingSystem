@@ -37,7 +37,7 @@ public class Dish extends AbstractBaseNameId {
     @Min(0)
     private Integer price;
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Restaurant.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Restaurant.class)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
     private Restaurant restaurant;
