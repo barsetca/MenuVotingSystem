@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
-import ru.cherniak.menuvotingsystem.repository.RestaurantRepository;
+import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
 
 import java.util.List;
 
@@ -60,5 +60,17 @@ public class RestaurantService {
     public List<Restaurant> getAll() {
         log.info("getAll");
         return repository.getAll();
+    }
+
+    public Restaurant getWithListVotes(long id) {
+        log.info("getWithListVotes {}", id);
+        return repository.getWithListVotes(id);
+        //        return checkNotFoundWithId(repository.getWithListMeals(id), id);
+    }
+
+    public Restaurant getWithListDishes(long id) {
+        log.info("getWithListDishes {}", id);
+        return repository.getWithListDishes(id);
+//        return checkNotFoundWithId(repository.getWithListMeals(id), id);
     }
 }

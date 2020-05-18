@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Vote;
-import ru.cherniak.menuvotingsystem.repository.VoteRepository;
+import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,24 +43,34 @@ public class VoteService {
         return repository.delete(date, userId);
     }
 
-    public long getRestaurantVotesByDate(@Nullable LocalDate date, long restaurantId) {
-        log.info("getRestaurantVotesByDate by restaurant {} date {}", restaurantId, date);
-        return repository.getRestaurantVotesByDate(date, restaurantId);
+    public long countByDateAndRestaurant(@Nullable LocalDate date, long restaurantId) {
+        log.info("countByDateAndRestaurant by restaurant {} date {}", restaurantId, date);
+        return repository.countByDateAndRestaurant(date, restaurantId);
     }
 
-    public long getAllRestaurantVotes(long restaurantId) {
-        log.info("getAllRestaurantVotes by restaurant {}", restaurantId);
-        return repository.getAllRestaurantVotes(restaurantId);
+    public long countByRestaurant(long restaurantId) {
+        log.info("countByRestaurant by restaurant {}", restaurantId);
+        return repository.countByRestaurant(restaurantId);
     }
 
-    public long getAllRestaurantVotesBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
-                                                           long restaurantId) {
-        log.info("getAllRestaurantVotesBetweenDatesInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
-        return repository.getAllRestaurantVotesBetween(startDate, endDate, restaurantId);
+    public long countByRestaurantAndDateBetweenInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
+                                                         long restaurantId) {
+        log.info("countByRestaurantAndDateBetweenInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
+        return repository.countByRestaurantAndDateBetween(startDate, endDate, restaurantId);
     }
 
     public List<Vote> getAll() {
         log.info("getAll");
         return repository.getAll();
+    }
+
+    public Vote getOneByDateWithUserAndRestaurant(@Nullable LocalDate date, long userId) {
+        log.info("getOneByDateWithUserAndRestaurant by user {} date {}", userId, date);
+        return repository.getOneByDateWithUserAndRestaurant(date, userId);
+    }
+
+    public List<Vote> getAllByDateWithRestaurantAndUser(@Nullable LocalDate date) {
+        log.info("getAllByDateWithRestaurantAndUser by date {}", date);
+        return repository.getAllByDateWithRestaurantAndUser(date);
     }
 }

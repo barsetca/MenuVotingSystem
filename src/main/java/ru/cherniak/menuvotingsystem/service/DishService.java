@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Dish;
-import ru.cherniak.menuvotingsystem.repository.DishRepository;
+import ru.cherniak.menuvotingsystem.repository.dish.DishRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -72,7 +72,11 @@ public class DishService {
         return repository.getAllBetweenInclusive(startDate, endDate, restaurantId);
     }
 
-//    public List<Dish> getDayMenuWithRestaurant(@Nullable LocalDate date, int restaurantId) {
-//        return repository.getDayMenuWithRestaurant(date, restaurantId);
-//    }
+    public Dish getWithRestaurant(long id, long restaurantId) {
+        return repository.getWithRestaurant(id, restaurantId);
+    }
+
+    public List<Dish> getDayMenuByDateWithRestaurant(@Nullable LocalDate date, long restaurantId) {
+        return repository.getDayMenuByDateWithRestaurant(date, restaurantId);
+    }
 }

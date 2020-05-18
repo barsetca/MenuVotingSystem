@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.repository;
+package ru.cherniak.menuvotingsystem.repository.user;
 
 import ru.cherniak.menuvotingsystem.model.User;
 
@@ -18,5 +18,7 @@ public interface UserRepository {
     User getByEmail(String email);
 
     List<User> getAll();
+
+    User getWithListVotes(long id);
 }
 

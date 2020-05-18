@@ -9,8 +9,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
+import ru.cherniak.menuvotingsystem.model.Vote;
 
 import java.util.Collections;
 import java.util.Date;
@@ -83,5 +85,12 @@ public class UserServiceTest {
     public void getAll() throws Exception {
         List<User> all = service.getAll();
         assertMatch(all, ADMIN, USER);
+    }
+
+    @Test
+    public void getWithListVotes() {
+        User user = service.getWithListVotes(USER_ID);
+        List<Vote> votes = user.getVotes();
+        VoteTestData.assertMatch(votes, VoteTestData.VOTE_1, VoteTestData.VOTE_3);
     }
 }

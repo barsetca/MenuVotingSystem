@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.repository;
+package ru.cherniak.menuvotingsystem.repository.restaurant;
 
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 
@@ -15,4 +15,8 @@ public interface RestaurantRepository {
     Restaurant getByName(String name);
 
     List<Restaurant> getAll();
+
+    Restaurant getWithListVotes(long id);
+
+    Restaurant getWithListDishes(long id);
 }

@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.repository;
+package ru.cherniak.menuvotingsystem.repository.dish;
 
 
 import org.springframework.lang.Nullable;
@@ -21,5 +21,7 @@ public interface DishRepository {
 
     List<Dish> getAllBetweenInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long restaurantId);
 
-//    List<Dish> getDayMenuWithRestaurant(LocalDate date, int restaurantId);
+    Dish getWithRestaurant(long id, long restaurantId);
+
+    List<Dish> getDayMenuByDateWithRestaurant(LocalDate date, long restaurantId);
 }

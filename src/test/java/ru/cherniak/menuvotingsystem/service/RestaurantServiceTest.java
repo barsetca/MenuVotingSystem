@@ -3,20 +3,17 @@ package ru.cherniak.menuvotingsystem.service;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.cherniak.menuvotingsystem.RestaurantTestData;
+import ru.cherniak.menuvotingsystem.DishTestData;
+import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
-import ru.cherniak.menuvotingsystem.model.Role;
-import ru.cherniak.menuvotingsystem.model.User;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
 
 @ContextConfiguration({
@@ -24,7 +21,7 @@ import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql" , config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class RestaurantServiceTest {
 
     @Autowired
@@ -35,7 +32,6 @@ public class RestaurantServiceTest {
         Restaurant restaurant = service.get(RESTAURANT1_ID);
         assertMatch(restaurant, RESTAURANT1);
     }
-
 
 
     @Test
@@ -55,7 +51,7 @@ public class RestaurantServiceTest {
         Restaurant updated = new Restaurant(RESTAURANT2);
         updated.setName("updateName");
         service.update(updated);
-        assertMatch(service.get(RESTAURANT2_ID) , updated);
+        assertMatch(service.get(RESTAURANT2_ID), updated);
     }
 
     @Test
@@ -73,5 +69,17 @@ public class RestaurantServiceTest {
     public void getAll() {
         List<Restaurant> all = service.getAll();
         assertMatch(all, RESTAURANT1, RESTAURANT2);
+    }
+
+    @Test
+    public void getWithListVotes() {
+        Restaurant restaurant = service.getWithListVotes(RESTAURANT2_ID);
+        VoteTestData.assertMatch(restaurant.getVotes(), VoteTestData.VOTE_2, VoteTestData.VOTE_3);
+    }
+
+    @Test
+    public void getWithListDishes() {
+        Restaurant restaurant = service.getWithListDishes(RESTAURANT1_ID);
+        DishTestData.assertMatch(restaurant.getDishes(), DishTestData.ALL_DISHES_R1_ORDER_BY_ID);
     }
 }
