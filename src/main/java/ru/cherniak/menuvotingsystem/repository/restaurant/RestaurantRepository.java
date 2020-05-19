@@ -24,5 +24,5 @@ public interface RestaurantRepository {
 
     List<Restaurant> findAllWithVotes();
 
-//  Restaurant getWithDishesAndVotes(long id);
+    List<Restaurant> getAllWithDishesAndVotes();
 }

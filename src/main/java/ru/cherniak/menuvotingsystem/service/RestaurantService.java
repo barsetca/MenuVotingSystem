@@ -75,17 +75,19 @@ public class RestaurantService {
     }
 
 
-    public List<Restaurant> findAllWithDishes(){
+    public List<Restaurant> getAllWithDishes(){
+        log.info("findAllWithDishes");
         return repository.findAllWithDishes();
     }
 
 
-    public List<Restaurant> findAllWithVotes(){
+    public List<Restaurant> getAllWithVotes(){
+        log.info("findAllWithVotes");
         return repository.findAllWithVotes();
     }
 
-
-//    public Restaurant findAllWithDishesAndVotes(long id){
-//        return repository.getWithDishesAndVotes(id);
-//    }
+    public List<Restaurant> getAllWithDishesAndVotes(){
+        log.info("getWithDishesAndVotes");
+        return repository.getAllWithDishesAndVotes();
+    }
 }

@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @NamedQueries({
         @NamedQuery(name = Restaurant.DELETE, query = "DELETE FROM Restaurant r WHERE r.id =:id"),
@@ -42,11 +43,11 @@ public class Restaurant extends AbstractBaseNameId {
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     @OrderBy("date DESC, price DESC")
-    private List<Dish> dishes;
+    private Set<Dish> dishes;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     @OrderBy("date DESC, restaurant ASC")
-    private List<Vote> votes;
+    private Set<Vote> votes;
 
     public Restaurant() {
     }
@@ -113,19 +114,19 @@ public class Restaurant extends AbstractBaseNameId {
         this.address = address;
     }
 
-    public List<Dish> getDishes() {
+    public Set<Dish> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<Dish> dishes) {
+    public void setDishes(Set<Dish> dishes) {
         this.dishes = dishes;
     }
 
-    public List<Vote> getVotes() {
+    public Set<Vote> getVotes() {
         return votes;
     }
 
-    public void setVotes(List<Vote> votes) {
+    public void setVotes(Set<Vote> votes) {
         this.votes = votes;
     }
 
