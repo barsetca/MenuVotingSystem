@@ -73,4 +73,9 @@ public class VoteService {
         log.info("getAllByDateWithRestaurantAndUser by date {}", date);
         return repository.getAllByDateWithRestaurantAndUser(date);
     }
+
+    public List<Vote> getAllWithRestaurant(){
+        log.info("getAllWithRestaurant");
+        return repository.getAllWithRestaurant();
+    }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 public class DishRepositoryImpl implements DishRepository {
 
     private static final Sort SORT_DATE_PRICE = Sort.by(Sort.Direction.DESC, "date", "price");
+    private static final Sort SORT_PRICE = Sort.by(Sort.Direction.DESC, "price");
 
     @Autowired
     private JpaDishRepository repository;
@@ -52,12 +53,12 @@ public class DishRepositoryImpl implements DishRepository {
 
     @Override
     public List<Dish> getDayMenu(LocalDate date, long restaurantId) {
-        return repository.findAllByDateAndRestaurantId(date, restaurantId, SORT_DATE_PRICE);
+        return repository.findAllByDateAndRestaurantId(date, restaurantId, SORT_PRICE);
     }
 
     @Override
-    public List<Dish> getAllBetweenInclusive(LocalDate startDate, LocalDate endDate, long restaurantId) {
-        return repository.findAllByRestaurantIdAndDateBetween(restaurantId, startDate, endDate, SORT_DATE_PRICE);
+    public List<Dish> getAllByRestaurantBetweenInclusive(LocalDate startDate, LocalDate endDate, long restaurantId) {
+        return repository.findAllByRestaurantIdAndDateBetween(restaurantId, startDate, endDate, SORT_PRICE);
     }
 //    return crudRepository.findAll(userId, DateTimeUtil.getStartInclusive(startDate), DateTimeUtil.getEndExclusive(endDate));
 
@@ -70,6 +71,12 @@ public class DishRepositoryImpl implements DishRepository {
     @Override
     @Transactional
     public List<Dish> getDayMenuByDateWithRestaurant(LocalDate date, long restaurantId) {
-        return repository.getAllByDateWithRestaurant(date, restaurantId, SORT_DATE_PRICE);
+        return repository.getAllByDateAndRestaurantIdWithRestaurant(date, restaurantId, SORT_DATE_PRICE);
+    }
+
+    @Override
+    @Transactional
+    public List<Dish> getAllDayMenuByDateWithRestaurant (LocalDate date){
+        return repository.getAllByDateWithRestaurant(date);
     }
 }

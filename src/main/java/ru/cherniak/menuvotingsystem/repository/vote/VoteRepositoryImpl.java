@@ -78,4 +78,10 @@ public class VoteRepositoryImpl implements VoteRepository {
     public List<Vote> getAllByDateWithRestaurantAndUser(LocalDate date) {
         return repository.getAllByDateWithRestaurantAndUser(date);
     }
+
+    @Override
+    @Transactional
+    public List<Vote> getAllWithRestaurant(){
+        return repository.getAllWithRestaurant();
+    }
 }

@@ -125,4 +125,11 @@ public class VoteServiceTest {
         RestaurantTestData.assertMatch(restaurants, RESTAURANT1, RESTAURANT2);
         assertMatch(users, USER, ADMIN);
     }
+
+    @Test
+    public void getAllWithRestaurant() {
+        List<Vote> votes = service.getAllWithRestaurant();
+        List<Restaurant> restaurants = List.of(votes.get(0).getRestaurant(), votes.get(1).getRestaurant(), votes.get(2).getRestaurant());
+        RestaurantTestData.assertMatch(restaurants, RESTAURANT1, RESTAURANT2, RESTAURANT2);
+    }
 }

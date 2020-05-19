@@ -12,7 +12,7 @@
         </bean>
     -->
 
-    <!--    <import resource="spring-tools.xml"/>-->
+        <import resource="spring-tools.xml"/>
 
     <!-- Not necessary, already included with component-scan -->
     <!--<context:annotation-config/>-->

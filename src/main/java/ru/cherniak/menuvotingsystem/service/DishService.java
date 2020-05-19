@@ -66,10 +66,10 @@ public class DishService {
     }
 
 
-    public List<Dish> getAllBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
-                                                  long restaurantId) {
+    public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
+                                                              long restaurantId) {
         log.info("getAllBetweenDatesInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
-        return repository.getAllBetweenInclusive(startDate, endDate, restaurantId);
+        return repository.getAllByRestaurantBetweenInclusive(startDate, endDate, restaurantId);
     }
 
     public Dish getWithRestaurant(long id, long restaurantId) {
@@ -78,5 +78,9 @@ public class DishService {
 
     public List<Dish> getDayMenuByDateWithRestaurant(@Nullable LocalDate date, long restaurantId) {
         return repository.getDayMenuByDateWithRestaurant(date, restaurantId);
+    }
+
+    public List<Dish> getAllDayMenuByDateWithRestaurant (@Nullable LocalDate date){
+        return repository.getAllDayMenuByDateWithRestaurant(date);
     }
 }

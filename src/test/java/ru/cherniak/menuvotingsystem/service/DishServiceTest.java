@@ -13,11 +13,11 @@ import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.cherniak.menuvotingsystem.DishTestData.*;
-import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1;
-import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
+import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -85,7 +85,7 @@ public class DishServiceTest {
     @Test
     public void getAllBetweenDatesInclusive() {
         Dish today = service.create(getCreatedToday(), RESTAURANT1_ID);
-        List<Dish> allBetween = service.getAllBetweenDatesInclusive(LocalDate.now(), DATE_300520,
+        List<Dish> allBetween = service.getAllByRestaurantBetweenDatesInclusive(LocalDate.now(), DATE_300520,
                 RESTAURANT1_ID);
         assertMatch(allBetween, DISH_1, DISH_2, today);
     }
@@ -104,5 +104,13 @@ public class DishServiceTest {
         Restaurant restaurant = dish.getRestaurant();
         RestaurantTestData.assertMatch(restaurant, RESTAURANT1);
 
+    }
+
+    @Test
+    public void getAllDayMenuByDateWithRestaurant() {
+        List<Dish> dishes = service.getAllDayMenuByDateWithRestaurant(DATE_300520);
+        List<Restaurant> restaurants = new ArrayList<>();
+        dishes.forEach(d -> restaurants.add(d.getRestaurant()));
+        RestaurantTestData.assertMatch(restaurants, RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
     }
 }

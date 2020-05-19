@@ -26,4 +26,6 @@ public interface VoteRepository {
 
     List<Vote> getAllByDateWithRestaurantAndUser(LocalDate date);
 
+    List<Vote> getAllWithRestaurant();
+
 }

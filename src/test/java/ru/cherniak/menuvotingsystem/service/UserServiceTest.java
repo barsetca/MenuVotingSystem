@@ -32,6 +32,8 @@ public class UserServiceTest {
     @Autowired
     private UserService service;
 
+
+
     @Test
     public void create() throws Exception {
         User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", Role.ROLE_USER);
