@@ -27,7 +27,6 @@ public class DishTestData {
 
 
     public static final List<Dish> ALL_DISHES_R1 = List.of(DISH_6, DISH_5, DISH_1, DISH_2);
-    public static final List<Dish> ALL_DISHES_R1_ORDER_BY_ID = List.of(DISH_1, DISH_2, DISH_5, DISH_6);
     public static final List<Dish> ALL_DISHES_R2 = List.of(DISH_7, DISH_8, DISH_3, DISH_4);
 
     public static Dish getCreatedToday() {

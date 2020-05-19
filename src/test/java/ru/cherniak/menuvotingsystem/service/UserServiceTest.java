@@ -93,6 +93,6 @@ public class UserServiceTest {
     public void getWithListVotes() {
         User user = service.getWithListVotes(USER_ID);
         List<Vote> votes = user.getVotes();
-        VoteTestData.assertMatch(votes, VoteTestData.VOTE_1, VoteTestData.VOTE_3);
+        VoteTestData.assertMatch(votes, VoteTestData.VOTE_3, VoteTestData.VOTE_1);
     }
 }

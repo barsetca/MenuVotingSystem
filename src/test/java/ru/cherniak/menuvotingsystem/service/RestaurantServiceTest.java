@@ -10,8 +10,11 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.VoteTestData;
+import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
+import ru.cherniak.menuvotingsystem.model.Vote;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
@@ -74,12 +77,33 @@ public class RestaurantServiceTest {
     @Test
     public void getWithListVotes() {
         Restaurant restaurant = service.getWithListVotes(RESTAURANT2_ID);
-        VoteTestData.assertMatch(restaurant.getVotes(), VoteTestData.VOTE_2, VoteTestData.VOTE_3);
+        VoteTestData.assertMatch(restaurant.getVotes(), VoteTestData.VOTE_3, VoteTestData.VOTE_2);
     }
 
     @Test
     public void getWithListDishes() {
         Restaurant restaurant = service.getWithListDishes(RESTAURANT1_ID);
-        DishTestData.assertMatch(restaurant.getDishes(), DishTestData.ALL_DISHES_R1_ORDER_BY_ID);
+        DishTestData.assertMatch(restaurant.getDishes(), DishTestData.ALL_DISHES_R1);
     }
+
+    @Test
+    public void findAllWithDishes() {
+        List<Restaurant> restaurants = service.findAllWithDishes();
+        List<Dish> dishes1 = restaurants.get(0).getDishes();
+        List<Dish> dishes2 = restaurants.get(1).getDishes();
+        DishTestData.assertMatch(dishes1, DishTestData.ALL_DISHES_R1);
+        DishTestData.assertMatch(dishes2, DishTestData.ALL_DISHES_R2);
+
+    }
+
+    @Test
+    public void findAllWithVotes() {
+        List<Restaurant> restaurants = service.findAllWithVotes();
+        List<Vote> votes1 = restaurants.get(0).getVotes();
+        List<Vote> votes2 = restaurants.get(1).getVotes();
+        VoteTestData.assertMatch(votes1, VoteTestData.VOTE_1);
+        VoteTestData.assertMatch(votes2, VoteTestData.VOTE_3, VoteTestData.VOTE_2);
+
+    }
+
 }

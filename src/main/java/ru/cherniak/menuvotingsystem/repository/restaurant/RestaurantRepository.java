@@ -19,4 +19,10 @@ public interface RestaurantRepository {
     Restaurant getWithListVotes(long id);
 
     Restaurant getWithListDishes(long id);
+
+    List<Restaurant> findAllWithDishes();
+
+    List<Restaurant> findAllWithVotes();
+
+//  Restaurant getWithDishesAndVotes(long id);
 }

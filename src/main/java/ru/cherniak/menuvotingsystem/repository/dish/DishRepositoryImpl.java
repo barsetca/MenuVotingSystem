@@ -58,7 +58,7 @@ public class DishRepositoryImpl implements DishRepository {
 
     @Override
     public List<Dish> getAllByRestaurantBetweenInclusive(LocalDate startDate, LocalDate endDate, long restaurantId) {
-        return repository.findAllByRestaurantIdAndDateBetween(restaurantId, startDate, endDate, SORT_PRICE);
+        return repository.findAllByRestaurantIdAndDateBetween(restaurantId, startDate, endDate, SORT_DATE_PRICE);
     }
 //    return crudRepository.findAll(userId, DateTimeUtil.getStartInclusive(startDate), DateTimeUtil.getEndExclusive(endDate));
 

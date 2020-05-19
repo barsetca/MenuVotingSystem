@@ -56,4 +56,21 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
         return repository.findOneWithDishes(id);
     }
 
+    @Override
+    @Transactional
+    public List<Restaurant> findAllWithDishes(){
+        return repository.findAllWithDishes(SORT_BY_NAME);
+    }
+    @Override
+    @Transactional
+    public List<Restaurant> findAllWithVotes(){
+        return repository.findAllWithVotes(SORT_BY_NAME);
+    }
+
+//    @Override
+//    @Transactional
+//    public Restaurant getWithDishesAndVotes(long id){
+//        return repository.findOneByIdWithDishesAndVotes(id, SORT_BY_NAME);
+//    }
+
 }

@@ -73,4 +73,19 @@ public class RestaurantService {
         return repository.getWithListDishes(id);
 //        return checkNotFoundWithId(repository.getWithListMeals(id), id);
     }
+
+
+    public List<Restaurant> findAllWithDishes(){
+        return repository.findAllWithDishes();
+    }
+
+
+    public List<Restaurant> findAllWithVotes(){
+        return repository.findAllWithVotes();
+    }
+
+
+//    public Restaurant findAllWithDishesAndVotes(long id){
+//        return repository.getWithDishesAndVotes(id);
+//    }
 }
