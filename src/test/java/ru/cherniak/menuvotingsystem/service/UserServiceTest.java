@@ -1,54 +1,43 @@
 package ru.cherniak.menuvotingsystem.service;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
+
 import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.model.Vote;
 
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
 
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class UserServiceTest {
+class UserServiceTest extends AbstractServiceTest{
 
     @Autowired
     private UserService service;
 
-
-
     @Test
-    public void create() throws Exception {
+    void create() throws Exception {
         User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", Role.ROLE_USER);
         User created = service.create(newUser);
         newUser.setId(created.getId());
         assertMatch(service.getAll(), ADMIN, newUser, USER);
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
-    public void duplicateMailCreate() throws Exception {
-        service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
+    @Test
+    void duplicateMailCreate() throws Exception {
+        assertThrows(DataIntegrityViolationException.class, () ->
+                service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER)));
+
     }
 
     @Test
-    public void delete() throws Exception {
+    void delete() throws Exception {
         service.delete(USER_ID);
         assertMatch(service.getAll(), ADMIN);
     }
@@ -59,7 +48,7 @@ public class UserServiceTest {
 //    }
 
     @Test
-    public void get() throws Exception {
+    void get() throws Exception {
         User user = service.get(USER_ID);
         assertMatch(user, USER);
     }
@@ -70,13 +59,13 @@ public class UserServiceTest {
 //    }
 
     @Test
-    public void getByEmail() throws Exception {
+    void getByEmail() throws Exception {
         User user = service.getByEmail("user@yandex.ru");
         assertMatch(user, USER);
     }
 
     @Test
-    public void update() throws Exception {
+    void update() throws Exception {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         service.update(updated);
@@ -84,13 +73,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getAll() throws Exception {
+    void getAll() throws Exception {
         List<User> all = service.getAll();
         assertMatch(all, ADMIN, USER);
     }
 
     @Test
-    public void getWithListVotes() {
+    void getWithListVotes() {
         User user = service.getWithListVotes(USER_ID);
         List<Vote> votes = user.getVotes();
         VoteTestData.assertMatch(votes, VoteTestData.VOTE_3, VoteTestData.VOTE_1);
