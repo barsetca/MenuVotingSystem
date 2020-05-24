@@ -15,7 +15,9 @@ public interface DishRepository {
 
     boolean delete(long dishId, long restaurantId);
 
-    List<Dish> getAll(long restaurantId);
+    List<Dish> getAllWithRestaurant();
+
+    List<Dish> getAllByRestaurant(long restaurantId);
 
     List<Dish> getDayMenu(@Nullable LocalDate date, long restaurantId);
 

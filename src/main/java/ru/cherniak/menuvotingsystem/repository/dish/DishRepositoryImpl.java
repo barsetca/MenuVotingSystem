@@ -16,6 +16,8 @@ import java.util.List;
 public class DishRepositoryImpl implements DishRepository {
 
     private static final Sort SORT_DATE_PRICE = Sort.by(Sort.Direction.DESC, "date", "price");
+    private static final Sort SORT_DATE_RID_PRICE = Sort.by(Sort.Direction.DESC, "date", "restaurant.id", "price");
+    private static final Sort SORT_RID_PRICE = Sort.by(Sort.Direction.DESC, "restaurant.id", "price");
     private static final Sort SORT_PRICE = Sort.by(Sort.Direction.DESC, "price");
 
     @Autowired
@@ -42,12 +44,21 @@ public class DishRepositoryImpl implements DishRepository {
 
     @Override
     @Transactional
+    public List<Dish> getAllWithRestaurant() {
+        return repository.findAllWithRestaurant(SORT_DATE_RID_PRICE);
+    }
+
+    @Override
+    @Transactional
     public boolean delete(long id, long restaurantId) {
         return repository.delete(id, restaurantId) != 0;
     }
 
+
+
+
     @Override
-    public List<Dish> getAll(long restaurantId) {
+    public List<Dish> getAllByRestaurant(long restaurantId) {
         return repository.findAllByRestaurantId(restaurantId, SORT_DATE_PRICE);
     }
 
@@ -71,12 +82,12 @@ public class DishRepositoryImpl implements DishRepository {
     @Override
     @Transactional
     public List<Dish> getDayMenuByDateWithRestaurant(LocalDate date, long restaurantId) {
-        return repository.getAllByDateAndRestaurantIdWithRestaurant(date, restaurantId, SORT_DATE_PRICE);
+        return repository.findAllByDateAndRestaurantIdWithRestaurant(date, restaurantId, SORT_PRICE);
     }
 
     @Override
     @Transactional
     public List<Dish> getAllDayMenuByDateWithRestaurant (LocalDate date){
-        return repository.getAllByDateWithRestaurant(date);
+        return repository.findAllByDateWithRestaurant(date, SORT_RID_PRICE);
     }
 }

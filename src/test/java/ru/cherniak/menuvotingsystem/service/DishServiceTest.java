@@ -3,7 +3,7 @@ package ru.cherniak.menuvotingsystem.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-
+import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.cherniak.menuvotingsystem.DishTestData.assertMatch;
 import static ru.cherniak.menuvotingsystem.DishTestData.*;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
 
@@ -54,9 +55,9 @@ class DishServiceTest extends AbstractServiceTest {
     }
 
     @Test
-   void getAll() {
-        List<Dish> all1 = service.getAll(RESTAURANT1_ID);
-        List<Dish> all2 = service.getAll(RestaurantTestData.RESTAURANT2_ID);
+    void getAll() {
+        List<Dish> all1 = service.getAllByRestaurant(RESTAURANT1_ID);
+        List<Dish> all2 = service.getAllByRestaurant(RestaurantTestData.RESTAURANT2_ID);
         assertMatch(all1, ALL_DISHES_R1);
         assertMatch(all2, ALL_DISHES_R2);
     }
@@ -86,6 +87,7 @@ class DishServiceTest extends AbstractServiceTest {
     void getDayMenuByDateWithRestaurant() {
         List<Dish> dishes = service.getDayMenuByDateWithRestaurant(DATE_300520, RESTAURANT1_ID);
         Restaurant restaurant = dishes.get(0).getRestaurant();
+        assertMatch(dishes, DISH_1, DISH_2);
         RestaurantTestData.assertMatch(restaurant, RESTAURANT1);
 
     }
@@ -94,6 +96,7 @@ class DishServiceTest extends AbstractServiceTest {
     void getWithRestaurant() {
         Dish dish = service.getWithRestaurant(DISH_ID, RESTAURANT1_ID);
         Restaurant restaurant = dish.getRestaurant();
+        assertMatch(dish, DISH_1);
         RestaurantTestData.assertMatch(restaurant, RESTAURANT1);
 
     }
@@ -103,6 +106,19 @@ class DishServiceTest extends AbstractServiceTest {
         List<Dish> dishes = service.getAllDayMenuByDateWithRestaurant(DATE_300520);
         List<Restaurant> restaurants = new ArrayList<>();
         dishes.forEach(d -> restaurants.add(d.getRestaurant()));
-        RestaurantTestData.assertMatch(restaurants, RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
+        assertMatch(dishes, DISH_3, DISH_4, DISH_1, DISH_2);
+        RestaurantTestData.assertMatch(restaurants, RESTAURANT2, RESTAURANT2, RESTAURANT1, RESTAURANT1);
+    }
+
+    @Test
+    void getAllWithRestaurant() {
+        List<Dish> dishes = service.getAllWithRestaurant();
+        List<Restaurant> restaurants = new ArrayList<>();
+        dishes.forEach(d -> restaurants.add(d.getRestaurant()));
+        assertMatch(dishes, ALL_DISHES);
+        RestaurantTestData.assertMatch(restaurants,
+                RESTAURANT2, RESTAURANT2, RESTAURANT1, RESTAURANT1,
+                RESTAURANT2, RESTAURANT2, RESTAURANT1, RESTAURANT1);
     }
 }
+

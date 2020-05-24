@@ -17,6 +17,7 @@ import java.util.List;
 public class VoteRepositoryImpl implements VoteRepository {
 
     private static final Sort SORT_DATE_RESTAURANT = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurantId"));
+    private static final Sort SORT_DATE_RESTAURANT_WITH = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurant.id"));
 
     @Autowired
     private JpaVoteRepository repository;
@@ -82,6 +83,6 @@ public class VoteRepositoryImpl implements VoteRepository {
     @Override
     @Transactional
     public List<Vote> getAllWithRestaurant(){
-        return repository.getAllWithRestaurant();
+        return repository.getAllWithRestaurant(SORT_DATE_RESTAURANT_WITH);
     }
 }

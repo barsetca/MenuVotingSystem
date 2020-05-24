@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Vote;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,6 +36,6 @@ public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant JOIN FETCH v.user WHERE v.date=:date ORDER BY v.restaurant.id")
     List<Vote> getAllByDateWithRestaurantAndUser(@Param("date") LocalDate date);
 
-    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant ORDER BY v.restaurant.id")
-    List<Vote> getAllWithRestaurant();
+    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant")
+    List<Vote> getAllWithRestaurant(Sort sort);
 }

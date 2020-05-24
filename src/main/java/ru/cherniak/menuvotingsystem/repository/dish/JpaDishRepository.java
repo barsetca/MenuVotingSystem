@@ -36,11 +36,12 @@ public interface JpaDishRepository extends JpaRepository<Dish, Long> {
 
 
     @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.date=:date AND d.restaurant.id=:restaurantId")
-    List<Dish> getAllByDateAndRestaurantIdWithRestaurant(@Param("date") LocalDate date, @Param("restaurantId") long restaurantId, Sort sort);
+    List<Dish> findAllByDateAndRestaurantIdWithRestaurant(@Param("date") LocalDate date, @Param("restaurantId") long restaurantId, Sort sort);
 
-    @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.date=:date ORDER BY d.restaurant.id")
-    List<Dish> getAllByDateWithRestaurant(@Param("date") LocalDate date);
+    @Query("SELECT d FROM Dish d LEFT OUTER JOIN FETCH d.restaurant WHERE d.date=:date")
+    List<Dish> findAllByDateWithRestaurant(@Param("date") LocalDate date, Sort sort);
 
-
+    @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant")
+    List<Dish> findAllWithRestaurant(Sort sort);
 }
 

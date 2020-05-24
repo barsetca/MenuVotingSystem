@@ -28,6 +28,19 @@ public class DishTestData {
 
     public static final List<Dish> ALL_DISHES_R1 = List.of(DISH_6, DISH_5, DISH_1, DISH_2);
     public static final List<Dish> ALL_DISHES_R2 = List.of(DISH_7, DISH_8, DISH_3, DISH_4);
+    public static final List<Dish> ALL_DISHES = List.of(DISH_7, DISH_8, DISH_6, DISH_5, DISH_3, DISH_4, DISH_1, DISH_2);
+
+
+    /*
+        Пицца,2020-05-31 00:00:00.000000,400,100003
+        Гаспачо,2020-05-31 00:00:00.000000,300,100003
+        Цезарь,2020-05-31 00:00:00.000000,300,100002
+        Нагетсы,2020-05-31 00:00:00.000000,200,100002
+        Цезарь,2020-05-30 00:00:00.000000,400,100003
+        Вино,2020-05-30 00:00:00.000000,200,100003
+        БигМак,2020-05-30 00:00:00.000000,500,100002
+        Кола,2020-05-30 00:00:00.000000,100,100002
+        */
 
     public static Dish getCreatedToday() {
         return new Dish(null, "Картофель Фри", LocalDate.now(), 300);

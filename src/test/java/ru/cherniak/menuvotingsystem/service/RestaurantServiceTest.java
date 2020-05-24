@@ -95,6 +95,7 @@ class RestaurantServiceTest extends AbstractServiceTest{
         List<Restaurant> restaurants = service.getAllWithVotes();
         Set<Vote> votes1 = restaurants.get(0).getVotes();
         Set<Vote> votes2 = restaurants.get(1).getVotes();
+        assertMatch(restaurants, RESTAURANT1, RESTAURANT2);
         VoteTestData.assertMatch(votes1, VoteTestData.VOTE_1);
         VoteTestData.assertMatch(votes2, VoteTestData.VOTE_3, VoteTestData.VOTE_2);
 

@@ -49,9 +49,14 @@ public class DishService {
         return repository.get(id, restaurantId);
     }
 
-    public List<Dish> getAll(long restaurantId) {
+    public List<Dish> getAllWithRestaurant(){
+        log.info("getAllWithRestaurant");
+        return repository.getAllWithRestaurant();
+    }
+
+    public List<Dish> getAllByRestaurant(long restaurantId) {
         log.info("getAll of restaurant {}", restaurantId);
-        return repository.getAll(restaurantId);
+        return repository.getAllByRestaurant(restaurantId);
     }
 
     public List<Dish> getDayMenu(@Nullable LocalDate date, long restaurantId) {
