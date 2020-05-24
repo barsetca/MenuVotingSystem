@@ -62,6 +62,7 @@ public class UserService {
     public User getWithListVotes(long id){
         log.info("getWithListVotes {}", id);
         return repository.getWithListVotes(id);
+// return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
 }
 

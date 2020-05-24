@@ -1,13 +1,17 @@
 package ru.cherniak.menuvotingsystem;
 
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.cherniak.menuvotingsystem.model.AbstractBase.START_SEQ;
+import static ru.cherniak.menuvotingsystem.web.TestUtil.readFromJsonMvcResult;
+import static ru.cherniak.menuvotingsystem.web.TestUtil.readListFromJsonMvcResult;
 
 
 public class UserTestData {
@@ -27,5 +31,13 @@ public class UserTestData {
 
     public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "roles", "votes").isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJson(User... expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, User.class), List.of(expected));
+    }
+
+    public static ResultMatcher contentJson(User expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, User.class), expected);
     }
 }
