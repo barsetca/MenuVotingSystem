@@ -1,20 +1,23 @@
 package ru.cherniak.menuvotingsystem.web.json;
 
 import org.junit.jupiter.api.Test;
-import ru.cherniak.menuvotingsystem.DishTestData;
+import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.model.Dish;
+import ru.cherniak.menuvotingsystem.model.Restaurant;
 
 import java.util.List;
 
-import static ru.cherniak.menuvotingsystem.DishTestData.*;
+import static ru.cherniak.menuvotingsystem.DishTestData.ALL_DISHES;
+import static ru.cherniak.menuvotingsystem.DishTestData.assertMatch;
 
 public class JsonUtilTest {
     @Test
     void readWriteValue() throws Exception {
-        String json = JsonUtil.writeValue(DISH_1);
+        Restaurant newRestaurant = new Restaurant("CreateRest", "пл. Новая, д.1", "315-00-00");
+        String json = JsonUtil.writeValue(newRestaurant);
         System.out.println(json);
-        Dish dish = JsonUtil.readValue(json, Dish.class);
-        assertMatch(dish, DISH_1 );
+        Restaurant restaurant = JsonUtil.readValue(json, Restaurant.class);
+        RestaurantTestData.assertMatch(restaurant, newRestaurant);
     }
 
     @Test
@@ -22,6 +25,6 @@ public class JsonUtilTest {
         String json = JsonUtil.writeValue(ALL_DISHES);
         System.out.println(json);
         List<Dish> dishes = JsonUtil.readValues(json, Dish.class);
-        assertMatch(dishes, ALL_DISHES );
+        assertMatch(dishes, ALL_DISHES);
     }
 }
