@@ -17,10 +17,8 @@ public interface JpaDishRepository extends JpaRepository<Dish, Long> {
 
 
     @Modifying
-    @Query("DELETE FROM Dish d WHERE d.id=:id AND d.restaurant.id=:restaurantId")
-    int delete(@Param("id") long id, @Param("restaurantId") long restaurantId);
-
-    Optional<Dish> findByIdAndRestaurantId(@Param("id") long id, @Param("restaurantId") long restaurantId);
+    @Query("DELETE FROM Dish d WHERE d.id=:id")
+    int delete(@Param("id") long id);
 
     List<Dish> findAllByDateAndRestaurantId(@Param("date") LocalDate date, @Param("restaurantId") long restaurantId, Sort sort);
 

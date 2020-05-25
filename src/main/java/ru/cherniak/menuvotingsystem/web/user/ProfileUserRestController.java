@@ -8,8 +8,8 @@ import ru.cherniak.menuvotingsystem.model.User;
 import static ru.cherniak.menuvotingsystem.web.SecurityUtil.authUserId;
 
 @RestController
-@RequestMapping(ProfileRestController.REST_URL)
-public class ProfileRestController extends AbstractUserController {
+@RequestMapping(ProfileUserRestController.REST_URL)
+public class ProfileUserRestController extends AbstractUserController {
     static final String REST_URL = "rest/profile";
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

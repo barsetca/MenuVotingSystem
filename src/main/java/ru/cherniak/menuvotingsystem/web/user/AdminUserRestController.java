@@ -11,8 +11,8 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = AdminRestUserController.REST_ADMIN_USERS, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminRestUserController extends AbstractUserController {
+@RequestMapping(value = AdminUserRestController.REST_ADMIN_USERS, produces = MediaType.APPLICATION_JSON_VALUE)
+public class AdminUserRestController extends AbstractUserController {
     static final String REST_ADMIN_USERS = "rest/admin/users";
 
     @GetMapping

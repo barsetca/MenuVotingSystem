@@ -42,7 +42,7 @@ public class Restaurant extends AbstractBaseNameId {
     private Date registered = new Date();
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
-    @OrderBy("date DESC, price DESC")
+    @OrderBy("date DESC, name ASC")
     private Set<Dish> dishes;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)

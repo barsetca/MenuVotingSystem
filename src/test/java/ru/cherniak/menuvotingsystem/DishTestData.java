@@ -1,14 +1,19 @@
 package ru.cherniak.menuvotingsystem;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.cherniak.menuvotingsystem.model.Dish;
+import ru.cherniak.menuvotingsystem.model.Restaurant;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Collection;
 import java.util.List;
 
 import static java.time.LocalDate.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.cherniak.menuvotingsystem.model.AbstractBase.START_SEQ;
+import static ru.cherniak.menuvotingsystem.web.TestUtil.readFromJsonMvcResult;
+import static ru.cherniak.menuvotingsystem.web.TestUtil.readListFromJsonMvcResult;
 
 public class DishTestData {
     public static final long DISH_ID = START_SEQ + 4;
@@ -26,9 +31,9 @@ public class DishTestData {
     public static final Dish DISH_8 = new Dish(DISH_ID + 7, "Гаспачо", DATE_310520, 300);
 
 
-    public static final List<Dish> ALL_DISHES_R1 = List.of(DISH_6, DISH_5, DISH_1, DISH_2);
-    public static final List<Dish> ALL_DISHES_R2 = List.of(DISH_7, DISH_8, DISH_3, DISH_4);
-    public static final List<Dish> ALL_DISHES = List.of(DISH_7, DISH_8, DISH_6, DISH_5, DISH_3, DISH_4, DISH_1, DISH_2);
+    public static final List<Dish> ALL_DISHES_R1 = List.of(DISH_5, DISH_6, DISH_1, DISH_2);
+    public static final List<Dish> ALL_DISHES_R2 = List.of(DISH_8, DISH_7, DISH_4, DISH_3);
+    public static final Collection<Dish> ALL_DISHES = List.of(DISH_5, DISH_6, DISH_8, DISH_7, DISH_1, DISH_2, DISH_4, DISH_3);
 
 
     /*
@@ -61,5 +66,13 @@ public class DishTestData {
 
     public static void assertMatch(Iterable<Dish> actual, Iterable<Dish> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("restaurant").isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJson(Dish... expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Dish.class), List.of(expected));
+    }
+
+    public static ResultMatcher contentJson(Dish expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, Dish.class), expected);
     }
 }

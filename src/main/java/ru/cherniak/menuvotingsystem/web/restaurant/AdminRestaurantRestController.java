@@ -11,8 +11,8 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = AdminRestRestaurantController.REST_ADMIN_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminRestRestaurantController extends AbstractRestaurantController {
+@RequestMapping(value = AdminRestaurantRestController.REST_ADMIN_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
+public class AdminRestaurantRestController extends AbstractRestaurantController {
 
     static final String REST_ADMIN_RESTAURANTS = "rest/admin/restaurants";
 
@@ -26,6 +26,7 @@ public class AdminRestRestaurantController extends AbstractRestaurantController 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@RequestBody Restaurant restaurant) {
         Restaurant created = super.create(restaurant);
+
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_ADMIN_RESTAURANTS + "/{id}")
                 .buildAndExpand(created.getId()).toUri();

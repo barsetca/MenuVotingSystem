@@ -11,9 +11,9 @@ public interface DishRepository {
 
     Dish save(Dish dish, long restaurantId);
 
-    Dish get(long id, long restaurantId);
+    Dish get(long id);
 
-    boolean delete(long dishId, long restaurantId);
+    boolean delete(long dishId);
 
     List<Dish> getAllWithRestaurant();
 

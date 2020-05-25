@@ -39,25 +39,25 @@ class DishServiceTest extends AbstractServiceTest {
     void update() {
         Dish updated = getUpdated();
         service.update(updated, RESTAURANT1_ID);
-        assertMatch(service.get(DISH_ID, RESTAURANT1_ID), updated);
+        assertMatch(service.get(DISH_ID), updated);
     }
 
     @Test
     void delete() {
-        service.delete(DISH_ID, RESTAURANT1_ID);
+        service.delete(DISH_ID);
         assertMatch(service.getDayMenu(DATE_300520, RESTAURANT1_ID), DISH_2);
     }
 
     @Test
     void get() {
-        Dish getDish1 = service.get(DISH_ID, RESTAURANT1_ID);
+        Dish getDish1 = service.get(DISH_ID);
         assertMatch(service.getDayMenu(DATE_300520, RESTAURANT1_ID), getDish1, DISH_2);
     }
 
     @Test
-    void getAll() {
+    void getAllByRestaurant() {
         List<Dish> all1 = service.getAllByRestaurant(RESTAURANT1_ID);
-        List<Dish> all2 = service.getAllByRestaurant(RestaurantTestData.RESTAURANT2_ID);
+        List<Dish> all2 = service.getAllByRestaurant(RESTAURANT2_ID);
         assertMatch(all1, ALL_DISHES_R1);
         assertMatch(all2, ALL_DISHES_R2);
     }
@@ -106,8 +106,8 @@ class DishServiceTest extends AbstractServiceTest {
         List<Dish> dishes = service.getAllDayMenuByDateWithRestaurant(DATE_300520);
         List<Restaurant> restaurants = new ArrayList<>();
         dishes.forEach(d -> restaurants.add(d.getRestaurant()));
-        assertMatch(dishes, DISH_3, DISH_4, DISH_1, DISH_2);
-        RestaurantTestData.assertMatch(restaurants, RESTAURANT2, RESTAURANT2, RESTAURANT1, RESTAURANT1);
+        assertMatch(dishes, DISH_1, DISH_2, DISH_4, DISH_3);
+       RestaurantTestData.assertMatch(restaurants, RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
     }
 
     @Test
@@ -117,8 +117,8 @@ class DishServiceTest extends AbstractServiceTest {
         dishes.forEach(d -> restaurants.add(d.getRestaurant()));
         assertMatch(dishes, ALL_DISHES);
         RestaurantTestData.assertMatch(restaurants,
-                RESTAURANT2, RESTAURANT2, RESTAURANT1, RESTAURANT1,
-                RESTAURANT2, RESTAURANT2, RESTAURANT1, RESTAURANT1);
+                RESTAURANT1, RESTAURANT1,RESTAURANT2, RESTAURANT2,
+                RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
     }
 }
 

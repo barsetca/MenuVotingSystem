@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.repository.restaurant.JpaRestaurantRepository;
+import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,63 +16,62 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class DishRepositoryImpl implements DishRepository {
 
-    private static final Sort SORT_DATE_PRICE = Sort.by(Sort.Direction.DESC, "date", "price");
-    private static final Sort SORT_DATE_RID_PRICE = Sort.by(Sort.Direction.DESC, "date", "restaurant.id", "price");
-    private static final Sort SORT_RID_PRICE = Sort.by(Sort.Direction.DESC, "restaurant.id", "price");
-    private static final Sort SORT_PRICE = Sort.by(Sort.Direction.DESC, "price");
+    private static final Sort SORT_DATE_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("name"));
+    private static final Sort SORT_DATE_RID_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurant.id"), Sort.Order.asc("name"));
+    private static final Sort SORT_RID_NAME = Sort.by(Sort.Direction.ASC, "restaurant.id", "name");
+    private static final Sort SORT_NAME = Sort.by(Sort.Order.asc("name"));
+
+
 
     @Autowired
     private JpaDishRepository repository;
 
     @Autowired
-    private JpaRestaurantRepository restaurantRepository;
+    private RestaurantRepository restaurantRepository;
 
     @Override
     @Transactional
     public Dish save(Dish dish, long restaurantId) {
-        if (!dish.isNew() && get(dish.getId(), restaurantId) == null) {
+        Restaurant restaurant = restaurantRepository.get(restaurantId);
+        if (restaurant == null) {
             return null;
         }
-        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
         dish.setRestaurant(restaurant);
         return repository.save(dish);
     }
 
     @Override
-    public Dish get(long id, long restaurantId) {
-        return repository.findByIdAndRestaurantId(id, restaurantId).orElse(null);
+    public Dish get(long id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional
     public List<Dish> getAllWithRestaurant() {
-        return repository.findAllWithRestaurant(SORT_DATE_RID_PRICE);
+        return repository.findAllWithRestaurant(SORT_DATE_RID_NAME);
     }
 
     @Override
     @Transactional
-    public boolean delete(long id, long restaurantId) {
-        return repository.delete(id, restaurantId) != 0;
+    public boolean delete(long id) {
+        return repository.delete(id) != 0;
     }
-
-
 
 
     @Override
     public List<Dish> getAllByRestaurant(long restaurantId) {
-        return repository.findAllByRestaurantId(restaurantId, SORT_DATE_PRICE);
+        return repository.findAllByRestaurantId(restaurantId, SORT_DATE_NAME);
     }
 
     @Override
     public List<Dish> getDayMenu(LocalDate date, long restaurantId) {
-        return repository.findAllByDateAndRestaurantId(date, restaurantId, SORT_PRICE);
+        return repository.findAllByDateAndRestaurantId(date, restaurantId, SORT_NAME);
     }
 
     @Override
     public List<Dish> getAllByRestaurantBetweenInclusive(LocalDate startDate, LocalDate endDate, long restaurantId) {
-        return repository.findAllByRestaurantIdAndDateBetween(restaurantId, startDate, endDate, SORT_DATE_PRICE);
+        return repository.findAllByRestaurantIdAndDateBetween(restaurantId, startDate, endDate, SORT_DATE_NAME);
     }
-//    return crudRepository.findAll(userId, DateTimeUtil.getStartInclusive(startDate), DateTimeUtil.getEndExclusive(endDate));
 
     @Override
     @Transactional
@@ -82,12 +82,12 @@ public class DishRepositoryImpl implements DishRepository {
     @Override
     @Transactional
     public List<Dish> getDayMenuByDateWithRestaurant(LocalDate date, long restaurantId) {
-        return repository.findAllByDateAndRestaurantIdWithRestaurant(date, restaurantId, SORT_PRICE);
+        return repository.findAllByDateAndRestaurantIdWithRestaurant(date, restaurantId, SORT_NAME);
     }
 
     @Override
     @Transactional
     public List<Dish> getAllDayMenuByDateWithRestaurant (LocalDate date){
-        return repository.findAllByDateWithRestaurant(date, SORT_RID_PRICE);
+        return repository.findAllByDateWithRestaurant(date, SORT_RID_NAME);
     }
 }

@@ -7,8 +7,8 @@ import ru.cherniak.menuvotingsystem.model.Restaurant;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = UserRestRestaurantController.REST_USER_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserRestRestaurantController extends AbstractRestaurantController {
+@RequestMapping(value = UserRestaurantRestController.REST_USER_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
+public class UserRestaurantRestController extends AbstractRestaurantController {
 
     static final String REST_USER_RESTAURANTS = "rest/user/restaurants";
 

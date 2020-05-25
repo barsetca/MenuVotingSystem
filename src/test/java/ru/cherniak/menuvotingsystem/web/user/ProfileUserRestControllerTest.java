@@ -13,9 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
-import static ru.cherniak.menuvotingsystem.web.user.ProfileRestController.REST_URL;
+import static ru.cherniak.menuvotingsystem.web.user.ProfileUserRestController.REST_URL;
 
-class ProfileRestControllerTest extends AbstractControllerTest {
+class ProfileUserRestControllerTest extends AbstractControllerTest {
 
     @Autowired
     private UserService userService;

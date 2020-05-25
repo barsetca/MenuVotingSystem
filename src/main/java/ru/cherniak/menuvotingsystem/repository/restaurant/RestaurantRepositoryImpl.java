@@ -58,12 +58,12 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
 
     @Override
     @Transactional
-    public List<Restaurant> findAllWithDishes(){
+    public List<Restaurant> getAllWithDishes(){
         return repository.findAllWithDishes(SORT_BY_NAME);
     }
     @Override
     @Transactional
-    public List<Restaurant> findAllWithVotes(){
+    public List<Restaurant> getAllWithVotes(){
         return repository.findAllWithVotes(SORT_BY_NAME);
     }
 

@@ -17,9 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
 
-class AdminRestUserControllerTest extends AbstractControllerTest {
+class AdminUserRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = "/" + AdminRestUserController.REST_ADMIN_USERS + '/';
+    private static final String REST_URL = "/" + AdminUserRestController.REST_ADMIN_USERS + '/';
 
     @Autowired
     UserService userService;

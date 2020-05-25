@@ -77,13 +77,13 @@ public class RestaurantService {
 
     public List<Restaurant> getAllWithDishes(){
         log.info("findAllWithDishes");
-        return repository.findAllWithDishes();
+        return repository.getAllWithDishes();
     }
 
 
     public List<Restaurant> getAllWithVotes(){
         log.info("findAllWithVotes");
-        return repository.findAllWithVotes();
+        return repository.getAllWithVotes();
     }
 
     public List<Restaurant> getAllWithDishesAndVotes(){
