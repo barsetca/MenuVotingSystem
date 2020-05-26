@@ -2,19 +2,21 @@ package ru.cherniak.menuvotingsystem.util;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
+import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 public class DateTimeUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    private static final LocalTime TIME_OVER = LocalTime.of(11, 0, 0, 0);
+
     // HSQLDB doesn't support LocalDate.MIN/MAX
-    private static final LocalDateTime MIN_DATE = LocalDate.of(1, 1, 1).atStartOfDay();
-    private static final LocalDateTime MAX_DATE = LocalDate.of(3000, 1, 1).atStartOfDay();
+    private static final LocalDate MIN_DATE = LocalDate.of(1, 1, 1);
+    private static final LocalDate MAX_DATE = LocalDate.of(3000, 1, 1);
 
     private DateTimeUtil() {
     }
@@ -33,12 +35,24 @@ public class DateTimeUtil {
         return StringUtils.isEmpty(str) ? null : LocalTime.parse(str);
     }
 
-    public static LocalDateTime getStartInclusive(LocalDate localDate) {
-        return localDate != null ? localDate.atStartOfDay() : MIN_DATE;
+    public static LocalDate getStartDate(LocalDate localDate) {
+        return localDate != null ? localDate : MIN_DATE;
     }
 
-    public static LocalDateTime getEndExclusive(LocalDate localDate) {
-        return localDate != null ? localDate.plus(1, ChronoUnit.DAYS).atStartOfDay() : MAX_DATE;
+    public static LocalDate getEndDate(LocalDate localDate) {
+        return localDate != null ? localDate : MAX_DATE;
+    }
+
+
+    public static void checkTimeBorder() {
+        if (LocalDateTime.now().toLocalTime().isAfter(TIME_OVER)) {
+            throw new NotFoundException("Time is after 11:00 -  the vote can't be changed");
+        }
+
+    }
+
+    public static boolean isBeforeTimeBorder() {
+        return !LocalDateTime.now().toLocalTime().isAfter(TIME_OVER);
     }
 }
 

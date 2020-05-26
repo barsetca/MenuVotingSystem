@@ -17,17 +17,15 @@ public class AdminDishRestController extends AbstractDishController {
 
     static final String REST_ADMIN_DISHES = "rest/admin/dishes";
 
-//@Override
+
     @PostMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    //@ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Dish> createWithLocation(@RequestBody Dish dish, @PathVariable long restaurantId) {
         Dish created = super.create(dish, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_ADMIN_DISHES + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
-//public Dish create(@RequestBody Dish dish, @PathVariable long restaurantId) {
-//    return super.create(dish, restaurantId);
+
     }
 
     @Override
@@ -65,7 +63,7 @@ public class AdminDishRestController extends AbstractDishController {
 
     @Override
     @GetMapping
-    public List<Dish> getAllWithRestaurant(){
+    public List<Dish> getAllWithRestaurant() {
         return super.getAllWithRestaurant();
     }
 }

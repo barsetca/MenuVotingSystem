@@ -10,7 +10,6 @@ import ru.cherniak.menuvotingsystem.model.Dish;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface JpaDishRepository extends JpaRepository<Dish, Long> {
@@ -41,5 +40,6 @@ public interface JpaDishRepository extends JpaRepository<Dish, Long> {
 
     @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant")
     List<Dish> findAllWithRestaurant(Sort sort);
+
 }
 

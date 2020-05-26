@@ -12,6 +12,7 @@ import static ru.cherniak.menuvotingsystem.util.ValidationUtil.assureIdConsisten
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNew;
 
 public abstract class AbstractUserController {
+
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired

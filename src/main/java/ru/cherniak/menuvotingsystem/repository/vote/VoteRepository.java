@@ -22,10 +22,14 @@ public interface VoteRepository {
 
     List<Vote> getAll();
 
-    Vote getOneByDateWithUserAndRestaurant(LocalDate date, long userId);
+    Vote getOneByDateWithUserAndRestaurant(@Nullable LocalDate date, long userId);
 
-    List<Vote> getAllByDateWithRestaurantAndUser(LocalDate date);
+    List<Vote> getAllByDateWithRestaurantAndUser(@Nullable LocalDate date);
 
     List<Vote> getAllWithRestaurant();
+
+    List<Vote> getAllByUserIdWithRestaurant(long userId);
+
+    List<Vote> getAllWithRestaurantByUserIdBetween(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long userId);
 
 }

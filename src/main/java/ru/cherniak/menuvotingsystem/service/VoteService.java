@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
+import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.cherniak.menuvotingsystem.util.DateTimeUtil.checkTimeBorder;
+
 @Service
 public class VoteService {
 
-    protected final Logger log = LoggerFactory.getLogger(VoteService.class);
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final VoteRepository repository;
 
@@ -27,6 +30,7 @@ public class VoteService {
 
     public Vote save(Vote vote, long userId, long restaurantId) {
         log.info("save {} by user {} restaurant {}", vote, userId, restaurantId);
+        checkTimeBorder();
         Assert.notNull(vote, "vote must not be null");
         return repository.save(vote, userId, restaurantId);
     }
@@ -39,6 +43,7 @@ public class VoteService {
 
     public boolean delete(@Nullable LocalDate date, long userId) {
         log.info("delete by user {} date {}", userId, date);
+        checkTimeBorder();
         //checkNotFoundWithId(repository.delete(date, userId), id);
         return repository.delete(date, userId);
     }
@@ -74,8 +79,19 @@ public class VoteService {
         return repository.getAllByDateWithRestaurantAndUser(date);
     }
 
-    public List<Vote> getAllWithRestaurant(){
+    public List<Vote> getAllWithRestaurant() {
         log.info("getAllWithRestaurant");
         return repository.getAllWithRestaurant();
+    }
+
+    public List<Vote> getAllByUserIdWithRestaurant(long userId) {
+        log.info("getAllByUserIdWithRestaurant by user {}", userId);
+        return repository.getAllByUserIdWithRestaurant(userId);
+    }
+
+    public List<Vote> getAllWithRestaurantByUserIdBetween(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long userId) {
+        log.info("getAllWithRestaurantByUserIdBetween {} - {} of restaurant {}", startDate, endDate, userId);
+        return repository.getAllWithRestaurantByUserIdBetween(DateTimeUtil.getStartDate(startDate),
+                DateTimeUtil.getEndDate(endDate), userId);
     }
 }

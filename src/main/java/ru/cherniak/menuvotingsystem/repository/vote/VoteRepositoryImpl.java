@@ -17,6 +17,7 @@ import java.util.List;
 public class VoteRepositoryImpl implements VoteRepository {
 
     private static final Sort SORT_DATE_RESTAURANT = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurantId"));
+    private static final Sort SORT_DATE = Sort.by(Sort.Order.desc("date"));
     private static final Sort SORT_DATE_RESTAURANT_WITH = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurant.id"));
 
     @Autowired
@@ -71,18 +72,31 @@ public class VoteRepositoryImpl implements VoteRepository {
     @Override
     @Transactional
     public Vote getOneByDateWithUserAndRestaurant(LocalDate date, long userId) {
-        return repository.getOneByDateWithUserAndRestaurant(date, userId);
+        return repository.findOneByDateWithUserAndRestaurant(date, userId);
     }
 
     @Override
     @Transactional
     public List<Vote> getAllByDateWithRestaurantAndUser(LocalDate date) {
-        return repository.getAllByDateWithRestaurantAndUser(date);
+        return repository.findAllByDateWithRestaurantAndUser(date);
     }
 
     @Override
     @Transactional
-    public List<Vote> getAllWithRestaurant(){
-        return repository.getAllWithRestaurant(SORT_DATE_RESTAURANT_WITH);
+    public List<Vote> getAllWithRestaurant() {
+        return repository.findAllWithRestaurant(SORT_DATE_RESTAURANT_WITH);
     }
+
+    @Override
+    @Transactional
+    public List<Vote> getAllByUserIdWithRestaurant(long userId) {
+        return repository.findAllByUserIdWithRestaurant(userId, SORT_DATE);
+    }
+
+    @Override
+    @Transactional
+    public List<Vote> getAllWithRestaurantByUserIdBetween(LocalDate startDate, LocalDate endDate, long userId) {
+        return repository.findAllWithRestaurantByUserIdAndDateBetween(startDate, endDate, userId, SORT_DATE);
+    }
+
 }
