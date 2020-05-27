@@ -19,6 +19,6 @@ public interface UserRepository {
 
     List<User> getAll();
 
-    User getWithListVotes(long id);
+    User getWithVotes(long id);
 }
 

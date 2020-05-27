@@ -31,11 +31,11 @@ public class AbstractVoteController {
         return voteService.get(date, userId);
     }
 
-    public boolean delete() {
+    public void delete() {
         long userId = SecurityUtil.authUserId();
         LocalDate date = LocalDate.now();
         log.info("delete by user {} date {}", userId, date);
-        return voteService.delete(date, userId);
+        voteService.delete(date, userId);
     }
 
     public long countByDateAndRestaurant(@Nullable LocalDate date, long restaurantId) {

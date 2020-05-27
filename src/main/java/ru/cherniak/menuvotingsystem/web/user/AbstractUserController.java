@@ -52,6 +52,6 @@ public abstract class AbstractUserController {
 
     public User getWithVotes(long id) {
         log.info("getWithVotes {}", id);
-        return service.getWithListVotes(id);
+        return service.getWithVotes(id);
     }
 }

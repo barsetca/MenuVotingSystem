@@ -5,18 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.util.NestedServletException;
 import ru.cherniak.menuvotingsystem.UserTestData;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
-import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
 import ru.cherniak.menuvotingsystem.web.TestUtil;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,50 +30,35 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createUpdateWithLocation() throws Exception {
-        if (DateTimeUtil.isBeforeTimeBorder()) {
-            Vote newVote = getCreatedToday();
-            ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JsonUtil.writeValue(newVote)))
-                    .andExpect(status().isCreated());
+        timeBorderPlus();
+        Vote newVote = getCreatedToday();
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newVote)))
+                .andExpect(status().isCreated());
 
-            Vote created = TestUtil.readFromJson(action, Vote.class);
-            Long newID = created.getId();
-            newVote.setId(newID);
+        Vote created = TestUtil.readFromJson(action, Vote.class);
+        Long newID = created.getId();
+        newVote.setId(newID);
 
-            assertMatch(created, newVote);
-            assertMatch(voteService.get(LocalDate.now(), UserTestData.USER_ID), newVote);
-        } else {
-            //really NotFoundException Time is after 11:00 -  the vote can't be changed
-            assertThrows(NestedServletException.class, () ->
-                    mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(JsonUtil.writeValue(getCreatedToday())))
-                            .andExpect(status().isCreated()));
+        assertMatch(created, newVote);
+        assertMatch(voteService.get(LocalDate.now(), UserTestData.USER_ID), newVote);
+        timeBorderFix();
 
-        }
     }
 
     @Test
     void delete() throws Exception {
+        timeBorderPlus();
+        Vote created = voteService.save(getCreatedToday(), UserTestData.USER_ID, RESTAURANT1_ID);
+        assertMatch(voteService.getAll(), VOTE_3, VOTE_1, VOTE_2, created);
 
-        if (DateTimeUtil.isBeforeTimeBorder()) {
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL))
+                .andDo(print())
+                .andExpect(status().isNoContent());
 
-            Vote created = voteService.save(getCreatedToday(), UserTestData.USER_ID, RESTAURANT1_ID);
-            assertMatch(voteService.getAll(), VOTE_3, VOTE_1, VOTE_2, created);
-
-            mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL))
-                    .andDo(print())
-                    .andExpect(status().isNoContent());
-
-            assertMatch(voteService.getAll(), VOTE_3, VOTE_1, VOTE_2);
-        } else {
-            //really NotFoundException Time is after 11:00 -  the vote can't be changed
-            assertThrows(NestedServletException.class, () ->
-                    mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL))
-                            .andDo(print())
-                            .andExpect(status().isNoContent()));
-        }
+        assertMatch(voteService.getAll(), VOTE_3, VOTE_1, VOTE_2);
+        timeBorderFix();
     }
 
     @Test
@@ -103,7 +85,6 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllWithRestaurantByUserIdBetweenWithNull() throws Exception {
-
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "filter")
                 .param("startDate", "")
                 .param("endDate", ""))

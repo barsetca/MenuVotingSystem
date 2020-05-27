@@ -52,13 +52,13 @@ public abstract class AbstractRestaurantController {
 
     public Restaurant getWithListVotes(long id) {
         log.info("getWithListVotes {}", id);
-        return restaurantService.getWithListVotes(id);
+        return restaurantService.getWithVotes(id);
 
     }
 
     public Restaurant getWithListDishes(long id) {
         log.info("getWithListDishes {}", id);
-        return restaurantService.getWithListDishes(id);
+        return restaurantService.getWithDishes(id);
     }
 
     public List<Restaurant> getAllWithDishes() {

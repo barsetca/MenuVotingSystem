@@ -1,6 +1,7 @@
 package ru.cherniak.menuvotingsystem.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -28,6 +29,7 @@ public class Vote extends AbstractBase {
 
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp")
+    @FutureOrPresent
     @NotNull
     private LocalDate date;
 
@@ -46,7 +48,7 @@ public class Vote extends AbstractBase {
     }
 
     public Vote(LocalDate date) {
-        this(null, LocalDate.now());
+        this(null, date);
     }
 
     public Vote(Long id, LocalDate date) {

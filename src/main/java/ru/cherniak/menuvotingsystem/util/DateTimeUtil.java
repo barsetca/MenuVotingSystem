@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class DateTimeUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private static final LocalTime TIME_OVER = LocalTime.of(11, 0, 0, 0);
+    private static LocalTime timeBorder = LocalTime.of(11, 0, 0, 0);
 
     // HSQLDB doesn't support LocalDate.MIN/MAX
     private static final LocalDate MIN_DATE = LocalDate.of(1, 1, 1);
@@ -45,14 +45,13 @@ public class DateTimeUtil {
 
 
     public static void checkTimeBorder() {
-        if (LocalDateTime.now().toLocalTime().isAfter(TIME_OVER)) {
+        if (LocalDateTime.now().toLocalTime().isAfter(timeBorder)) {
             throw new NotFoundException("Time is after 11:00 -  the vote can't be changed");
         }
-
     }
 
     public static boolean isBeforeTimeBorder() {
-        return !LocalDateTime.now().toLocalTime().isAfter(TIME_OVER);
+        return !LocalDateTime.now().toLocalTime().isAfter(timeBorder);
     }
 }
 

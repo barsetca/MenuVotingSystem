@@ -12,6 +12,8 @@ import ru.cherniak.menuvotingsystem.repository.dish.DishRepository;
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithId;
+
 @Service
 public class DishService {
 
@@ -33,23 +35,21 @@ public class DishService {
     public void update(Dish dish, long restaurantId) {
         log.info("update dish {} of restaurant {}", dish, restaurantId);
         Assert.notNull(dish, "dish must not be null");
-        //checkNotFoundWithId(repository.save(dish, restaurantId), dish.getId());
-        repository.save(dish, restaurantId);
+        checkNotFoundWithId(repository.save(dish, restaurantId), dish.getId());
     }
 
     public boolean delete(long id) {
         log.info("delete {} ", id);
-        //checkNotFoundWithId(repository.delete(id, restaurantId), id);
+        checkNotFoundWithId(repository.delete(id), id);
         return repository.delete(id);
     }
 
     public Dish get(long id) {
         log.info("get {}", id);
-//        checkNotFoundWithId(repository.get(id, userId), id);
-        return repository.get(id);
+        return checkNotFoundWithId(repository.get(id), id);
     }
 
-    public List<Dish> getAllWithRestaurant(){
+    public List<Dish> getAllWithRestaurant() {
         log.info("getAllWithRestaurant");
         return repository.getAllWithRestaurant();
     }
@@ -70,7 +70,6 @@ public class DishService {
         return repository.getDayMenu(LocalDate.now(), restaurantId);
     }
 
-
     public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
                                                               long restaurantId) {
         log.info("getAllBetweenDatesInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
@@ -78,14 +77,15 @@ public class DishService {
     }
 
     public Dish getWithRestaurant(long id, long restaurantId) {
-        return repository.getWithRestaurant(id, restaurantId);
+        log.info("getWithRestaurant {} of restaurant {}", id, restaurantId);
+        return checkNotFoundWithId(repository.getWithRestaurant(id, restaurantId), id);
     }
 
     public List<Dish> getDayMenuByDateWithRestaurant(@Nullable LocalDate date, long restaurantId) {
         return repository.getDayMenuByDateWithRestaurant(date, restaurantId);
     }
 
-    public List<Dish> getAllDayMenuByDateWithRestaurant (@Nullable LocalDate date){
+    public List<Dish> getAllDayMenuByDateWithRestaurant(@Nullable LocalDate date) {
         return repository.getAllDayMenuByDateWithRestaurant(date);
     }
 }

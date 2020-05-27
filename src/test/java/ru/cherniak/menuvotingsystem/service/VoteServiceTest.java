@@ -8,10 +8,11 @@ import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
-import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,61 +35,47 @@ class VoteServiceTest extends AbstractServiceTest {
     VoteRepository voteRepository;
 
     @Test
-    void create() {
-        Vote created;
-        if (DateTimeUtil.isBeforeTimeBorder()) {
-            created = service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
-        } else {
-            created = voteRepository.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
-        }
+    void create() throws Exception {
+        timeBorderPlus();
+        Vote created = service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
         assertMatch(service.get(LocalDate.now(), ADMIN_ID), created);
+        timeBorderFix();
     }
 
     @Test
-    void createAfterTimeBorder() {
-        if (!DateTimeUtil.isBeforeTimeBorder()) {
-            assertThrows(NotFoundException.class, () ->
-                    service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID));
-        }
+    void createAfterTimeBorder() throws Exception {
+        timeBorderMinus();
+        assertThrows(NotFoundException.class, () ->
+                service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID));
+        timeBorderFix();
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
         VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_1, VOTE_2);
-        Vote updated;
-        if (DateTimeUtil.isBeforeTimeBorder()) {
-            updated = service.save(VOTE_2, ADMIN_ID, RESTAURANT1_ID);
-        } else {
-            updated = voteRepository.save(VOTE_2, ADMIN_ID, RESTAURANT1_ID);
-        }
+        timeBorderPlus();
+        Vote updated = service.save(VOTE_2, ADMIN_ID, RESTAURANT1_ID);
         assertMatch(service.get(DATE_300520, ADMIN_ID), updated);
         VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_1, updated);
+        timeBorderFix();
     }
 
     @Test
-    void updateAfterTimeBorder() {
-        if (!DateTimeUtil.isBeforeTimeBorder()) {
-            assertThrows(NotFoundException.class, () ->
-                    service.save(VOTE_2, ADMIN_ID, RESTAURANT1_ID));
-        }
+    void updateAfterTimeBorder() throws Exception {
+        timeBorderMinus();
+        assertThrows(NotFoundException.class, () ->
+                service.save(VOTE_2, ADMIN_ID, RESTAURANT1_ID));
+        timeBorderFix();
     }
 
-
     @Test
-    void createDuplicate() {
-        Vote created;
-        Vote duplicatedDateUserId;
-        if (DateTimeUtil.isBeforeTimeBorder()) {
-            created = service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
-            VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_1, VOTE_2, created);
-            duplicatedDateUserId = service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
-
-        } else {
-            created = voteRepository.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
-            VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_1, VOTE_2, created);
-            duplicatedDateUserId = voteRepository.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
-        }
+    void createDuplicate() throws Exception {
+        timeBorderPlus();
+        Vote created = service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
+        VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_1, VOTE_2, created);
+        Vote duplicatedDateUserId = service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
         VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_1, VOTE_2, duplicatedDateUserId);
+        timeBorderFix();
     }
 
     @Test
@@ -98,21 +85,33 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void delete() {
-        VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_1, VOTE_2);
-        if (DateTimeUtil.isBeforeTimeBorder()) {
-            service.delete(DATE_300520, USER_ID);
-        } else {
-            voteRepository.delete(DATE_300520, USER_ID);
-        }
-        VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_2);
+    public void getNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () ->
+                service.get(LocalDate.now(), 1));
     }
 
     @Test
-    void deleteAfterTimeBorder() {
-        if (!DateTimeUtil.isBeforeTimeBorder()) {
-            assertThrows(NotFoundException.class, () -> service.delete(DATE_300520, USER_ID));
-        }
+    void delete() throws Exception {
+        VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_1, VOTE_2);
+        timeBorderPlus();
+        service.delete(DATE_300520, USER_ID);
+        VoteTestData.assertMatch(service.getAll(), VOTE_3, VOTE_2);
+        timeBorderFix();
+    }
+
+    @Test
+    public void deletedNotFound() throws Exception {
+        timeBorderPlus();
+        assertThrows(NotFoundException.class, () ->
+                service.delete(LocalDate.now(), 1));
+        timeBorderFix();
+    }
+
+    @Test
+    void deleteAfterTimeBorder() throws Exception {
+        timeBorderMinus();
+        assertThrows(NotFoundException.class, () -> service.delete(DATE_300520, USER_ID));
+        timeBorderFix();
     }
 
     @Test
@@ -153,7 +152,12 @@ class VoteServiceTest extends AbstractServiceTest {
         User user = vote.getUser();
         RestaurantTestData.assertMatch(restaurant, RESTAURANT1);
         assertMatch(user, USER);
+    }
 
+    @Test
+    public void getOneByDateWithUserAndRestaurantNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () ->
+                service.get(LocalDate.now(), 1));
     }
 
     @Test
@@ -208,7 +212,14 @@ class VoteServiceTest extends AbstractServiceTest {
         assertMatch(votes1, VOTE_3, VOTE_1);
         assertMatch(votes2, VOTE_3, VOTE_1, today);
         assertMatch(votes3, VOTE_3, VOTE_1, today);
-
     }
 
+    @Test
+    void createWithException() throws Exception {
+        timeBorderPlus();
+        validateRootCause(() -> service.save(new Vote(LocalDate.of(2020, Month.APRIL, 30)), USER_ID, RESTAURANT1_ID), ConstraintViolationException.class);
+        timeBorderMinus();
+        validateRootCause(() -> service.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT1_ID), NotFoundException.class);
+        timeBorderFix();
+    }
 }

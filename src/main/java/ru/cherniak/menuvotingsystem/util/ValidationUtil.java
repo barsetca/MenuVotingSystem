@@ -8,11 +8,11 @@ public class ValidationUtil {
     private ValidationUtil() {
     }
 
-    public static <T> T checkNotFoundWithId(T object, int id) {
+    public static <T> T checkNotFoundWithId(T object, long id) {
         return checkNotFound(object, "id=" + id);
     }
 
-    public static void checkNotFoundWithId(boolean found, int id) {
+    public static void checkNotFoundWithId(boolean found, long id) {
         checkNotFound(found, "id=" + id);
     }
 

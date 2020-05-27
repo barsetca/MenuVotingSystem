@@ -3,15 +3,18 @@ package ru.cherniak.menuvotingsystem.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
+import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.cherniak.menuvotingsystem.DishTestData.assertMatch;
 import static ru.cherniak.menuvotingsystem.DishTestData.*;
@@ -49,9 +52,22 @@ class DishServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    public void deletedNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () ->
+                service.delete(1));
+
+    }
+
+    @Test
     void get() {
         Dish getDish1 = service.get(DISH_ID);
         assertMatch(service.getDayMenu(DATE_300520, RESTAURANT1_ID), getDish1, DISH_2);
+    }
+
+    @Test
+    public void getNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () ->
+                service.get(1));
     }
 
     @Test
@@ -102,12 +118,21 @@ class DishServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    public void getWithRestaurantNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () ->
+                service.getWithRestaurant(DISH_ID, 1));
+        assertThrows(NotFoundException.class, () ->
+                service.getWithRestaurant(1, RESTAURANT1_ID));
+    }
+
+
+    @Test
     void getAllDayMenuByDateWithRestaurant() {
         List<Dish> dishes = service.getAllDayMenuByDateWithRestaurant(DATE_300520);
         List<Restaurant> restaurants = new ArrayList<>();
         dishes.forEach(d -> restaurants.add(d.getRestaurant()));
         assertMatch(dishes, DISH_1, DISH_2, DISH_4, DISH_3);
-       RestaurantTestData.assertMatch(restaurants, RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
+        RestaurantTestData.assertMatch(restaurants, RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
     }
 
     @Test
@@ -117,8 +142,16 @@ class DishServiceTest extends AbstractServiceTest {
         dishes.forEach(d -> restaurants.add(d.getRestaurant()));
         assertMatch(dishes, ALL_DISHES);
         RestaurantTestData.assertMatch(restaurants,
-                RESTAURANT1, RESTAURANT1,RESTAURANT2, RESTAURANT2,
+                RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2,
                 RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
     }
-}
 
+    @Test
+    void createWithException() throws Exception {
+        validateRootCause(() -> service.create(new Dish(null, " ", LocalDate.now(), 1000), RESTAURANT1_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Dish(null, "С", LocalDate.now(), 1000), RESTAURANT1_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Dish(null, "Супчик", LocalDate.now(), -1), RESTAURANT1_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Dish(null, "Супчик", of(2020, Month.APRIL, 30), 1000), RESTAURANT1_ID), ConstraintViolationException.class);
+
+    }
+}

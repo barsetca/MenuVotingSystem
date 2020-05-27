@@ -30,8 +30,8 @@ public class UserVoteRestController extends AbstractVoteController {
     @Override
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public boolean delete() {
-        return super.delete();
+    public void delete() {
+        super.delete();
     }
 
     @Override

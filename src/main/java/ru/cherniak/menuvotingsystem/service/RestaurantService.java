@@ -10,6 +10,9 @@ import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
 
 import java.util.List;
 
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFound;
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithId;
+
 @Service
 public class RestaurantService {
 
@@ -25,8 +28,8 @@ public class RestaurantService {
 
     public Restaurant get(long id) {
         log.info("get {}", id);
-        // return checkNotFoundWithId(restaurantRepository.get(id), id);
-        return repository.get(id);
+        return checkNotFoundWithId(repository.get(id), id);
+
     }
 
     public Restaurant create(Restaurant restaurant) {
@@ -39,22 +42,21 @@ public class RestaurantService {
     public Restaurant update(Restaurant restaurant) {
         log.info("update {}", restaurant);
         Assert.notNull(restaurant, "user must not be null");
-        // checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
-        return repository.save(restaurant);
+        return checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
+
 
     }
 
     public void delete(long id) {
         log.info("delete {}", id);
-        //checkNotFoundWithId(repository.delete(id), id);
-        repository.delete(id);
+        checkNotFoundWithId(repository.delete(id), id);
     }
 
     public Restaurant getByName(String name) {
         log.info("getByName {}", name);
         Assert.notNull(name, "name must not be null");
-        // return checkNotFound(restaurantRepository.getByName(name), "name=" + name);
-        return repository.getByName(name);
+        return checkNotFound(repository.getByName(name), "name=" + name);
+
     }
 
     public List<Restaurant> getAll() {
@@ -62,31 +64,29 @@ public class RestaurantService {
         return repository.getAll();
     }
 
-    public Restaurant getWithListVotes(long id) {
+    public Restaurant getWithVotes(long id) {
         log.info("getWithListVotes {}", id);
-        return repository.getWithListVotes(id);
-        //        return checkNotFoundWithId(repository.getWithListMeals(id), id);
+        return checkNotFoundWithId(repository.getWithVotes(id), id);
     }
 
-    public Restaurant getWithListDishes(long id) {
+    public Restaurant getWithDishes(long id) {
         log.info("getWithListDishes {}", id);
-        return repository.getWithListDishes(id);
-//        return checkNotFoundWithId(repository.getWithListMeals(id), id);
+        return checkNotFoundWithId(repository.getWithDishes(id), id);
     }
 
 
-    public List<Restaurant> getAllWithDishes(){
+    public List<Restaurant> getAllWithDishes() {
         log.info("findAllWithDishes");
         return repository.getAllWithDishes();
     }
 
 
-    public List<Restaurant> getAllWithVotes(){
+    public List<Restaurant> getAllWithVotes() {
         log.info("findAllWithVotes");
         return repository.getAllWithVotes();
     }
 
-    public List<Restaurant> getAllWithDishesAndVotes(){
+    public List<Restaurant> getAllWithDishesAndVotes() {
         log.info("getWithDishesAndVotes");
         return repository.getAllWithDishesAndVotes();
     }

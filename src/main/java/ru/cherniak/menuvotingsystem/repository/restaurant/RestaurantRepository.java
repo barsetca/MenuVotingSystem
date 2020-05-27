@@ -16,9 +16,9 @@ public interface RestaurantRepository {
 
     List<Restaurant> getAll();
 
-    Restaurant getWithListVotes(long id);
+    Restaurant getWithVotes(long id);
 
-    Restaurant getWithListDishes(long id);
+    Restaurant getWithDishes(long id);
 
     List<Restaurant> getAllWithDishes();
 

@@ -2,11 +2,10 @@ package ru.cherniak.menuvotingsystem.model;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @NamedQueries({
@@ -24,13 +23,15 @@ public class Restaurant extends AbstractBaseNameId {
     public static final String GET_BY_NAME = "Restaurant.getByName";
 
     @Column(name = "address", nullable = false)
+    @NotBlank
     @NotNull
-    @Size(min = 5)
+    @Size(min = 5, max = 100)
     private String address;
 
     @Column(name = "phone", nullable = false)
+    @NotBlank
     @NotNull
-    @Size(min = 4)
+    @Size(min = 4, max = 100)
     private String phone;
 
     @Column(name = "url", nullable = false)

@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static ru.cherniak.menuvotingsystem.util.DateTimeUtil.checkTimeBorder;
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class VoteService {
@@ -37,15 +38,14 @@ public class VoteService {
 
     public Vote get(@Nullable LocalDate date, long userId) {
         log.info("get by user {} date {}", userId, date);
-        //        checkNotFoundWithId(repository.get(date, userId), date);
-        return repository.get(date, userId);
+        return checkNotFoundWithId(repository.get(date, userId), userId);
+
     }
 
-    public boolean delete(@Nullable LocalDate date, long userId) {
+    public void delete(@Nullable LocalDate date, long userId) {
         log.info("delete by user {} date {}", userId, date);
         checkTimeBorder();
-        //checkNotFoundWithId(repository.delete(date, userId), id);
-        return repository.delete(date, userId);
+        checkNotFoundWithId(repository.delete(date, userId), userId);
     }
 
     public long countByDateAndRestaurant(@Nullable LocalDate date, long restaurantId) {
@@ -71,7 +71,8 @@ public class VoteService {
 
     public Vote getOneByDateWithUserAndRestaurant(@Nullable LocalDate date, long userId) {
         log.info("getOneByDateWithUserAndRestaurant by user {} date {}", userId, date);
-        return repository.getOneByDateWithUserAndRestaurant(date, userId);
+        return checkNotFoundWithId(repository.getOneByDateWithUserAndRestaurant(date, userId), userId);
+
     }
 
     public List<Vote> getAllByDateWithRestaurantAndUser(@Nullable LocalDate date) {
