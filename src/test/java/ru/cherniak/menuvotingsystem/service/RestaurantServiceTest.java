@@ -38,7 +38,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Restaurant newRestaurant = new Restaurant("CreateRest", "пл. Новая, д.1", "315-00-00");
+        Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe","пл. Новая, д.1", "315-00-00");
         service.create(newRestaurant);
         assertMatch(service.getAll(), newRestaurant, RESTAURANT1, RESTAURANT2);
     }
@@ -46,7 +46,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void duplicateNameCreate() throws Exception {
         assertThrows(DataIntegrityViolationException.class,
-                () -> service.create(new Restaurant("McDonalds", "пл. Новая, д.1", "315-00-00")));
+                () -> service.create(new Restaurant("McDonalds","Cafe", "пл. Новая, д.1", "315-00-00")));
     }
 
     @Test
@@ -148,17 +148,14 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void createWithException() throws Exception {
-        validateRootCause(new Runnable() {
-            @Override
-            public void run() {
-                service.create(new Restaurant("  ", "Veteranov avenue", "1234567"));
-            }
-        }, ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new Restaurant("M", "Veteranov avenue", "1234567")), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new Restaurant("MamaRoma", "  ", "1234567")), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Vete", "1234567")), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Veteranov avenue", "  ")), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Veteranov avenue", "123")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant("  ","Italian", "Veteranov avenue", "1234567")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant("M","Italian", "Veteranov avenue", "1234567")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant("MamaRoma"," ", "Veteranov avenue", "1234567")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant("MamaRoma","It", "Veteranov avenue", "1234567")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Italian","  ", "1234567")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Italian","Vete", "1234567")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Italian","Veteranov avenue", "  ")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant("MamaRoma","Italian", "Veteranov avenue", "123")), ConstraintViolationException.class);
 
     }
 

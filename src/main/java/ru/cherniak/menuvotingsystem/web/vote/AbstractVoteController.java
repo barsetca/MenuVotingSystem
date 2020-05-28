@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
-import ru.cherniak.menuvotingsystem.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static ru.cherniak.menuvotingsystem.web.SecurityUtil.authUserId;
 
 public class AbstractVoteController {
 
@@ -20,19 +21,20 @@ public class AbstractVoteController {
 
 
     public Vote save(Vote vote, long restaurantId) {
-        long userId = SecurityUtil.authUserId();
+        long userId = authUserId();
         log.info("save {} by user {} restaurant {}", vote, userId, restaurantId);
-        return voteService.save(vote, userId, restaurantId);
+        return voteService.save(vote, authUserId(), restaurantId);
     }
 
-
-    public Vote get(@Nullable LocalDate date, long userId) {
+//пока для клиента не использую
+    public Vote get(@Nullable LocalDate date) {
+        long userId = authUserId();
         log.info("get by user {} date {}", userId, date);
         return voteService.get(date, userId);
     }
 
     public void delete() {
-        long userId = SecurityUtil.authUserId();
+        long userId = authUserId();
         LocalDate date = LocalDate.now();
         log.info("delete by user {} date {}", userId, date);
         voteService.delete(date, userId);
@@ -54,6 +56,7 @@ public class AbstractVoteController {
         return voteService.countByRestaurantAndDateBetweenInclusive(startDate, endDate, restaurantId);
     }
 
+    //getAll в таком виде не нужен
     public List<Vote> getAll() {
         log.info("getAll");
         return voteService.getAll();
@@ -69,13 +72,14 @@ public class AbstractVoteController {
         return voteService.getAllByDateWithRestaurantAndUser(date);
     }
 
+    //getAllWithRestaurant в таком виде не нужен
     public List<Vote> getAllWithRestaurant() {
         log.info("getAllWithRestaurant");
         return voteService.getAllWithRestaurant();
     }
 
     public List<Vote> getAllWithRestaurantByUserIdBetween(@Nullable LocalDate startDate, @Nullable LocalDate endDate) {
-        long userId = SecurityUtil.authUserId();
+        long userId = authUserId();
         log.info("getAllWithRestaurantByUserIdBetween {} - {} of user {}", startDate, endDate, userId);
         return voteService.getAllWithRestaurantByUserIdBetween(startDate, endDate, userId);
     }

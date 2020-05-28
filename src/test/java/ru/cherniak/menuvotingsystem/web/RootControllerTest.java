@@ -86,7 +86,7 @@ class RootControllerTest extends AbstractControllerTest{
                 .andExpect(model().attribute("votes", new AssertionMatcher<List<Vote>>() {
                     @Override
                     public void assertion(List<Vote> actual) throws AssertionError {
-                        VoteTestData.assertMatch(actual, VoteTestData.ALL_VOTES );
+                        VoteTestData.assertMatch(actual, VoteTestData.USER_ID_VOTES);
                     }
                 }));
     }

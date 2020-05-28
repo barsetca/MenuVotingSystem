@@ -34,7 +34,6 @@ public class ValidationUtil {
     }
 
     public static void assureIdConsistent(AbstractBase entity, long id) {
-//      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.getId() != id) {
@@ -42,7 +41,7 @@ public class ValidationUtil {
         }
     }
 
-    //  http://stackoverflow.com/a/28565320/548473
+
     public static Throwable getRootCause(Throwable t) {
         Throwable result = t;
         Throwable cause;

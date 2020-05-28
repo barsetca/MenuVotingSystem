@@ -33,6 +33,8 @@ public class VoteTestData {
 
     public static final List<Vote> ALL_VOTES = List.of(VOTE_3, VOTE_1, VOTE_2);
 
+    public static final List<Vote> USER_ID_VOTES = List.of(VOTE_3, VOTE_1);
+
 
     public static Vote getCreatedToday() {
         return new Vote(LocalDate.now());

@@ -1,6 +1,9 @@
 package ru.cherniak.menuvotingsystem.model;
 
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import org.hibernate.annotations.Cache;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,6 +11,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @NamedQueries({
         @NamedQuery(name = Restaurant.DELETE, query = "DELETE FROM Restaurant r WHERE r.id =:id"),
         @NamedQuery(name = Restaurant.GET_ALL, query = "SELECT r  FROM Restaurant r ORDER BY r.name"),
@@ -21,6 +25,13 @@ public class Restaurant extends AbstractBaseNameId {
     public static final String DELETE = "Restaurant.delete";
     public static final String GET_ALL = "Restaurant.getAll";
     public static final String GET_BY_NAME = "Restaurant.getByName";
+
+    @Column(name = "type", nullable = false)
+    @NotBlank
+    @NotNull
+    @Size(min = 3, max = 100)
+    private String type;
+
 
     @Column(name = "address", nullable = false)
     @NotBlank
@@ -42,10 +53,12 @@ public class Restaurant extends AbstractBaseNameId {
     @NotNull
     private Date registered = new Date();
 
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     @OrderBy("date DESC, name ASC")
     private Set<Dish> dishes;
 
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     @OrderBy("date DESC, restaurant ASC")
     private Set<Vote> votes;
@@ -54,29 +67,30 @@ public class Restaurant extends AbstractBaseNameId {
     }
 
     public Restaurant(Restaurant restaurant) {
-        this(restaurant.getId(), restaurant.getName(), restaurant.getAddress(), restaurant.getPhone(), restaurant.getUrl(),
+        this(restaurant.getId(), restaurant.getName(), restaurant.getType(), restaurant.getAddress(), restaurant.getPhone(), restaurant.getUrl(),
                 restaurant.getRegistered());
     }
 
-    public Restaurant(String name, String address, String phone, String url) {
-        this(null, name, address, phone, url, new Date());
+    public Restaurant(String name, String type, String address, String phone, String url) {
+        this(null, name, type, address, phone, url, new Date());
     }
 
-    public Restaurant(String name, String address, String phone) {
+    public Restaurant(String name, String type, String address, String phone) {
 
-        this(null, name, address, phone, "", new Date());
+        this(null, name, type, address, phone, "", new Date());
     }
 
-    public Restaurant(Long id, String name, String address, String phone) {
-        this(id, name, address, phone, "", new Date());
+    public Restaurant(Long id, String name, String type, String address, String phone) {
+        this(id, name, type, address, phone, "", new Date());
     }
 
-    public Restaurant(Long id, String name, String address, String phone, String url) {
-        this(id, name, address, phone, url, new Date());
+    public Restaurant(Long id, String name, String type, String address, String phone, String url) {
+        this(id, name, type, address, phone, url, new Date());
     }
 
-    public Restaurant(Long id, String name, String address, String phone, String url, Date registered) {
+    public Restaurant(Long id, String name, String type, String address, String phone, String url, Date registered) {
         super(id, name);
+        this.type = type;
         this.address = address;
         this.url = url;
         this.phone = phone;
@@ -131,10 +145,19 @@ public class Restaurant extends AbstractBaseNameId {
         this.votes = votes;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
-                "address='" + address + '\'' +
+                "type='" + type + '\'' +
+                ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", url='" + url + '\'' +
                 ", registered=" + registered +

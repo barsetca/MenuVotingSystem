@@ -16,7 +16,10 @@
         <tr>
             <th>Дата</th>
             <th>Ресторан</th>
-            <th>Пользователь</th>
+            <th>Тип</th>
+            <th>Телефон</th>
+            <th>Сайт</th>
+            <th>Адрес</th>
         </tr>
         </thead>
         <c:forEach items="${votes}" var="vote">
@@ -24,7 +27,11 @@
             <tr>
                 <td><c:out value="${vote.date}"/></td>
                 <td><c:out value="${vote.restaurant.name}"/></td>
-                <td><a href="mailto:${vote.user.email}">${vote.user.email}</a></td>
+                <td><c:out value="${vote.restaurant.type}"/></td>
+                <td><c:out value="${vote.restaurant.phone}"/></td>
+                <td><c:out value="${vote.restaurant.url}"/></td>
+                <td><c:out value="${vote.restaurant.address}"/></td>
+
             </tr>
         </c:forEach>
     </table>

@@ -3,6 +3,8 @@ package ru.cherniak.menuvotingsystem.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
@@ -32,6 +34,7 @@ public class RestaurantService {
 
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
         log.info("create {}", restaurant);
         Assert.notNull(restaurant, "user must not be null");
@@ -39,6 +42,7 @@ public class RestaurantService {
 
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant update(Restaurant restaurant) {
         log.info("update {}", restaurant);
         Assert.notNull(restaurant, "user must not be null");
@@ -47,6 +51,7 @@ public class RestaurantService {
 
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(long id) {
         log.info("delete {}", id);
         checkNotFoundWithId(repository.delete(id), id);
@@ -59,6 +64,7 @@ public class RestaurantService {
 
     }
 
+    @Cacheable("restaurants")
     public List<Restaurant> getAll() {
         log.info("getAll");
         return repository.getAll();

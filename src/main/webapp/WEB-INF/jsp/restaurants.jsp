@@ -15,6 +15,7 @@
         <thead>
         <tr>
             <th>Название</th>
+            <th>Тип</th>
             <th>Адрес</th>
             <th>Телефон</th>
             <th>Сайт</th>
@@ -25,6 +26,7 @@
             <jsp:useBean id="restaurant" scope="page" type="ru.cherniak.menuvotingsystem.model.Restaurant"/>
             <tr>
                 <td><c:out value="${restaurant.name}"/></td>
+                <td><c:out value="${restaurant.type}"/></td>
                 <td><c:out value="${restaurant.address}"/></td>
                 <td><c:out value="${restaurant.phone}"/></td>
                 <td><c:out value="${restaurant.url}"/></td>
