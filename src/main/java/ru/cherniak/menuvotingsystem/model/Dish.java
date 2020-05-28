@@ -7,26 +7,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-
-@NamedQueries({
-        @NamedQuery(name = Dish.DELETE, query = "DELETE FROM Dish d WHERE d.id=:id AND d.restaurant.id=:restaurantId"),
-        @NamedQuery(name = Dish.GET_ALL, query = "SELECT d FROM Dish d WHERE d.restaurant.id=:restaurantId ORDER BY d.date DESC, d.price DESC"),
-        @NamedQuery(name = Dish.GET_DAY_MENU, query = "SELECT d FROM Dish d WHERE d.date=:date AND d.restaurant.id=:restaurantId ORDER BY d.price DESC"),
-        @NamedQuery(name = Dish.GET_MENU_BETWEEN,
-                query = "SELECT d FROM Dish d WHERE d.date>= :startDate AND d.date<= :endDate AND d.restaurant.id=:restaurantId ORDER BY d.date DESC, d.price DESC")
-})
-
-
 @Entity
-@Table(name = "dishes",
-        uniqueConstraints = {@UniqueConstraint(
+@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(
                 columnNames = {"date", "name", "restaurant_id"}, name = "dishes_unique_date_name_restaurant_id_idx")})
 public class Dish extends AbstractBaseNameId {
-
-    public static final String DELETE = "Dish.delete";
-    public static final String GET_ALL = "Dish.getAll";
-    public static final String GET_DAY_MENU = "Dish.getMenu";
-    public static final String GET_MENU_BETWEEN = "Dish.getBetween";
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp")
     @FutureOrPresent
@@ -41,7 +25,6 @@ public class Dish extends AbstractBaseNameId {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
     private Restaurant restaurant;
-
 
     public Dish() {
     }

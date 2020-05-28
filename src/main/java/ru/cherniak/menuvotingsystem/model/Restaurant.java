@@ -11,20 +11,10 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@NamedQueries({
-        @NamedQuery(name = Restaurant.DELETE, query = "DELETE FROM Restaurant r WHERE r.id =:id"),
-        @NamedQuery(name = Restaurant.GET_ALL, query = "SELECT r  FROM Restaurant r ORDER BY r.name"),
-        @NamedQuery(name = Restaurant.GET_BY_NAME, query = "SELECT r FROM Restaurant  r WHERE r.name=:name")
-})
-
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurants_unique_name_idx")})
 public class Restaurant extends AbstractBaseNameId {
-
-    public static final String DELETE = "Restaurant.delete";
-    public static final String GET_ALL = "Restaurant.getAll";
-    public static final String GET_BY_NAME = "Restaurant.getByName";
 
     @Column(name = "type", nullable = false)
     @NotBlank
