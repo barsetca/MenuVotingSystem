@@ -3,6 +3,7 @@ package ru.cherniak.menuvotingsystem.util;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
+import ru.cherniak.menuvotingsystem.util.exception.OutsideTimeException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,12 +47,8 @@ public class DateTimeUtil {
 
     public static void checkTimeBorder() {
         if (LocalDateTime.now().toLocalTime().isAfter(timeBorder)) {
-            throw new NotFoundException("Time is after 11:00 -  the vote can't be changed");
+            throw new OutsideTimeException("Time is after "+  timeBorder + " -  the vote can't be changed");
         }
-    }
-
-    public static boolean isBeforeTimeBorder() {
-        return !LocalDateTime.now().toLocalTime().isAfter(timeBorder);
     }
 }
 

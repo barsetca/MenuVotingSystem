@@ -21,8 +21,6 @@ public class DishRepositoryImpl implements DishRepository {
     private static final Sort SORT_RID_NAME = Sort.by(Sort.Direction.ASC, "restaurant.id", "name");
     private static final Sort SORT_NAME = Sort.by(Sort.Order.asc("name"));
 
-
-
     @Autowired
     private JpaDishRepository repository;
 

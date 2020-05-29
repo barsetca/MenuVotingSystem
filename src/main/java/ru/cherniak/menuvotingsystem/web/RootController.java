@@ -67,7 +67,7 @@ public class RootController {
 
     @PostMapping("users")
     public String setUser(HttpServletRequest request) {
-        int userId = Integer.parseInt(request.getParameter("userId"));
+        long userId = Integer.parseInt(request.getParameter("userId"));
         SecurityUtil.setAuthUserId(userId);
         return "redirect:rating";
     }

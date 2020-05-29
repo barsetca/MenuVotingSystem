@@ -15,7 +15,7 @@ public class Dish extends AbstractBaseNameId {
     @Column(name = "date", nullable = false, columnDefinition = "timestamp")
     @FutureOrPresent
     @NotNull
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     @Column(name = "price", nullable = false)
     @Min(0)
@@ -31,6 +31,10 @@ public class Dish extends AbstractBaseNameId {
 
     public Dish(String name, Integer price) {
         this(null, name, LocalDate.now(), price);
+    }
+
+    public Dish(String name, LocalDate date, Integer price) {
+        this(null, name, date, price);
     }
 
     public Dish(Long id, String name, LocalDate date, Integer price) {

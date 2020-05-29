@@ -9,6 +9,7 @@ import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
+import ru.cherniak.menuvotingsystem.util.exception.OutsideTimeException;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
@@ -45,7 +46,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void createAfterTimeBorder() throws Exception {
         timeBorderMinus();
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(OutsideTimeException.class, () ->
                 service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID));
         timeBorderFix();
     }
@@ -63,7 +64,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void updateAfterTimeBorder() throws Exception {
         timeBorderMinus();
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(OutsideTimeException.class, () ->
                 service.save(VOTE_2, ADMIN_ID, RESTAURANT1_ID));
         timeBorderFix();
     }
@@ -110,7 +111,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void deleteAfterTimeBorder() throws Exception {
         timeBorderMinus();
-        assertThrows(NotFoundException.class, () -> service.delete(DATE_300520, USER_ID));
+        assertThrows(OutsideTimeException.class, () -> service.delete(DATE_300520, USER_ID));
         timeBorderFix();
     }
 
@@ -217,9 +218,8 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void createWithException() throws Exception {
         timeBorderPlus();
-        validateRootCause(() -> service.save(new Vote(LocalDate.of(2020, Month.APRIL, 30)), USER_ID, RESTAURANT1_ID), ConstraintViolationException.class);
-        timeBorderMinus();
-        validateRootCause(() -> service.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT1_ID), NotFoundException.class);
+        validateRootCause(() -> service.save(new Vote(LocalDate.of(2020, Month.APRIL, 30)), USER_ID, RESTAURANT1_ID),
+                ConstraintViolationException.class);
         timeBorderFix();
     }
 }
