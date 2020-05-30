@@ -38,10 +38,4 @@ public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long>
     @Query("SELECT r FROM Restaurant r")
     List<Restaurant> findAllWithVotes(Sort sort);
 
-    @EntityGraph(attributePaths = {"votes", "dishes"})
-    @Query("SELECT r FROM Restaurant r")
-    List<Restaurant> findAllWithDishesAndVotes(@Param("id") Sort sort);
-
-
-
 }

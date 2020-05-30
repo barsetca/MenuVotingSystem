@@ -14,19 +14,7 @@ public interface VoteRepository {
 
     boolean delete(@Nullable LocalDate date, long userId);
 
-    long countByDateAndRestaurant(@Nullable LocalDate date, long restaurantId);
-
     long countByRestaurant(long restaurantId);
-
-    long countByRestaurantAndDateBetween(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long restaurantId);
-
-    List<Vote> getAll();
-
-    Vote getOneByDateWithUserAndRestaurant(@Nullable LocalDate date, long userId);
-
-    List<Vote> getAllByDateWithRestaurantAndUser(@Nullable LocalDate date);
-
-    List<Vote> getAllWithRestaurant();
 
     List<Vote> getAllByUserIdWithRestaurant(long userId);
 

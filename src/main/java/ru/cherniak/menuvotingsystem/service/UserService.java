@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.repository.user.UserRepository;
@@ -49,7 +50,7 @@ public class UserService {
     public User getByEmail(String email) /*throws NotFoundException*/ {
         log.info("getByEmail {}", email);
         Assert.notNull(email, "email must not be null");
-        return checkNotFound(repository.getByEmail(email), "email=" + email);
+        return checkNotFound(repository.getByEmail(email), "email= " + email);
 
     }
 
@@ -63,13 +64,21 @@ public class UserService {
     public void update(User user) {
         log.info("update {}", user);
         Assert.notNull(user, "user must not be null");
-        repository.save(user);
+        checkNotFound(repository.save(user), "user= " + user);
 
     }
 
     public User getWithVotes(long id) {
         log.info("getWithVotes {}", id);
         return checkNotFoundWithId(repository.getWithVotes(id), id);
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Transactional
+    public void enable(long id, boolean enabled) {
+        User user = checkNotFoundWithId(get(id), id);
+        user.setEnabled(enabled);
+        update(user);
     }
 }
 

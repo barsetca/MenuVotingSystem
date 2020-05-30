@@ -357,17 +357,12 @@ GET http://localhost:8080/mvs/rest/user/votes/filter?startDate=2020-05-28&endDat
 
 
 ###create vote for 100002 (only LocalDate.now before 11-00)
-# curl -X POST -d '{"date":"2020-05-29"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/100002
+# curl -X POST -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/100002
 POST http://localhost:8080/mvs/rest/user/votes/100002
 Content-Type: application/json
 
-{
-  "date": "2020-05-29"
-}
-
-<> 2020-05-29T124441.201.json
-
 ###
+
 ###check
 # curl http://localhost:8080/mvs/rest/user/votes
 GET http://localhost:8080/mvs/rest/user/votes
@@ -384,6 +379,10 @@ Content-Type: application/json
 {
   "date": "2020-05-29"
 }
+
+
+
+
 
 <> 2020-05-29T124612.201.json
 

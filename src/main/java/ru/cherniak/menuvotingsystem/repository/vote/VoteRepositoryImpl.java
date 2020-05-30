@@ -50,41 +50,8 @@ public class VoteRepositoryImpl implements VoteRepository {
     }
 
     @Override
-    public long countByDateAndRestaurant(LocalDate date, long restaurantId) {
-        return repository.countAllByDateAndRestaurantId(date, restaurantId);
-    }
-
-    @Override
     public long countByRestaurant(long restaurantId) {
         return repository.countAllByRestaurantId(restaurantId);
-    }
-
-    @Override
-    public long countByRestaurantAndDateBetween(LocalDate startDate, LocalDate endDate, long restaurantId) {
-        return repository.countAllByRestaurantIdAndDateBetween(restaurantId, startDate, endDate);
-    }
-
-    @Override
-    public List<Vote> getAll() {
-        return repository.findAll(SORT_DATE_RESTAURANT);
-    }
-
-    @Override
-    @Transactional
-    public Vote getOneByDateWithUserAndRestaurant(LocalDate date, long userId) {
-        return repository.findOneByDateWithUserAndRestaurant(date, userId);
-    }
-
-    @Override
-    @Transactional
-    public List<Vote> getAllByDateWithRestaurantAndUser(LocalDate date) {
-        return repository.findAllByDateWithRestaurantAndUser(date);
-    }
-
-    @Override
-    @Transactional
-    public List<Vote> getAllWithRestaurant() {
-        return repository.findAllWithRestaurant(SORT_DATE_RESTAURANT_WITH);
     }
 
     @Override

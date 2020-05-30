@@ -12,6 +12,7 @@ import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
 import ru.cherniak.menuvotingsystem.web.TestUtil;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -82,5 +83,15 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(USER));
+    }
+
+    @Test
+    void enable() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch(REST_URL + USER_ID)
+                .param("enabled", "false")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        assertFalse(userService.get(USER_ID).isEnabled());
     }
 }

@@ -19,13 +19,11 @@ public interface DishRepository {
 
     List<Dish> getAllByRestaurant(long restaurantId);
 
-    List<Dish> getDayMenu(@Nullable LocalDate date, long restaurantId);
-
     List<Dish> getAllByRestaurantBetweenInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long restaurantId);
+
+    List<Dish> getDayMenu(@Nullable LocalDate date, long restaurantId);
 
     Dish getWithRestaurant(long id, long restaurantId);
 
-    List<Dish> getDayMenuByDateWithRestaurant(@Nullable LocalDate date, long restaurantId);
-
-    List<Dish> getAllDayMenuByDateWithRestaurant (@Nullable LocalDate date);
+    List<Dish> getAllDayMenuByDateWithRestaurant(@Nullable LocalDate date);
 }

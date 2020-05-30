@@ -11,15 +11,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 public abstract class AbstractDishController {
-    
+
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-   @Autowired
-   DishService dishService;
+    @Autowired
+    DishService dishService;
 
     public Dish create(Dish dish, long restaurantId) {
         log.info("create dish {} of restaurant {}", dish, restaurantId);
-              return dishService.create(dish, restaurantId);
+        return dishService.create(dish, restaurantId);
     }
 
     public void update(Dish dish, long restaurantId) {
@@ -37,7 +37,7 @@ public abstract class AbstractDishController {
         return dishService.get(id);
     }
 
-    public List<Dish> getAllWithRestaurant(){
+    public List<Dish> getAllWithRestaurant() {
         log.info("getAllWithRestaurant");
         return dishService.getAllWithRestaurant();
     }
@@ -69,11 +69,7 @@ public abstract class AbstractDishController {
         return dishService.getWithRestaurant(id, restaurantId);
     }
 
-    public List<Dish> getDayMenuByDateWithRestaurant(@Nullable LocalDate date, long restaurantId) {
-        return dishService.getDayMenuByDateWithRestaurant(date, restaurantId);
-    }
-
-    public List<Dish> getAllDayMenuByDateWithRestaurant (@Nullable LocalDate date){
+    public List<Dish> getAllDayMenuByDateWithRestaurant(@Nullable LocalDate date) {
         return dishService.getAllDayMenuByDateWithRestaurant(date);
     }
 }

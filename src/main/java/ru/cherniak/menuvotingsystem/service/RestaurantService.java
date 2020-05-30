@@ -80,20 +80,13 @@ public class RestaurantService {
         return checkNotFoundWithId(repository.getWithDishes(id), id);
     }
 
-
     public List<Restaurant> getAllWithDishes() {
         log.info("findAllWithDishes");
         return repository.getAllWithDishes();
     }
 
-
     public List<Restaurant> getAllWithVotes() {
         log.info("findAllWithVotes");
         return repository.getAllWithVotes();
-    }
-
-    public List<Restaurant> getAllWithDishesAndVotes() {
-        log.info("getWithDishesAndVotes");
-        return repository.getAllWithDishesAndVotes();
     }
 }

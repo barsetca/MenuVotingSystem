@@ -22,22 +22,8 @@ public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
 
     Optional<Vote> findByDateAndUserId(@Param("date") LocalDate date, @Param("userId") long userId);
 
-    long countAllByDateAndRestaurantId(@Param("date") LocalDate date, @Param("restaurantId") long restaurantId);
-
     long countAllByRestaurantId(long restaurantId);
 
-    long countAllByRestaurantIdAndDateBetween(long restaurantId, LocalDate startDate, LocalDate endDate);
-
-
-    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant JOIN FETCH v.user WHERE v.date=:date AND v.user.id=:userId")
-    Vote findOneByDateWithUserAndRestaurant(@Param("date") LocalDate date, @Param("userId") long userId);
-
-
-    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant JOIN FETCH v.user WHERE v.date=:date ORDER BY v.restaurant.id")
-    List<Vote> findAllByDateWithRestaurantAndUser(@Param("date") LocalDate date);
-
-    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant")
-    List<Vote> findAllWithRestaurant(Sort sort);
 
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.user.id=:userId")
     List<Vote> findAllByUserIdWithRestaurant(@Param("userId") long userId, Sort sort);
@@ -46,6 +32,4 @@ public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
     List<Vote> findAllWithRestaurantByUserIdAndDateBetween(@Param("startDate") LocalDate startDate,
                                                            @Param("endDate") LocalDate endDate,
                                                            @Param("userId") long userId, Sort sort);
-
-
 }

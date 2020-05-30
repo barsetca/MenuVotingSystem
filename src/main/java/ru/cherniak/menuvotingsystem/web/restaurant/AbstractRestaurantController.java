@@ -70,9 +70,4 @@ public abstract class AbstractRestaurantController {
         log.info("findAllWithVotes");
         return restaurantService.getAllWithVotes();
     }
-
-    public List<Restaurant> getAllWithDishesAndVotes() {
-        log.info("getWithDishesAndVotes");
-        return restaurantService.getAllWithDishesAndVotes();
-    }
 }

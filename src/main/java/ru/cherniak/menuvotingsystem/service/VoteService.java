@@ -42,47 +42,16 @@ public class VoteService {
 
     }
 
-    public void delete(@Nullable LocalDate date, long userId) {
-        log.info("delete by user {} date {}", userId, date);
+    public void delete(long userId) {
         checkTimeBorder();
+        LocalDate date = LocalDate.now();
+        log.info("delete by user {} date {}", userId, date);
         checkNotFoundWithId(repository.delete(date, userId), userId);
-    }
-
-    public long countByDateAndRestaurant(@Nullable LocalDate date, long restaurantId) {
-        log.info("countByDateAndRestaurant by restaurant {} date {}", restaurantId, date);
-        return repository.countByDateAndRestaurant(date, restaurantId);
     }
 
     public long countByRestaurant(long restaurantId) {
         log.info("countByRestaurant by restaurant {}", restaurantId);
         return repository.countByRestaurant(restaurantId);
-    }
-
-    public long countByRestaurantAndDateBetweenInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
-                                                         long restaurantId) {
-        log.info("countByRestaurantAndDateBetweenInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
-        return repository.countByRestaurantAndDateBetween(startDate, endDate, restaurantId);
-    }
-
-    public List<Vote> getAll() {
-        log.info("getAll");
-        return repository.getAll();
-    }
-
-    public Vote getOneByDateWithUserAndRestaurant(@Nullable LocalDate date, long userId) {
-        log.info("getOneByDateWithUserAndRestaurant by user {} date {}", userId, date);
-        return checkNotFoundWithId(repository.getOneByDateWithUserAndRestaurant(date, userId), userId);
-
-    }
-
-    public List<Vote> getAllByDateWithRestaurantAndUser(@Nullable LocalDate date) {
-        log.info("getAllByDateWithRestaurantAndUser by date {}", date);
-        return repository.getAllByDateWithRestaurantAndUser(date);
-    }
-
-    public List<Vote> getAllWithRestaurant() {
-        log.info("getAllWithRestaurant");
-        return repository.getAllWithRestaurant();
     }
 
     public List<Vote> getAllByUserIdWithRestaurant(long userId) {

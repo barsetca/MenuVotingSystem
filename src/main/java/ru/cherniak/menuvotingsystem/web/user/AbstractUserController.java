@@ -54,4 +54,9 @@ public abstract class AbstractUserController {
         log.info("getWithVotes {}", id);
         return service.getWithVotes(id);
     }
+
+    public void enable(long id, boolean enabled) {
+        log.info(enabled ? "enable {}" : "disable {}", id);
+        service.enable(id, enabled);
+    }
 }

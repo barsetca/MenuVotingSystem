@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
-import ru.cherniak.menuvotingsystem.repository.restaurant.JpaRestaurantRepository;
 import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
 
 import java.time.LocalDate;
@@ -79,13 +78,7 @@ public class DishRepositoryImpl implements DishRepository {
 
     @Override
     @Transactional
-    public List<Dish> getDayMenuByDateWithRestaurant(LocalDate date, long restaurantId) {
-        return repository.findAllByDateAndRestaurantIdWithRestaurant(date, restaurantId, SORT_NAME);
-    }
-
-    @Override
-    @Transactional
-    public List<Dish> getAllDayMenuByDateWithRestaurant (LocalDate date){
+    public List<Dish> getAllDayMenuByDateWithRestaurant(LocalDate date) {
         return repository.findAllByDateWithRestaurant(date, SORT_RID_NAME);
     }
 }

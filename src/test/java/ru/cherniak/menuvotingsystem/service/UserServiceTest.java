@@ -13,7 +13,7 @@ import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
 
 class UserServiceTest extends AbstractServiceTest {
@@ -33,7 +33,6 @@ class UserServiceTest extends AbstractServiceTest {
     void duplicateMailCreate() throws Exception {
         assertThrows(DataIntegrityViolationException.class, () ->
                 service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER)));
-
     }
 
     @Test
@@ -46,7 +45,6 @@ class UserServiceTest extends AbstractServiceTest {
     public void deletedNotFound() throws Exception {
         assertThrows(NotFoundException.class, () ->
                 service.delete(1));
-
     }
 
     @Test
@@ -98,6 +96,14 @@ class UserServiceTest extends AbstractServiceTest {
     void getWithVotesNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.getWithVotes(1));
+    }
+
+    @Test
+    void enable() {
+        service.enable(USER_ID, false);
+        assertFalse(service.get(USER_ID).isEnabled());
+        service.enable(USER_ID, true);
+        assertTrue(service.get(USER_ID).isEnabled());
     }
 
     @Test

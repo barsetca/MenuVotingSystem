@@ -34,21 +34,25 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateNameWithDateCreate() {
-        Dish dish = new Dish(null, "БигМак", DATE_300520, 500);
-        assertThrows(DataIntegrityViolationException.class, () -> service.create(dish, RESTAURANT1_ID));
+        Dish created = new Dish(null, "БигМак", LocalDate.now(), 500);
+        service.create(created, RESTAURANT1_ID);
+        Dish createdDuplicateName = new Dish(null, "БигМак", LocalDate.now(), 5000);
+        assertThrows(DataIntegrityViolationException.class, () -> service.create(createdDuplicateName, RESTAURANT1_ID));
     }
 
     @Test
     void update() {
-        Dish updated = getUpdated();
+        Dish newDish = new Dish(null, "БигМак", LocalDate.now(), 500);
+        Dish created = service.create(newDish, RESTAURANT1_ID);
+        Dish updated = getUpdated(created);
         service.update(updated, RESTAURANT1_ID);
-        assertMatch(service.get(DISH_ID), updated);
+        assertMatch(service.get(created.getId()), updated);
     }
 
     @Test
     void delete() {
         service.delete(DISH_ID);
-        assertMatch(service.getDayMenu(DATE_300520, RESTAURANT1_ID), DISH_2);
+        assertMatch(service.getDayMenu(DATE_290420, RESTAURANT1_ID), DISH_2);
     }
 
     @Test
@@ -61,7 +65,7 @@ class DishServiceTest extends AbstractServiceTest {
     @Test
     void get() {
         Dish getDish1 = service.get(DISH_ID);
-        assertMatch(service.getDayMenu(DATE_300520, RESTAURANT1_ID), getDish1, DISH_2);
+        assertMatch(service.getDayMenu(DATE_290420, RESTAURANT1_ID), getDish1, DISH_2);
     }
 
     @Test
@@ -80,7 +84,7 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void getDayMenu() {
-        List<Dish> allByDay = service.getDayMenu(DATE_300520, RESTAURANT1_ID);
+        List<Dish> allByDay = service.getDayMenu(DATE_290420, RESTAURANT1_ID);
         assertMatch(allByDay, DISH_1, DISH_2);
     }
 
@@ -94,18 +98,9 @@ class DishServiceTest extends AbstractServiceTest {
     @Test
     void getAllBetweenDatesInclusive() {
         Dish today = service.create(getCreatedToday(), RESTAURANT1_ID);
-        List<Dish> allBetween = service.getAllByRestaurantBetweenDatesInclusive(LocalDate.now(), DATE_300520,
+        List<Dish> allBetween = service.getAllByRestaurantBetweenDatesInclusive(DATE_300420, LocalDate.now(),
                 RESTAURANT1_ID);
-        assertMatch(allBetween, DISH_1, DISH_2, today);
-    }
-
-    @Test
-    void getDayMenuByDateWithRestaurant() {
-        List<Dish> dishes = service.getDayMenuByDateWithRestaurant(DATE_300520, RESTAURANT1_ID);
-        Restaurant restaurant = dishes.get(0).getRestaurant();
-        assertMatch(dishes, DISH_1, DISH_2);
-        RestaurantTestData.assertMatch(restaurant, RESTAURANT1);
-
+        assertMatch(allBetween, today, DISH_5, DISH_6);
     }
 
     @Test
@@ -125,10 +120,9 @@ class DishServiceTest extends AbstractServiceTest {
                 service.getWithRestaurant(1, RESTAURANT1_ID));
     }
 
-
     @Test
     void getAllDayMenuByDateWithRestaurant() {
-        List<Dish> dishes = service.getAllDayMenuByDateWithRestaurant(DATE_300520);
+        List<Dish> dishes = service.getAllDayMenuByDateWithRestaurant(DATE_290420);
         List<Restaurant> restaurants = new ArrayList<>();
         dishes.forEach(d -> restaurants.add(d.getRestaurant()));
         assertMatch(dishes, DISH_1, DISH_2, DISH_4, DISH_3);
