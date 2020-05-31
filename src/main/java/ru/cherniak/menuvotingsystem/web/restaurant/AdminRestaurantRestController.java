@@ -1,31 +1,58 @@
 package ru.cherniak.menuvotingsystem.web.restaurant;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
+import ru.cherniak.menuvotingsystem.service.RestaurantService;
 
 import java.net.URI;
 import java.util.List;
 
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.assureIdConsistent;
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNew;
+
 @RestController
 @RequestMapping(value = AdminRestaurantRestController.REST_ADMIN_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminRestaurantRestController extends AbstractRestaurantController {
+public class AdminRestaurantRestController {
 
     static final String REST_ADMIN_RESTAURANTS = "rest/admin/restaurants";
 
-    @Override
+    protected final Logger log = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    RestaurantService restaurantService;
+
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable long id) {
-        return super.get(id);
+        log.info("get {}", id);
+        return restaurantService.get(id);
+    }
+
+    @GetMapping
+    public List<Restaurant> getAll() {
+        log.info("getAll");
+        return restaurantService.getAll();
+    }
+
+    @GetMapping("/by")
+    public Restaurant getByName(@RequestParam String name) {
+        log.info("getByName {}", name);
+        return restaurantService.getByName(name);
     }
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@RequestBody Restaurant restaurant) {
-        Restaurant created = super.create(restaurant);
+        log.info("create {}", restaurant);
+        checkNew(restaurant);
+        restaurantService.create(restaurant);
+        Restaurant created = restaurantService.create(restaurant);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_ADMIN_RESTAURANTS + "/{id}")
@@ -33,29 +60,18 @@ public class AdminRestaurantRestController extends AbstractRestaurantController 
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Restaurant update(@RequestBody Restaurant restaurant, @PathVariable long id) {
-        return super.update(restaurant, id);
+        log.info("update {}", restaurant);
+        assureIdConsistent(restaurant, id);
+        return restaurantService.update(restaurant);
     }
 
-    @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) {
-        super.delete(id);
-    }
-
-    @Override
-    @GetMapping("/by")
-    public Restaurant getByName(@RequestParam String name) {
-        return super.getByName(name);
-    }
-
-    @Override
-    @GetMapping
-    public List<Restaurant> getAll() {
-        return super.getAll();
+        log.info("delete {}", id);
+        restaurantService.delete(id);
     }
 }

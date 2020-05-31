@@ -59,7 +59,6 @@ class DishServiceTest extends AbstractServiceTest {
     public void deletedNotFound() throws Exception {
         assertThrows(NotFoundException.class, () ->
                 service.delete(1));
-
     }
 
     @Test
@@ -109,7 +108,6 @@ class DishServiceTest extends AbstractServiceTest {
         Restaurant restaurant = dish.getRestaurant();
         assertMatch(dish, DISH_1);
         RestaurantTestData.assertMatch(restaurant, RESTAURANT1);
-
     }
 
     @Test
@@ -118,15 +116,6 @@ class DishServiceTest extends AbstractServiceTest {
                 service.getWithRestaurant(DISH_ID, 1));
         assertThrows(NotFoundException.class, () ->
                 service.getWithRestaurant(1, RESTAURANT1_ID));
-    }
-
-    @Test
-    void getAllDayMenuByDateWithRestaurant() {
-        List<Dish> dishes = service.getAllDayMenuByDateWithRestaurant(DATE_290420);
-        List<Restaurant> restaurants = new ArrayList<>();
-        dishes.forEach(d -> restaurants.add(d.getRestaurant()));
-        assertMatch(dishes, DISH_1, DISH_2, DISH_4, DISH_3);
-        RestaurantTestData.assertMatch(restaurants, RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
     }
 
     @Test
@@ -146,6 +135,5 @@ class DishServiceTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new Dish(null, "С", LocalDate.now(), 1000), RESTAURANT1_ID), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Dish(null, "Супчик", LocalDate.now(), -1), RESTAURANT1_ID), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Dish(null, "Супчик", of(2020, Month.APRIL, 30), 1000), RESTAURANT1_ID), ConstraintViolationException.class);
-
     }
 }

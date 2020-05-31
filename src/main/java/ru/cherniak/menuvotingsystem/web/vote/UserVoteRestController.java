@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.model.Vote;
@@ -30,8 +29,29 @@ public class UserVoteRestController {
     @Autowired
     private VoteService voteService;
 
-    @PostMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> createUpdateWithLocation(@PathVariable long restaurantId) {
+    @GetMapping("/{id}")
+    public Vote get(@PathVariable long id) {
+        long userId = authUserId();
+        log.info("get {} by user {}", id, userId);
+        return voteService.getWithRestaurant(id, userId);
+    }
+
+    @GetMapping()
+    public List<Vote> getAllByUserIdWithRestaurant() {
+        long userId = authUserId();
+        log.info("getAllByUserIdWithRestaurant by user {}", userId);
+        return voteService.getAllByUserIdWithRestaurant(userId);
+    }
+
+    @GetMapping("/filter")
+    public List<Vote> getAllWithRestaurantByUserIdBetween(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+        long userId = authUserId();
+        log.info("getAllWithRestaurantByUserIdBetween {} - {} of user {}", startDate, endDate, userId);
+        return voteService.getAllWithRestaurantByUserIdBetween(startDate, endDate, userId);
+    }
+
+    @PostMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Vote> createUpdateWithLocation(@RequestParam long restaurantId) {
         long userId = authUserId();
         Vote vote = new Vote(LocalDate.now());
         log.info("save {} by user {} restaurant {}", vote, userId, restaurantId);
@@ -49,24 +69,5 @@ public class UserVoteRestController {
         long userId = authUserId();
         log.info("delete by user {}", userId);
         voteService.delete(userId);
-    }
-
-    @GetMapping(value = "/filter")
-    public List<Vote> getAllWithRestaurantByUserIdBetween(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
-        long userId = authUserId();
-        log.info("getAllWithRestaurantByUserIdBetween {} - {} of user {}", startDate, endDate, userId);
-        return voteService.getAllWithRestaurantByUserIdBetween(startDate, endDate, userId);
-    }
-
-    public long countByRestaurant(long restaurantId) {
-        log.info("countByRestaurant by restaurant {}", restaurantId);
-        return voteService.countByRestaurant(restaurantId);
-    }
-
-    //пока для клиента не использую
-    public Vote get(@Nullable LocalDate date) {
-        long userId = authUserId();
-        log.info("get by user {} date {}", userId, date);
-        return voteService.get(date, userId);
     }
 }

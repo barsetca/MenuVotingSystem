@@ -80,6 +80,20 @@ class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    void getByNameWithVotes() {
+        Restaurant restaurant = service.getByNameWithVotes("McDonalds");
+        assertMatch(restaurant, RESTAURANT1);
+        VoteTestData.assertMatch(restaurant.getVotes(), VoteTestData.VOTE_1);
+    }
+
+    @Test
+    void getByNameWithVotesNotFound() {
+        assertThrows(NotFoundException.class, () ->
+                service.getByNameWithVotes("Donalds"));
+    }
+
+
+    @Test
     void getAll() {
         List<Restaurant> all = service.getAll();
         assertMatch(all, RESTAURANT1, RESTAURANT2);
@@ -110,7 +124,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void findAllWithDishes() {
+    void getAllWithDishes() {
         List<Restaurant> restaurants = service.getAllWithDishes();
         Set<Dish> dishes1 = restaurants.get(0).getDishes();
         Set<Dish> dishes2 = restaurants.get(1).getDishes();
@@ -120,14 +134,13 @@ class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void findAllWithVotes() {
+    void getAllWithVotes() {
         List<Restaurant> restaurants = service.getAllWithVotes();
         Set<Vote> votes1 = restaurants.get(0).getVotes();
         Set<Vote> votes2 = restaurants.get(1).getVotes();
-        assertMatch(restaurants, RESTAURANT1, RESTAURANT2);
-        VoteTestData.assertMatch(votes1, VoteTestData.VOTE_1);
-        VoteTestData.assertMatch(votes2, VoteTestData.VOTE_3, VoteTestData.VOTE_2);
-
+        assertMatch(restaurants, RESTAURANT2, RESTAURANT1);
+        VoteTestData.assertMatch(votes2, VoteTestData.VOTE_1);
+        VoteTestData.assertMatch(votes1, VoteTestData.VOTE_3, VoteTestData.VOTE_2);
     }
 
     @Test
@@ -142,4 +155,6 @@ class RestaurantServiceTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Italian", "Veteranov avenue", "123")), ConstraintViolationException.class);
 
     }
+
+
 }

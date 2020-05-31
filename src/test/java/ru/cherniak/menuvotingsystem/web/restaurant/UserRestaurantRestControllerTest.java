@@ -5,7 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
+import ru.cherniak.menuvotingsystem.to.RestaurantTo;
+import ru.cherniak.menuvotingsystem.util.RestaurantUtil;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -20,29 +24,30 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
     RestaurantService restaurantService;
 
     @Test
-    void get() throws Exception {
+    void getWithVotes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(RESTAURANT1));
+                .andExpect(contentJsonTo(RestaurantUtil.createTo(restaurantService.getWithVotes(RESTAURANT1_ID))));
     }
 
     @Test
-    void getByName() throws Exception {
+    void getByNameWithVotes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + RESTAURANT1.getName()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(RESTAURANT1));
+                .andExpect(contentJsonTo(RestaurantUtil.createTo(restaurantService.getByNameWithVotes(RESTAURANT1.getName()))));
     }
 
     @Test
-    void getAll() throws Exception {
+    void getAllWithVotes() throws Exception {
+        List<RestaurantTo> restaurantTos = RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(RESTAURANT1, RESTAURANT2));
+                .andExpect(contentJsonTo(restaurantTos.get(0), restaurantTos.get(1)));
     }
 }

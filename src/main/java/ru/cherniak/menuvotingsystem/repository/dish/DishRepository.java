@@ -25,5 +25,4 @@ public interface DishRepository {
 
     Dish getWithRestaurant(long id, long restaurantId);
 
-    List<Dish> getAllDayMenuByDateWithRestaurant(@Nullable LocalDate date);
-}
+  }

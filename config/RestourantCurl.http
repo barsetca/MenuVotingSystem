@@ -1,0 +1,73 @@
+
+#############################RESTOURANT#################################################################################
+
+###UserRestaurantRestController-----------------------------------------------------------------------------------------
+###getWithCountVotes----------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants/100002
+GET http://localhost:8080/mvs/rest/user/restaurants/100002
+
+###
+# curl http://localhost:8080/mvs/rest/user/restaurants/100003
+GET http://localhost:8080/mvs/rest/user/restaurants/100003
+
+###getByNameWithCountVotes---------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants/by?name=McDonalds
+GET http://localhost:8080/mvs/rest/user/restaurants/by?name=McDonalds
+
+###
+# curl http://localhost:8080/mvs/rest/user/restaurants/by?name=Pizza_Hut
+GET http://localhost:8080/mvs/rest/user/restaurants/by?name=Pizza_Hut
+
+###getAllWithVotes-----------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants
+GET http://localhost:8080/mvs/rest/user/restaurants
+
+###AdminRestaurantRestController---------------------------------------------------------------------------------------
+###get-----------------------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/restaurants/100003
+GET http://localhost:8080/mvs/rest/admin/restaurants/100003
+
+###getAll--------------------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/restaurants
+GET http://localhost:8080/mvs/rest/admin/restaurants
+
+###getByName-----------------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/restaurants/by?name=McDonalds
+GET http://localhost:8080/mvs/rest/admin/restaurants/by?name=McDonalds
+
+###createWithLocation--------------------------------------------------------------------------------------------------
+# curl -X POST -d '{"name":"Mama_Roma","type":"Italian","address":"пр.Стачек","phone":"318-56-98","url":"mamaroma.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants
+POST http://localhost:8080/mvs/rest/admin/restaurants
+Content-Type: application/json
+
+{
+  "name": "Mama_Roma",
+  "type": "Italian",
+  "address": "пр.Стачек",
+  "phone": "318-56-98",
+  "url": "mamaroma.ru"
+}
+
+###update restaurant id=100015-----------------------------------------------------------------------------------------
+# curl -X PUT -d '{"name":"Update_Roma","type":"UpdateItalian","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100015
+PUT http://localhost:8080/mvs/rest/admin/restaurants/100015
+Content-Type: application/json
+
+{
+  "name": "Update_Roma",
+  "type": "UpdateItalian",
+  "address": "пр.СтачекUpdate",
+  "phone": "(812)318-56-98",
+  "url": "update.ru"
+}
+
+### DELETE restaurant id=100015----------------------------------------------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100015
+DELETE http://localhost:8080/mvs/rest/admin/restaurants/100015
+
+###
+
+
+###C:\Users\barse\AppData\Roaming\JetBrains\IntelliJIdea2020.1\scratches\scratch.http
+###TooBox URL
+###jetbrains://idea/navigate/reference?project=MenuVotingSystem&path=scratch.http

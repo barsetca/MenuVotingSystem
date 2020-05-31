@@ -73,12 +73,6 @@ public class DishRepositoryImpl implements DishRepository {
     @Override
     @Transactional
     public Dish getWithRestaurant(long id, long restaurantId) {
-        return repository.findOneWithRestaurant(id, restaurantId);
-    }
-
-    @Override
-    @Transactional
-    public List<Dish> getAllDayMenuByDateWithRestaurant(LocalDate date) {
-        return repository.findAllByDateWithRestaurant(date, SORT_RID_NAME);
+        return repository.findOneWithRestaurant(id, restaurantId).orElse(null);
     }
 }

@@ -37,7 +37,7 @@ class VoteServiceTest extends AbstractServiceTest {
     void create() throws Exception {
         timeBorderPlus();
         Vote created = service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
-        assertMatch(service.get(LocalDate.now(), ADMIN_ID), created);
+        assertMatch(service.getWithRestaurant(created.getId(), ADMIN_ID), created);
         timeBorderFix();
     }
 
@@ -55,7 +55,7 @@ class VoteServiceTest extends AbstractServiceTest {
         Vote created = service.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT1_ID);
         VoteTestData.assertMatch(service.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
         Vote updated = service.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT2_ID);
-        assertMatch(service.get(LocalDate.now(), USER_ID), updated);
+        assertMatch(service.getWithRestaurant(updated.getId(), USER_ID), updated);
         VoteTestData.assertMatch(service.getAllByUserIdWithRestaurant(USER_ID), updated, VOTE_3, VOTE_1);
         timeBorderFix();
     }
@@ -79,15 +79,16 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void get() {
-        Vote vote = service.get(DATE_290420, USER_ID);
+    void getWithRestaurant() {
+        Vote vote = service.getWithRestaurant(VOTE_ID, USER_ID);
         assertMatch(VOTE_1, vote);
+        RestaurantTestData.assertMatch(vote.getRestaurant(), RESTAURANT1);
     }
 
     @Test
     public void getNotFound() throws Exception {
         assertThrows(NotFoundException.class, () ->
-                service.get(LocalDate.now(), 1));
+                service.getWithRestaurant(VOTE_ID, 1));
     }
 
     @Test
@@ -127,7 +128,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     public void getOneByDateWithUserAndRestaurantNotFound() throws Exception {
         assertThrows(NotFoundException.class, () ->
-                service.get(LocalDate.now(), 1));
+                service.getWithRestaurant(VOTE_ID, 1));
     }
 
     @Test

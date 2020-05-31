@@ -89,4 +89,9 @@ public class RestaurantService {
         log.info("findAllWithVotes");
         return repository.getAllWithVotes();
     }
+
+    public Restaurant getByNameWithVotes(String name) {
+        Assert.notNull(name, "name must not be null");
+        return checkNotFound(repository.getByNameWithVotes(name), "name=" + name);
+    }
 }

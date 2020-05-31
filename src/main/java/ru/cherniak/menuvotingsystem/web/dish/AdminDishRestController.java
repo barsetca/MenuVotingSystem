@@ -18,20 +18,45 @@ public class AdminDishRestController extends AbstractDishController {
     static final String REST_ADMIN_DISHES = "rest/admin/dishes";
 
 
-    @PostMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createWithLocation(@RequestBody Dish dish, @PathVariable long restaurantId) {
+    @Override
+    @GetMapping("/{id}")
+    public Dish get(@PathVariable long id) {
+        return super.get(id);
+    }
+
+    @Override
+    @GetMapping("/by")
+    public List<Dish> getAllByRestaurant(@RequestParam long restaurantId) {
+        return super.getAllByRestaurant(restaurantId);
+    }
+
+    @Override
+    @GetMapping("/filter")
+    public List<Dish> getAllByRestaurantBetweenDatesInclusive(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate, @RequestParam long restaurantId) {
+        log.info("getAllByRestaurantBetweenDatesInclusive {} - {} of user {}", startDate, endDate, restaurantId);
+        return super.getAllByRestaurantBetweenDatesInclusive(startDate, endDate, restaurantId);
+    }
+
+    @Override
+    @GetMapping
+    public List<Dish> getAllWithRestaurant() {
+        return super.getAllWithRestaurant();
+    }
+
+
+    @PostMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Dish> createWithLocation(@RequestBody Dish dish, @RequestParam long restaurantId) {
         Dish created = super.create(dish, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_ADMIN_DISHES + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
-
     }
 
     @Override
-    @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Dish dish, @PathVariable long restaurantId) {
+    public void update(@RequestBody Dish dish, @RequestParam long restaurantId) {
         super.update(dish, restaurantId);
     }
 
@@ -40,30 +65,5 @@ public class AdminDishRestController extends AbstractDishController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean delete(@PathVariable long id) {
         return super.delete(id);
-    }
-
-    @Override
-    @GetMapping("/{id}")
-    public Dish get(@PathVariable long id) {
-        return super.get(id);
-    }
-
-    @Override
-    @GetMapping("/{restaurantId}/by")
-    public List<Dish> getDayMenu(@RequestParam LocalDate date, @PathVariable long restaurantId) {
-        return super.getDayMenu(date, restaurantId);
-    }
-
-    @Override
-    @GetMapping("/by")
-    public List<Dish> getTodayMenu(@RequestParam long restaurantId) {
-        return super.getTodayMenu(restaurantId);
-    }
-
-
-    @Override
-    @GetMapping
-    public List<Dish> getAllWithRestaurant() {
-        return super.getAllWithRestaurant();
     }
 }

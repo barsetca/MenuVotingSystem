@@ -193,6 +193,19 @@ GET http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
 <> 2020-05-28T084115.200.json
 <> 2020-05-28T083910.400.html
 
+
+###
+
+# curl -X PATCH -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
+PATCH http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
+Content-Type: application/json
+
+### check enabled
+# curl http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
+GET http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
+
+###
+
 ###ProfileUserRestController
 
 ### get user profile
@@ -342,6 +355,14 @@ GET http://localhost:8080/mvs/rest/user/dishes
 
 ###UserVoteRestController
 
+###getWithRestaurant
+# curl http://localhost:8080/mvs/rest/user/votes/100012
+GET http://localhost:8080/mvs/rest/user/votes/100014
+
+###
+
+
+
 ###getAllWithRestaurant
 # curl http://localhost:8080/mvs/rest/user/votes
 GET http://localhost:8080/mvs/rest/user/votes
@@ -349,8 +370,8 @@ GET http://localhost:8080/mvs/rest/user/votes
 <> 2020-05-28T115340.200.json
 
 ###getAllWithRestaurantByUserIdBetween
-# curl http://localhost:8080/mvs/rest/user/votes/filter?startDate=2020-05-28&endDate=2020-05-31
-GET http://localhost:8080/mvs/rest/user/votes/filter?startDate=2020-05-28&endDate=2020-05-31
+# curl http://localhost:8080/mvs/rest/user/votes/filter?startDate=2020-04-28&endDate=2020-05-31
+GET http://localhost:8080/mvs/rest/user/votes/filter?startDate=2020-04-29&endDate=2020-04-29
 
 <> 2020-05-28T115902.200.json
 
@@ -372,19 +393,9 @@ GET http://localhost:8080/mvs/rest/user/votes
 ###
 
 ###update  vote (vote in favor of another one) for 100003 (only LocalDate.now before 11-00)
-# curl -X POST -d '{"date":"2020-05-29"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/100003
+# curl -X POST -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/100003
 POST http://localhost:8080/mvs/rest/user/votes/100003
 Content-Type: application/json
-
-{
-  "date": "2020-05-29"
-}
-
-
-
-
-
-<> 2020-05-29T124612.201.json
 
 ###
 ###check

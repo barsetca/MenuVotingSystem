@@ -28,15 +28,13 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     @Autowired
     VoteService voteService;
 
-
     @Test
     void createUpdateWithLocation() throws Exception {
         timeBorderPlus();
-        Vote newVote = getCreatedToday();
-        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID)
-                        .contentType(MediaType.APPLICATION_JSON)
-//                .content(JsonUtil.writeValue(newVote))
-        )
+        Vote newVote = new Vote(LocalDate.now());
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+                .param("restaurantId", "100002")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
         Vote created = TestUtil.readFromJson(action, Vote.class);
@@ -44,7 +42,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
         newVote.setId(newID);
 
         assertMatch(created, newVote);
-        assertMatch(voteService.get(LocalDate.now(), UserTestData.USER_ID), newVote);
+        assertMatch(voteService.getWithRestaurant(newID, UserTestData.USER_ID), newVote);
         timeBorderFix();
     }
 
@@ -61,15 +59,23 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
         timeBorderFix();
     }
 
-//    @Test
-//    void getAllWithRestaurant() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(contentJson(VOTE_3, VOTE_1, VOTE_2));
-//
-//    }
+    @Test
+    void getWithRestaurant() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + VOTE_ID))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(VOTE_1));
+    }
+
+    @Test
+    void getAllByUserIdWithRestaurant() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(VOTE_3, VOTE_1));
+    }
 
     @Test
     void getAllWithRestaurantByUserIdBetween() throws Exception {

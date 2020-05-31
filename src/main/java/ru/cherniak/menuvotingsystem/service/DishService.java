@@ -80,8 +80,4 @@ public class DishService {
         log.info("getWithRestaurant {} of restaurant {}", id, restaurantId);
         return checkNotFoundWithId(repository.getWithRestaurant(id, restaurantId), id);
     }
-
-    public List<Dish> getAllDayMenuByDateWithRestaurant(@Nullable LocalDate date) {
-        return repository.getAllDayMenuByDateWithRestaurant(date);
-    }
 }

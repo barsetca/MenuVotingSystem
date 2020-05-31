@@ -10,7 +10,7 @@ public interface VoteRepository {
 
     Vote save(Vote vote, long userId, long restaurantId);
 
-    Vote get(@Nullable LocalDate date, long userId);
+    Vote getWithRestaurant(long id, long userId);
 
     boolean delete(@Nullable LocalDate date, long userId);
 

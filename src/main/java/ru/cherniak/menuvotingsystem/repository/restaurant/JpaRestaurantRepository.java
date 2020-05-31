@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 
 import java.util.List;
-
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long> {
@@ -20,7 +20,7 @@ public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long>
     @Query("DELETE FROM Restaurant r WHERE r.id =:id")
     int deleteById(@Param("id") long id);
 
-    Restaurant getByName(@Param("name") String name);
+    Optional<Restaurant> getByName(@Param("name") String name);
 
     @EntityGraph(attributePaths = {"votes"})
     @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
@@ -35,7 +35,10 @@ public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long>
     List<Restaurant> findAllWithDishes(Sort sort);
 
     @EntityGraph(attributePaths = {"votes"})
-    @Query("SELECT r FROM Restaurant r")
-    List<Restaurant> findAllWithVotes(Sort sort);
+    @Query("SELECT r FROM Restaurant r ORDER BY r.votes.size DESC")
+    List<Restaurant> findAllWithVotes();
 
+    @EntityGraph(attributePaths = {"votes"})
+    @Query("SELECT r FROM Restaurant r WHERE r.name=:name")
+    Optional<Restaurant> findOneByNameWithVotes(@Param("name") String name);
 }

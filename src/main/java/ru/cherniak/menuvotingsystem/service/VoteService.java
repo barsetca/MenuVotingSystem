@@ -36,10 +36,9 @@ public class VoteService {
         return repository.save(vote, userId, restaurantId);
     }
 
-    public Vote get(@Nullable LocalDate date, long userId) {
-        log.info("get by user {} date {}", userId, date);
-        return checkNotFoundWithId(repository.get(date, userId), userId);
-
+    public Vote getWithRestaurant(long id, long userId) {
+        log.info("get {} by user {}", id, userId);
+        return checkNotFoundWithId(repository.getWithRestaurant(id, userId), id);
     }
 
     public void delete(long userId) {

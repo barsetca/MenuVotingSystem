@@ -2,9 +2,6 @@ package ru.cherniak.menuvotingsystem.web;
 
 import org.assertj.core.matcher.AssertionMatcher;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.VoteTestData;
@@ -16,18 +13,16 @@ import ru.cherniak.menuvotingsystem.model.Vote;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static ru.cherniak.menuvotingsystem.DishTestData.ALL_DISHES;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT2;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
 
 
-class RootControllerTest extends AbstractControllerTest{
+class RootControllerTest extends AbstractControllerTest {
 
     @Test
     void getUsers() throws Exception {
@@ -62,7 +57,7 @@ class RootControllerTest extends AbstractControllerTest{
     }
 
     @Test
-    void getDishesByRestaurant() throws Exception{
+    void getDishesByRestaurant() throws Exception {
         mockMvc.perform((get("/dishes")))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -77,7 +72,7 @@ class RootControllerTest extends AbstractControllerTest{
     }
 
     @Test
-    void getVotes() throws Exception{
+    void getVotes() throws Exception {
         mockMvc.perform((get("/votes")))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -92,7 +87,7 @@ class RootControllerTest extends AbstractControllerTest{
     }
 
     @Test
-    void getRating() throws Exception{
+    void getRating() throws Exception {
         mockMvc.perform(get("/rating"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -103,14 +98,10 @@ class RootControllerTest extends AbstractControllerTest{
                     public void assertion(List<Restaurant> actual) throws AssertionError {
                         Set<Vote> votes1 = actual.get(0).getVotes();
                         Set<Vote> votes2 = actual.get(1).getVotes();
-                        VoteTestData.assertMatch(votes1, VoteTestData.VOTE_1);
-                        VoteTestData.assertMatch(votes2, VoteTestData.VOTE_3, VoteTestData.VOTE_2);
-                        RestaurantTestData.assertMatch(actual, RESTAURANT1, RESTAURANT2);
+                        VoteTestData.assertMatch(votes2, VoteTestData.VOTE_1);
+                        VoteTestData.assertMatch(votes1, VoteTestData.VOTE_3, VoteTestData.VOTE_2);
+                        RestaurantTestData.assertMatch(actual, RESTAURANT2, RESTAURANT1);
                     }
                 }));
     }
-//
-//    @Test
-//    void setUser() {
-//    }
 }

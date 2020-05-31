@@ -14,6 +14,8 @@ public interface RestaurantRepository {
 
     Restaurant getByName(String name);
 
+    Restaurant getByNameWithVotes(String name);
+
     List<Restaurant> getAll();
 
     Restaurant getWithVotes(long id);

@@ -17,15 +17,17 @@ public class ProfileUserRestController extends AbstractUserController {
         return super.get(authUserId());
     }
 
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody User user) {
+        super.update(user, authUserId());
+    }
+
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete() {
         super.delete(authUserId());
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody User user) {
-        super.update(user, authUserId());
-    }
+//    create!!!
 }

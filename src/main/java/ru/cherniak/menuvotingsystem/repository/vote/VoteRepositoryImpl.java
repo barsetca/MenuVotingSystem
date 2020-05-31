@@ -39,8 +39,9 @@ public class VoteRepositoryImpl implements VoteRepository {
     }
 
     @Override
-    public Vote get(LocalDate date, long userId) {
-        return repository.findByDateAndUserId(date, userId).orElse(null);
+    @Transactional
+    public Vote getWithRestaurant(long id, long userId) {
+        return repository.findByDateAndUserIdWithRestaurant(id, userId).orElse(null);
     }
 
     @Override
@@ -65,5 +66,4 @@ public class VoteRepositoryImpl implements VoteRepository {
     public List<Vote> getAllWithRestaurantByUserIdBetween(LocalDate startDate, LocalDate endDate, long userId) {
         return repository.findAllWithRestaurantByUserIdAndDateBetween(startDate, endDate, userId, SORT_DATE);
     }
-
 }

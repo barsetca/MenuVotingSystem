@@ -36,7 +36,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
 
     @Override
     public Restaurant getByName(String name) {
-        return repository.getByName(name);
+        return repository.getByName(name).orElse(null);
     }
 
     @Override
@@ -65,7 +65,11 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     @Override
     @Transactional
     public List<Restaurant> getAllWithVotes() {
-        return repository.findAllWithVotes(SORT_BY_NAME);
+        return repository.findAllWithVotes();
     }
 
+    @Override
+    public Restaurant getByNameWithVotes(String name) {
+        return repository.findOneByNameWithVotes(name).orElse(null);
+    }
 }

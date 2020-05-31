@@ -47,15 +47,9 @@ public abstract class AbstractDishController {
         return dishService.getAllByRestaurant(restaurantId);
     }
 
-    public List<Dish> getDayMenu(@Nullable LocalDate date, long restaurantId) {
-        log.info("getDayMenu {} of restaurant {}", date, restaurantId);
-        return dishService.getDayMenu(date, restaurantId);
-
-    }
-
     public List<Dish> getTodayMenu(long restaurantId) {
         log.info("getTodayMenu of restaurant {}", restaurantId);
-        return dishService.getDayMenu(LocalDate.now(), restaurantId);
+        return dishService.getTodayMenu(restaurantId);
     }
 
 
@@ -67,10 +61,6 @@ public abstract class AbstractDishController {
 
     public Dish getWithRestaurant(long id, long restaurantId) {
         return dishService.getWithRestaurant(id, restaurantId);
-    }
-
-    public List<Dish> getAllDayMenuByDateWithRestaurant(@Nullable LocalDate date) {
-        return dishService.getAllDayMenuByDateWithRestaurant(date);
     }
 }
 

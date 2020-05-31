@@ -10,10 +10,10 @@ import ru.cherniak.menuvotingsystem.model.Dish;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface JpaDishRepository extends JpaRepository<Dish, Long> {
-
 
     @Modifying
     @Query("DELETE FROM Dish d WHERE d.id=:id")
@@ -27,12 +27,8 @@ public interface JpaDishRepository extends JpaRepository<Dish, Long> {
                                                    @Param("startDate") LocalDate startDate,
                                                    @Param("endDate") LocalDate endDate, Sort sort);
 
-
     @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.id=:id AND d.restaurant.id=:restaurantId")
-    Dish findOneWithRestaurant(@Param("id") long id, @Param("restaurantId") long restaurantId);
-
-    @Query("SELECT d FROM Dish d LEFT OUTER JOIN FETCH d.restaurant WHERE d.date=:date")
-    List<Dish> findAllByDateWithRestaurant(@Param("date") LocalDate date, Sort sort);
+    Optional<Dish> findOneWithRestaurant(@Param("id") long id, @Param("restaurantId") long restaurantId);
 
     @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant")
     List<Dish> findAllWithRestaurant(Sort sort);

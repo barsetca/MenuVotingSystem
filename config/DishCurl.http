@@ -1,0 +1,70 @@
+
+################################DISH####################################################################################
+###AdminDishRestController
+
+###get (dish 100004)
+# curl http://localhost:8080/mvs/rest/admin/dishes/100004
+GET http://localhost:8080/mvs/rest/admin/dishes/100004
+
+###getAllByRestaurant
+# curl http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+GET http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+
+###getAllByRestaurantBetweenDatesInclusive
+# curl http://localhost:8080/mvs/rest/admin/dishes/filter?startDate=2020-04-28&endDate=2020-04-30&restaurantId=100002
+GET http://localhost:8080/mvs/rest/admin/dishes/filter?startDate=2020-04-28&endDate=2020-04-30&restaurantId=100002
+
+###getAll With Restaurant
+# curl http://localhost:8080/mvs/rest/admin/dishes
+GET http://localhost:8080/mvs/rest/admin/dishes
+
+###create newDish by restaurantId 100002 with Restaurant on date
+# curl -X POST -d '{"name":"FirstName","date":"2020-07-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+Content-Type: application/json
+
+{
+  "name": "FirstName",
+  "date": "2020-07-28",
+  "price": 5000
+}
+
+###create newDish by restaurantId 100002 with Restaurant now
+# curl -X POST -d '{"name":"SecondName","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+Content-Type: application/json
+
+{
+  "name": "FirstName",
+  "price": 500
+}
+
+###update Dish 100015 by restaurantId 100002
+# curl -X PUT -d '{"id":100017,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+PUT http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+Content-Type: application/json
+
+{
+  "id": 100017,
+  "name": "UpdateName",
+  "date": "2020-07-28",
+  "price": 500
+}
+
+###
+
+###delete dish 100015
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/dishes/100016
+DELETE http://localhost:8080/mvs/rest/admin/dishes/100016
+
+###
+
+###UserDishRestController
+
+###getTodayMenu
+# curl http://localhost:8080/mvs/rest/user/dishes/by?restaurantId=100002
+GET http://localhost:8080/mvs/rest/user/dishes/by?restaurantId=100002
+
+###C:\Users\barse\AppData\Roaming\JetBrains\IntelliJIdea2020.1\scratches\scratch.http
+###ToolBox URL
+###jetbrains://idea/navigate/reference?project=MenuVotingSystem&path=scratch.http
