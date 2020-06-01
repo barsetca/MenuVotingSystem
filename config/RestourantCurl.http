@@ -3,41 +3,52 @@
 
 ###UserRestaurantRestController-----------------------------------------------------------------------------------------
 ###getWithCountVotes----------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants/100002
+# curl http://localhost:8080/mvs/rest/user/restaurants/100002 --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/100002
+Authorization: Basic user@yandex.ru password
 
 ###
-# curl http://localhost:8080/mvs/rest/user/restaurants/100003
+# curl http://localhost:8080/mvs/rest/user/restaurants/100003 --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/100003
+Authorization: Basic user@yandex.ru password
 
 ###getByNameWithCountVotes---------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants/by?name=McDonalds
+# curl http://localhost:8080/mvs/rest/user/restaurants/by?name=McDonalds --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/by?name=McDonalds
+Authorization: Basic user@yandex.ru password
 
 ###
-# curl http://localhost:8080/mvs/rest/user/restaurants/by?name=Pizza_Hut
+# curl http://localhost:8080/mvs/rest/user/restaurants/by?name=Pizza_Hut --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/by?name=Pizza_Hut
+Authorization: Basic user@yandex.ru password
 
 ###getAllWithCountVotes------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants
+# curl http://localhost:8080/mvs/rest/user/restaurants --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants
+Authorization: Basic user@yandex.ru password
+
+###
 
 ###AdminRestaurantRestController---------------------------------------------------------------------------------------
 ###get-----------------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants/100003
+# curl http://localhost:8080/mvs/rest/admin/restaurants/100003 --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/restaurants/100003
+Authorization: Basic admin@gmail.com admin
 
 ###getAll--------------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants
+# curl http://localhost:8080/mvs/rest/admin/restaurants --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/restaurants
+Authorization: Basic admin@gmail.com admin
 
 ###getByName-----------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants/by?name=McDonalds
+# curl http://localhost:8080/mvs/rest/admin/restaurants/by?name=McDonalds --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/restaurants/by?name=McDonalds
+Authorization: Basic admin@gmail.com admin
 
 ###createWithLocation--------------------------------------------------------------------------------------------------
-# curl -X POST -d '{"name":"Mama_Roma","type":"Italian","address":"пр.Стачек","phone":"318-56-98","url":"mamaroma.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants
+# curl -X POST -d '{"name":"Mama_Roma","type":"Italian","address":"пр.Стачек","phone":"318-56-98","url":"mamaroma.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/restaurants
+Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
@@ -48,9 +59,10 @@ Content-Type: application/json
   "url": "mamaroma.ru"
 }
 
-###update restaurant id=100025-----------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"Update_Roma","type":"UpdateItalian","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100025
-PUT http://localhost:8080/mvs/rest/admin/restaurants/100025
+###update restaurant id=100027-----------------------------------------------------------------------------------------
+# curl -X PUT -d '{"name":"Update_Roma","type":"UpdateItalian","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100027 --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/restaurants/100027
+Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
@@ -61,11 +73,11 @@ Content-Type: application/json
   "url": "update.ru"
 }
 
-### DELETE restaurant id=100025----------------------------------------------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100025
-DELETE http://localhost:8080/mvs/rest/admin/restaurants/100025
+### DELETE restaurant id=100027----------------------------------------------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100027 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/restaurants/100027
+Authorization: Basic admin@gmail.com admin
 
-###
 
 ###C:\Users\barse\AppData\Roaming\JetBrains\IntelliJIdea2020.1\scratches\scratch.http
 ###TooBox URL

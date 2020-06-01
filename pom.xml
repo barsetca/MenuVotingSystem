@@ -20,7 +20,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
-        <spring.version>5.2.5.RELEASE</spring.version>
+        <spring.version>5.2.4.RELEASE</spring.version>
         <spring-data-jpa.version>2.3.0.RELEASE</spring-data-jpa.version>
         <jackson-json.version>2.10.3</jackson-json.version>
         <tomcat.version>9.0.30</tomcat.version>
@@ -140,6 +140,18 @@
             <version>${spring-data-jpa.version}</version>
         </dependency>
 
+        <!--security-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
         <!--DataBase-->
 <!--        <dependency>-->
 <!--            <groupId>org.postgresql</groupId>-->
@@ -166,12 +178,6 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate.validator</groupId>-->
-<!--            <artifactId>hibernate-validator-annotation-processor</artifactId>-->
-<!--            <version>${hibernate-validator.version}</version>-->
-<!--        </dependency>-->
-
 
         <dependency>
             <groupId>org.hibernate</groupId>

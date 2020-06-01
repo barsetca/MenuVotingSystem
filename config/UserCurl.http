@@ -3,16 +3,19 @@
 
 ###AdminUserRestController---------------------------------------------------------------------------------------------
 ###getAll--------------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/users----------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/users
+Authorization: Basic admin@gmail.com admin
 
 ### GET user id=100000-------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/users/100000
+# curl http://localhost:8080/mvs/rest/admin/users/100000 --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/users/100000
+Authorization: Basic admin@gmail.com admin
 
 ### Create user--------------------------------------------------------------------------------------------------------
-# curl -X POST -d '{"name":"NewName","email":"new@nuevo.ru","password":"passwordNew","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users
+# curl -X POST -d '{"name":"NewName","email":"new@nuevo.ru","password":"passwordNew","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/users
+Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
@@ -24,9 +27,10 @@ Content-Type: application/json
   ]
 }
 
-###update user 100026 (if exist)---------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100016
-PUT http://localhost:8080/mvs/rest/admin/users/100026
+###update user (if exist)---------------------------------------------------------------------------------------
+# curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100028 --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/users/100028
+Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
@@ -38,44 +42,53 @@ Content-Type: application/json
   ]
 }
 
-### DELETE user id=100026 (if exist)-----------------------------------------------------------------------------------
+### DELETE user by id (if exist)-----------------------------------------------------------------------------------
 
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/users/100026
-DELETE http://localhost:8080/mvs/rest/admin/users/100026
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/users/100028 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/users/100028
+Authorization: Basic admin@gmail.com admin
 
 ###getByMail-----------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
+# curl http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
+Authorization: Basic admin@gmail.com admin
 
 ###enable--------------------------------------------------------------------------------------------------------------
-# curl -X PATCH -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
+# curl -X PATCH -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100000?enabled=false --user admin@gmail.com:admin
 PATCH http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
+Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 ###ProfileUserRestController(id = 100000)------------------------------------------------------------------------------
-###get
-# curl http://localhost:8080/mvs/rest/profile
+###get-----------------------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/profile
+Authorization: Basic user@yandex.ru password
 
 ### update user profile------------------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"NameUpdate","email":"update@a","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile
+# curl -X PUT -d '{"name":"NameUpdate","email":"update@a","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 PUT http://localhost:8080/mvs/rest/profile
+Authorization: Basic user@yandex.ru password
 Content-Type: application/json
 
 {
   "name": "NameUpdate",
   "email": "update@a",
   "password": "passwordUpdate",
-  "roles": ["ROLE_USER"]
+  "roles": [
+    "ROLE_USER"
+  ]
 }
 
 ### delete user profile------------------------------------------------------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/profile
+# curl -X DELETE http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 DELETE http://localhost:8080/mvs/rest/profile
+Authorization: Basic user@yandex.ru password
 
 ### getAll (check delete)----------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/users
+# curl http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/users
+Authorization: Basic admin@gmail.com admin
 
 ###C:\Users\barse\AppData\Roaming\JetBrains\IntelliJIdea2020.1\scratches\scratch.http
 ###TooBox URL
