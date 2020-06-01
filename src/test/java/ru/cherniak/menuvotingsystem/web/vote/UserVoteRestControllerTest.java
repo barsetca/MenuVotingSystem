@@ -23,7 +23,7 @@ import static ru.cherniak.menuvotingsystem.VoteTestData.*;
 
 class UserVoteRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = "/" + UserVoteRestController.REST_USER_VOTES + '/';
+    private static final String REST_URL = UserVoteRestController.REST_USER_VOTES + '/';
 
     @Autowired
     VoteService voteService;

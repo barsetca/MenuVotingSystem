@@ -10,7 +10,7 @@ import static ru.cherniak.menuvotingsystem.web.SecurityUtil.authUserId;
 @RestController
 @RequestMapping(ProfileUserRestController.REST_URL)
 public class ProfileUserRestController extends AbstractUserController {
-    static final String REST_URL = "rest/profile";
+    static final String REST_URL = "/rest/profile";
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public User get() {

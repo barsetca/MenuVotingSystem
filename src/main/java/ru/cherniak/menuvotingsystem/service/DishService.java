@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.repository.dish.DishRepository;
+import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -73,7 +74,8 @@ public class DishService {
     public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
                                                               long restaurantId) {
         log.info("getAllBetweenDatesInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
-        return repository.getAllByRestaurantBetweenInclusive(startDate, endDate, restaurantId);
+        return repository.getAllByRestaurantBetweenInclusive(DateTimeUtil.getStartDate(startDate),
+                DateTimeUtil.getEndDate(endDate), restaurantId);
     }
 
     public Dish getWithRestaurant(long id, long restaurantId) {

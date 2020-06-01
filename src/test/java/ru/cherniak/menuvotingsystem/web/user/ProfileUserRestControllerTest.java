@@ -23,7 +23,7 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/" + REST_URL))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(USER));
@@ -31,7 +31,7 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/" + REST_URL))
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isNoContent());
         assertMatch(userService.getAll(), ADMIN);
     }
@@ -40,7 +40,7 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
     void update() throws Exception {
         User updated = new User(USER);
         updated.setName("UpdatedName");
-        mockMvc.perform(MockMvcRequestBuilders.put("/" + REST_URL)
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())

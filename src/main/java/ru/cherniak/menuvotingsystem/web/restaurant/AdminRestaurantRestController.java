@@ -21,7 +21,7 @@ import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNew;
 @RequestMapping(value = AdminRestaurantRestController.REST_ADMIN_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestaurantRestController {
 
-    static final String REST_ADMIN_RESTAURANTS = "rest/admin/restaurants";
+    static final String REST_ADMIN_RESTAURANTS = "/rest/admin/restaurants";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

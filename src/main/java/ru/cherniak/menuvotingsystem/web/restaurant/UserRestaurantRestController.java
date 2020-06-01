@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(value = UserRestaurantRestController.REST_USER_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserRestaurantRestController {
 
-    static final String REST_USER_RESTAURANTS = "rest/user/restaurants";
+    static final String REST_USER_RESTAURANTS = "/rest/user/restaurants";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -35,7 +35,7 @@ public class UserRestaurantRestController {
     }
 
     @GetMapping
-    public List<RestaurantTo> getAllWithVotes() {
+    public List<RestaurantTo> getAllWithCountVotes() {
         log.info("findAllWithVotes");
         RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
         return RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());

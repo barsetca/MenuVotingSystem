@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(value = AdminDishRestController.REST_ADMIN_DISHES, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminDishRestController extends AbstractDishController {
 
-    static final String REST_ADMIN_DISHES = "rest/admin/dishes";
+    static final String REST_ADMIN_DISHES = "/rest/admin/dishes";
 
 
     @Override

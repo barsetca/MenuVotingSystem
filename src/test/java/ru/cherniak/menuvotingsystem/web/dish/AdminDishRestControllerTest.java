@@ -20,7 +20,7 @@ import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
 
 class AdminDishRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = "/" + AdminDishRestController.REST_ADMIN_DISHES + '/';
+    private static final String REST_URL = AdminDishRestController.REST_ADMIN_DISHES + '/';
 
     @Autowired
     DishService dishService;

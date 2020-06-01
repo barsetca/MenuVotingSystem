@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping(value = UserDishRestController.REST_USER_DISHES, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserDishRestController extends AbstractDishController {
 
-    static final String REST_USER_DISHES = "rest/user/dishes";
+    static final String REST_USER_DISHES = "/rest/user/dishes";
 
     @Override
     @GetMapping("/by")

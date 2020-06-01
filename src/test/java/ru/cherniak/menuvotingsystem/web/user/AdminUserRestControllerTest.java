@@ -20,7 +20,7 @@ import static ru.cherniak.menuvotingsystem.UserTestData.*;
 
 class AdminUserRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = "/" + AdminUserRestController.REST_ADMIN_USERS + '/';
+    private static final String REST_URL = AdminUserRestController.REST_ADMIN_USERS + '/';
 
     @Autowired
     UserService userService;

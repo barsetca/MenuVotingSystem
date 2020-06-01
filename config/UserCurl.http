@@ -1,23 +1,16 @@
 
 ################################USER####################################################################################
 
-###AdminUserRestController
-
-###getAll
-# curl http://localhost:8080/mvs/rest/admin/users
+###AdminUserRestController---------------------------------------------------------------------------------------------
+###getAll--------------------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/users----------------------------------------------------------------------
 GET http://localhost:8080/mvs/rest/admin/users
 
-<> 2020-05-28T075757.200.json
-
-### GET user id=100000
+### GET user id=100000-------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users/100000
 GET http://localhost:8080/mvs/rest/admin/users/100000
 
-<> 2020-05-28T081451.200.json
-
-###
-
-### Create user
+### Create user--------------------------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"NewName","email":"new@nuevo.ru","password":"passwordNew","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users
 POST http://localhost:8080/mvs/rest/admin/users
 Content-Type: application/json
@@ -31,11 +24,9 @@ Content-Type: application/json
   ]
 }
 
-<> 2020-05-28T082130.201.json
-
-###update user 100016
+###update user 100026 (if exist)---------------------------------------------------------------------------------------
 # curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100016
-PUT http://localhost:8080/mvs/rest/admin/users/100016
+PUT http://localhost:8080/mvs/rest/admin/users/100026
 Content-Type: application/json
 
 {
@@ -46,28 +37,27 @@ Content-Type: application/json
     "ROLE_USER"
   ]
 }
-###
 
-### DELETE user id=100016
+### DELETE user id=100026 (if exist)-----------------------------------------------------------------------------------
 
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/users/100016
-DELETE http://localhost:8080/mvs/rest/admin/users/100016
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/users/100026
+DELETE http://localhost:8080/mvs/rest/admin/users/100026
 
-###getByMail
+###getByMail-----------------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
 GET http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
 
-###enable
+###enable--------------------------------------------------------------------------------------------------------------
 # curl -X PATCH -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
 PATCH http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
 Content-Type: application/json
 
-###ProfileUserRestController(id = 100000)
+###ProfileUserRestController(id = 100000)------------------------------------------------------------------------------
 ###get
 # curl http://localhost:8080/mvs/rest/profile
 GET http://localhost:8080/mvs/rest/profile
 
-### update user profile
+### update user profile------------------------------------------------------------------------------------------------
 # curl -X PUT -d '{"name":"NameUpdate","email":"update@a","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile
 PUT http://localhost:8080/mvs/rest/profile
 Content-Type: application/json
@@ -79,12 +69,11 @@ Content-Type: application/json
   "roles": ["ROLE_USER"]
 }
 
-
-### delete user profile
+### delete user profile------------------------------------------------------------------------------------------------
 # curl -X DELETE http://localhost:8080/mvs/rest/profile
 DELETE http://localhost:8080/mvs/rest/profile
 
-### check delete
+### getAll (check delete)----------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users
 GET http://localhost:8080/mvs/rest/admin/users
 

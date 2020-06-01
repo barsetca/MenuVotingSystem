@@ -18,7 +18,7 @@ GET http://localhost:8080/mvs/rest/user/restaurants/by?name=McDonalds
 # curl http://localhost:8080/mvs/rest/user/restaurants/by?name=Pizza_Hut
 GET http://localhost:8080/mvs/rest/user/restaurants/by?name=Pizza_Hut
 
-###getAllWithVotes-----------------------------------------------------------------------------------------------------
+###getAllWithCountVotes------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants
 GET http://localhost:8080/mvs/rest/user/restaurants
 
@@ -48,9 +48,9 @@ Content-Type: application/json
   "url": "mamaroma.ru"
 }
 
-###update restaurant id=100015-----------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"Update_Roma","type":"UpdateItalian","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100015
-PUT http://localhost:8080/mvs/rest/admin/restaurants/100015
+###update restaurant id=100025-----------------------------------------------------------------------------------------
+# curl -X PUT -d '{"name":"Update_Roma","type":"UpdateItalian","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100025
+PUT http://localhost:8080/mvs/rest/admin/restaurants/100025
 Content-Type: application/json
 
 {
@@ -61,12 +61,11 @@ Content-Type: application/json
   "url": "update.ru"
 }
 
-### DELETE restaurant id=100015----------------------------------------------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100015
-DELETE http://localhost:8080/mvs/rest/admin/restaurants/100015
+### DELETE restaurant id=100025----------------------------------------------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100025
+DELETE http://localhost:8080/mvs/rest/admin/restaurants/100025
 
 ###
-
 
 ###C:\Users\barse\AppData\Roaming\JetBrains\IntelliJIdea2020.1\scratches\scratch.http
 ###TooBox URL

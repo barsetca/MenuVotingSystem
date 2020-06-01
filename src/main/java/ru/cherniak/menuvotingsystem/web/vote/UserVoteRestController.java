@@ -22,7 +22,7 @@ import static ru.cherniak.menuvotingsystem.web.SecurityUtil.authUserId;
 @RequestMapping(value = UserVoteRestController.REST_USER_VOTES, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserVoteRestController {
 
-    protected static final String REST_USER_VOTES = "rest/user/votes";
+    protected static final String REST_USER_VOTES = "/rest/user/votes";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
