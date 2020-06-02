@@ -1,11 +1,13 @@
 package ru.cherniak.menuvotingsystem.model;
 
+import ru.cherniak.menuvotingsystem.HasId;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractBase {
+public abstract class AbstractBase implements HasId {
     public static final int START_SEQ = 100000;
 
     @Id
@@ -28,9 +30,6 @@ public abstract class AbstractBase {
         this.id = id;
     }
 
-    public boolean isNew() {
-        return getId() == null;
-    }
 
     @Override
     public String toString() {

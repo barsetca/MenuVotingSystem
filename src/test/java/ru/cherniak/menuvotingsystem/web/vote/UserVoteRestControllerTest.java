@@ -18,8 +18,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
+import static ru.cherniak.menuvotingsystem.UserTestData.USER;
 import static ru.cherniak.menuvotingsystem.UserTestData.USER_ID;
 import static ru.cherniak.menuvotingsystem.VoteTestData.*;
+import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
 class UserVoteRestControllerTest extends AbstractControllerTest {
 
@@ -34,6 +36,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
         Vote newVote = new Vote(LocalDate.now());
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
                 .param("restaurantId", "100002")
+                .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
@@ -51,7 +54,8 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
         timeBorderPlus();
         Vote created = voteService.save(new Vote(LocalDate.now()), UserTestData.USER_ID, RESTAURANT1_ID);
         VoteTestData.assertMatch(voteService.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
-        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL))
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -61,7 +65,8 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithRestaurant() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + VOTE_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + VOTE_ID)
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -70,7 +75,8 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllByUserIdWithRestaurant() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -81,7 +87,8 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     void getAllWithRestaurantByUserIdBetween() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "filter")
                 .param("startDate", "2020-04-29")
-                .param("endDate", "2020-04-30"))
+                .param("endDate", "2020-04-30")
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -92,7 +99,8 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     void getAllWithRestaurantByUserIdBetweenWithNull() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "filter")
                 .param("startDate", "")
-                .param("endDate", ""))
+                .param("endDate", "")
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

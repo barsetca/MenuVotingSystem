@@ -1,7 +1,14 @@
 package ru.cherniak.menuvotingsystem.util;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import ru.cherniak.menuvotingsystem.HasId;
 import ru.cherniak.menuvotingsystem.model.AbstractBase;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
+
+import javax.validation.*;
+import java.util.Set;
+import java.util.StringJoiner;
 
 public class ValidationUtil {
 
@@ -27,21 +34,22 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkNew(AbstractBase entity) {
-        if (!entity.isNew()) {
-            throw new IllegalArgumentException(entity + " must be new (id=null)");
+    public static void checkNew(HasId bean) {
+        if (!bean.isNew()) {
+            throw new IllegalArgumentException(bean + " must be new (id=null)");
         }
     }
 
-    public static void assureIdConsistent(AbstractBase entity, long id) {
-        if (entity.isNew()) {
-            entity.setId(id);
-        } else if (entity.getId() != id) {
-            throw new IllegalArgumentException(entity + " must be with id=" + id);
+    public static void assureIdConsistent(HasId bean, long id) {
+//      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
+        if (bean.isNew()) {
+            bean.setId(id);
+        } else if (bean.id() != id) {
+            throw new IllegalArgumentException(bean + " must be with id=" + id);
         }
     }
 
-
+    //  http://stackoverflow.com/a/28565320/548473
     public static Throwable getRootCause(Throwable t) {
         Throwable result = t;
         Throwable cause;
@@ -50,5 +58,37 @@ public class ValidationUtil {
             result = cause;
         }
         return result;
+    }
+
+    private static final Validator validator;
+
+    static {
+        //  From Javadoc: implementations are thread-safe and instances are typically cached and reused.
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        //  From Javadoc: implementations of this longerface must be thread-safe
+        validator = factory.getValidator();
+    }
+
+    public static <T> void validate(T bean) {
+        // https://alexkosarev.name/2018/07/30/bean-validation-api/
+        Set<ConstraintViolation<T>> violations = validator.validate(bean);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
+
+    public static ResponseEntity<String> getStringResponseEntityError(BindingResult result) {
+        StringJoiner joiner = new StringJoiner("<br>");
+        result.getFieldErrors().forEach(
+                fe -> {
+                    String msg = fe.getDefaultMessage();
+                    if (msg != null) {
+                        if (!msg.startsWith(fe.getField())) {
+                            msg = fe.getField() + ' ' + msg;
+                        }
+                        joiner.add(msg);
+                    }
+                });
+        return ResponseEntity.unprocessableEntity().body(joiner.toString());
     }
 }

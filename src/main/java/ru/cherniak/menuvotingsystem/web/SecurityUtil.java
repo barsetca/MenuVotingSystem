@@ -1,24 +1,30 @@
 package ru.cherniak.menuvotingsystem.web;
 
-import ru.cherniak.menuvotingsystem.model.AbstractBase;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import ru.cherniak.menuvotingsystem.AuthorizedUser;
+
+import static java.util.Objects.requireNonNull;
 
 public class SecurityUtil {
 
-    private static long id = AbstractBase.START_SEQ;
+    public static AuthorizedUser safeGet() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return null;
+        }
+        Object principal = auth.getPrincipal();
+        return (principal instanceof AuthorizedUser) ? (AuthorizedUser) principal : null;
+    }
 
-    private SecurityUtil() {
+    public static AuthorizedUser get() {
+        AuthorizedUser user = safeGet();
+        requireNonNull(user, "No authorized user found");
+        return user;
     }
 
     public static long authUserId() {
-        return id;
+        return get().getUserTo().id();
     }
 
-    public static void setAuthUserId(long id) {
-        SecurityUtil.id = id;
     }
-
-
-//    public static int authUserCaloriesPerDay() {
-//        return DEFAULT_CALORIES_PER_DAY;
-//    }
-}

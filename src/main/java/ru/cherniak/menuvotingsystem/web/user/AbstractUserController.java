@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.service.UserService;
+import ru.cherniak.menuvotingsystem.to.UserTo;
+import ru.cherniak.menuvotingsystem.util.UserUtil;
 
 import java.util.List;
 
@@ -34,6 +36,13 @@ public abstract class AbstractUserController {
         return service.create(user);
     }
 
+    public User createTo(UserTo userTo) {
+        log.info("create {}", userTo);
+        checkNew(userTo);
+        return create(UserUtil.createNewFromTo(userTo));
+    }
+
+
     public void delete(long id) {
         log.info("delete {}", id);
         service.delete(id);
@@ -44,6 +53,13 @@ public abstract class AbstractUserController {
         assureIdConsistent(user, id);
         service.update(user);
     }
+
+    public void updateTo(UserTo userTo, long id) {
+        log.info("update {} with id={}", userTo, id);
+        assureIdConsistent(userTo, id);
+        service.updateTo(userTo);
+    }
+
 
     public User getByMail(String email) {
         log.info("getByEmail {}", email);

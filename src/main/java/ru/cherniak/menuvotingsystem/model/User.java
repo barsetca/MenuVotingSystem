@@ -108,10 +108,6 @@ public class User extends AbstractBaseNameId {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     public List<Vote> getVotes() {
         return votes;
     }

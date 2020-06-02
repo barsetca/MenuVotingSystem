@@ -17,6 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.DishTestData.*;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
+import static ru.cherniak.menuvotingsystem.UserTestData.ADMIN;
+import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
 class AdminDishRestControllerTest extends AbstractControllerTest {
 
@@ -30,6 +32,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
         Dish newDish = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
                 .param("restaurantId", "100002")
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
                 .andExpect(status().isCreated());
@@ -47,6 +50,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
         Dish updated = DishTestData.getUpdated(DISH_1);
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
                 .param("restaurantId", "100002")
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
@@ -55,7 +59,8 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + DISH_ID))
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + DISH_ID)
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         DishTestData.assertMatch(dishService.getDayMenu(DATE_290420, RESTAURANT1_ID), DISH_2);
@@ -63,7 +68,8 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + DISH_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + DISH_ID)
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -72,7 +78,8 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllWithRestaurant() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -82,7 +89,8 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
     @Test
     void getAllByRestaurant() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "/by")
-                .param("restaurantId", "100003"))
+                .param("restaurantId", "100003")
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -94,7 +102,8 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "filter")
                 .param("startDate", "2020-04-29")
                 .param("endDate", "2020-04-30")
-                .param("restaurantId", "100002"))
+                .param("restaurantId", "100002")
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

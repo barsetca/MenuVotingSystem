@@ -14,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.cherniak.menuvotingsystem.DishTestData.contentJson;
 import static ru.cherniak.menuvotingsystem.DishTestData.getCreatedToday;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
+import static ru.cherniak.menuvotingsystem.UserTestData.USER;
+import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
 class UserDishRestControllerTest extends AbstractControllerTest {
 
@@ -29,7 +31,8 @@ class UserDishRestControllerTest extends AbstractControllerTest {
         Dish newDish = getCreatedToday();
         newDish.setName("Второе Имя");
         Dish today2 = dishService.create(newDish, RESTAURANT1_ID);
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?restaurantId=" + RESTAURANT1_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?restaurantId=" + RESTAURANT1_ID)
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

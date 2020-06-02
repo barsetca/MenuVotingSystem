@@ -4,7 +4,7 @@
 ###UserVoteRestController----------------------------------------------------------------------------------------------
 ###getWithRestaurant---------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/votes/100014 --user user@yandex.ru:password
-GET http://localhost:8080/mvs/rest/user/votes/100013
+GET http://localhost:8080/mvs/rest/user/votes/100014
 Authorization: Basic user@yandex.ru password
 
 ###getAllByUserIdWithRestaurant----------------------------------------------------------------------------------------

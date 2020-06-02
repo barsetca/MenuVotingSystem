@@ -86,7 +86,7 @@ public class RestaurantService {
     }
 
     public List<Restaurant> getAllWithVotes() {
-        log.info("findAllWithVotes");
+        log.info("getAllWithVotes");
         return repository.getAllWithVotes();
     }
 

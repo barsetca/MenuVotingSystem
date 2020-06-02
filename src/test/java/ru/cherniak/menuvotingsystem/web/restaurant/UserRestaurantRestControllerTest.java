@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
+import static ru.cherniak.menuvotingsystem.UserTestData.USER;
+import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
 class UserRestaurantRestControllerTest extends AbstractControllerTest {
 
@@ -25,7 +27,8 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithVotes() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID)
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -34,7 +37,8 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getByNameWithVotes() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + RESTAURANT1.getName()))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + RESTAURANT1.getName())
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -44,7 +48,8 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void getAllWithVotes() throws Exception {
         List<RestaurantTo> restaurantTos = RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
