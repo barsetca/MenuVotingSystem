@@ -26,6 +26,7 @@ public class AdminUserRestController extends AbstractUserController {
         return super.get(id);
     }
 
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@RequestBody User user) {
         User created = super.create(user);

@@ -18,8 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
-import static ru.cherniak.menuvotingsystem.UserTestData.USER;
-import static ru.cherniak.menuvotingsystem.UserTestData.USER_ID;
+import static ru.cherniak.menuvotingsystem.UserTestData.*;
 import static ru.cherniak.menuvotingsystem.VoteTestData.*;
 import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
@@ -71,6 +70,12 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(VOTE_1));
+    }
+
+    @Test
+    void getUnAuth() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + VOTE_ID))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test

@@ -15,8 +15,11 @@ import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.cherniak.menuvotingsystem.DishTestData.DISH_ID;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
 import static ru.cherniak.menuvotingsystem.UserTestData.ADMIN;
+import static ru.cherniak.menuvotingsystem.UserTestData.USER;
+import static ru.cherniak.menuvotingsystem.VoteTestData.VOTE_ID;
 import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
 
@@ -35,6 +38,19 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(RESTAURANT1));
+    }
+
+    @Test
+    void getUnAuth() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getForbidden() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isForbidden());
     }
 
     @Test

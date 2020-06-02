@@ -66,7 +66,7 @@ GET http://localhost:8080/mvs/rest/profile
 Authorization: Basic user@yandex.ru password
 
 ### update user profile------------------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"NameUpdate","email":"update@a","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
+# curl -X PUT -d '{"name":"NameUpdate","email":"update@a","password":"passwordUpdate"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 PUT http://localhost:8080/mvs/rest/profile
 Authorization: Basic user@yandex.ru password
 Content-Type: application/json
@@ -74,11 +74,31 @@ Content-Type: application/json
 {
   "name": "NameUpdate",
   "email": "update@a",
-  "password": "passwordUpdate",
-  "roles": [
-    "ROLE_USER"
-  ]
+  "password": "passwordUpdate"
 }
+
+###get(check update)---------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/profile --user update@a:passwordUpdate
+GET http://localhost:8080/mvs/rest/profile
+Authorization: Basic update@a passwordUpdate
+
+###
+
+### register user--------------------------------------------------------------------------------------------------------
+# curl -X POST -d '{"name":"NewName","email":"new@nuevo.ru","password":"passwordNew"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
+POST http://localhost:8080/mvs/rest/profile/register
+Content-Type: application/json
+
+{
+  "name": "NewName",
+  "email": "new@nuevo.ru",
+  "password": "passwordNew"
+}
+
+###get(check create)---------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/profile --user new@nuevo.ru:passwordNew
+GET http://localhost:8080/mvs/rest/profile
+Authorization: Basic new@nuevo.ru passwordNew
 
 ### delete user profile------------------------------------------------------------------------------------------------
 # curl -X DELETE http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password

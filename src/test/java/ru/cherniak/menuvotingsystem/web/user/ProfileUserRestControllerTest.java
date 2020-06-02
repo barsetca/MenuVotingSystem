@@ -4,13 +4,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.Assert;
+import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.service.UserService;
 import ru.cherniak.menuvotingsystem.to.UserTo;
 import ru.cherniak.menuvotingsystem.util.UserUtil;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
+import ru.cherniak.menuvotingsystem.web.TestUtil;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -36,6 +39,12 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getUnAuth() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void update() throws Exception {
         UserTo updated = UserUtil.asTo(USER);
         updated.setName("UpdatedName");
@@ -57,4 +66,15 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
     }
 
 
+    @Test
+    void register()  throws Exception {
+        UserTo newUserTo = new UserTo(null, "Create", "create@user.ru", "createPass");
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newUserTo)))
+                .andExpect(status().isCreated());
+        User created = TestUtil.readFromJson(action, User.class);
+        Long newID = created.getId();
+        assertMatch(userService.get(newID), created);
+    }
 }

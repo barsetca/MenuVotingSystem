@@ -38,4 +38,10 @@ class UserDishRestControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(today2, today1));
     }
+
+    @Test
+    void getUnAuth() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?restaurantId=" + RESTAURANT1_ID))
+                .andExpect(status().isUnauthorized());
+    }
 }

@@ -46,6 +46,19 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getUnAuth() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getForbidden() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void createWithLocation() throws Exception {
         User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", Role.ROLE_USER);
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
