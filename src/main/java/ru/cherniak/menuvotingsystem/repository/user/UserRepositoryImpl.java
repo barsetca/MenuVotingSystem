@@ -20,6 +20,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public User save(User user) {
+        if (!user.isNew() && get(user.id()) == null) {
+            return null;
+        }
         return repository.save(user);
     }
 

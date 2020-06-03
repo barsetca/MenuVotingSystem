@@ -1,6 +1,8 @@
 package ru.cherniak.menuvotingsystem.model;
 
 
+import ru.cherniak.menuvotingsystem.web.View;
+
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Min;
@@ -23,7 +25,7 @@ public class Dish extends AbstractBaseNameId {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Restaurant.class)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private Restaurant restaurant;
 
     public Dish() {

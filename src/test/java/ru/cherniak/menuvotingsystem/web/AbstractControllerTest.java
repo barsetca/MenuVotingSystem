@@ -21,10 +21,9 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml",
         "classpath:spring/spring-mvc.xml",
-        "classpath:spring/spring-cache.xml"
 })
 
-@Transactional
+@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class AbstractControllerTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
@@ -47,5 +46,4 @@ public class AbstractControllerTest {
                 .apply(springSecurity())
                 .build();
     }
-
 }

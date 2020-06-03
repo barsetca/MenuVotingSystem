@@ -1,26 +1,12 @@
 package ru.cherniak.menuvotingsystem.web;
 
-import org.assertj.core.matcher.AssertionMatcher;
 import org.junit.jupiter.api.Test;
-import ru.cherniak.menuvotingsystem.DishTestData;
-import ru.cherniak.menuvotingsystem.RestaurantTestData;
-import ru.cherniak.menuvotingsystem.VoteTestData;
-import ru.cherniak.menuvotingsystem.model.Dish;
-import ru.cherniak.menuvotingsystem.model.Restaurant;
-import ru.cherniak.menuvotingsystem.model.User;
-import ru.cherniak.menuvotingsystem.model.Vote;
-
-import java.util.List;
-import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.cherniak.menuvotingsystem.DishTestData.ALL_DISHES;
-import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1;
-import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT2;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.userAuth;
+import static ru.cherniak.menuvotingsystem.TestUtil.userAuth;
 
 
 class RootControllerTest extends AbstractControllerTest {

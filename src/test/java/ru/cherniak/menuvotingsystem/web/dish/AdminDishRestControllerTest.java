@@ -5,12 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.service.DishService;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
-import ru.cherniak.menuvotingsystem.web.TestUtil;
+import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
+
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -19,7 +23,7 @@ import static ru.cherniak.menuvotingsystem.DishTestData.*;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
 import static ru.cherniak.menuvotingsystem.UserTestData.ADMIN;
 import static ru.cherniak.menuvotingsystem.UserTestData.USER;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
+import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
 
 class AdminDishRestControllerTest extends AbstractControllerTest {
 
@@ -30,7 +34,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Dish newDish = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
+        Dish newDish = new Dish("NewName", LocalDate.now(), 100);
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
                 .param("restaurantId", "100002")
                 .with(userHttpBasic(ADMIN))
@@ -42,20 +46,97 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
         Long newID = created.getId();
         newDish.setId(newID);
 
-        DishTestData.assertMatch(created, newDish);
-        DishTestData.assertMatch(dishService.get(newID), newDish);
+        DISH_MATCHER.assertMatch(created, newDish);
+        DISH_MATCHER.assertMatch(dishService.get(newID), newDish);
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
+    @Test
+    void createValidationError() throws Exception {
+        Dish newDish = new Dish("NewName", LocalDate.now(), 100);
+        newDish.setName("R");
+        newDish.setPrice(-1);
+        newDish.setDate(LocalDate.now().minusDays(1));
+//        newDish.setName(" ");
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+                .param("restaurantId", "100002")
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
+    @Test
+    void createDuplicateNameOneDateByRestaurant() throws Exception {
+        dishService.create(new Dish("NewName", LocalDate.now(), 100), RESTAURANT1_ID);
+        Dish newDish = new Dish("NewName", LocalDate.now(), 1000);
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+                .param("restaurantId", "100002")
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)))
+                .andExpect(status().isConflict())
+                .andDo(print());
     }
 
     @Test
     void update() throws Exception {
-        Dish updated = DishTestData.getUpdated(DISH_1);
+        Dish updated = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
+        updated.setName("UpdateName");
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
                 .param("restaurantId", "100002")
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
-        DishTestData.assertMatch(dishService.get(DISH_ID), updated);
+
+        DISH_MATCHER.assertMatch(dishService.get(updated.getId()), updated);
+    }
+
+    @Test
+    void updateNotFound() throws Exception {
+        Dish updated = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
+        updated.setName("UpdateName");
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
+                .param("restaurantId", "1")
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
+
+    @Test
+    void updateValidationError() throws Exception {
+        Dish updated = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
+        updated.setName("R");
+        updated.setPrice(-1);
+        updated.setDate(LocalDate.now().minusDays(1));
+//        newDish.setName(" ");
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
+                .param("restaurantId", "100002")
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
+    @Test
+    void updateDuplicateNameOneDateByRestaurant() throws Exception {
+        dishService.create(new Dish("FirstName", LocalDate.now(), 100), RESTAURANT1_ID);
+        Dish second = dishService.create(new Dish("SecondNewName", LocalDate.now(), 1000), RESTAURANT1_ID);
+        second.setName("FirstName");
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
+                .param("restaurantId", "100002")
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(second)))
+                .andExpect(status().isConflict()) //isConflict
+                .andDo(print());
     }
 
     @Test
@@ -64,7 +145,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        DishTestData.assertMatch(dishService.getDayMenu(DATE_290420, RESTAURANT1_ID), DISH_2);
+        DISH_MATCHER.assertMatch(dishService.getDayMenu(DATE_290420, RESTAURANT1_ID), DISH_2);
     }
 
     @Test
@@ -74,7 +155,15 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(DISH_1));
+                .andExpect(DISH_MATCHER.contentJson(DISH_1));
+    }
+
+    @Test
+    void getNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + 1)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test
@@ -97,7 +186,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DishTestData.contentJson(DISH_5, DISH_6, DISH_8, DISH_7, DISH_1, DISH_2, DISH_4, DISH_3));
+                .andExpect(DISH_MATCHER.contentJson(DISH_5, DISH_6, DISH_8, DISH_7, DISH_1, DISH_2, DISH_4, DISH_3));
     }
 
     @Test
@@ -108,7 +197,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(DISH_8, DISH_7, DISH_4, DISH_3));
+                .andExpect(DISH_MATCHER.contentJson(DISH_8, DISH_7, DISH_4, DISH_3));
     }
 
     @Test
@@ -121,6 +210,6 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DishTestData.contentJson(DISH_5, DISH_6, DISH_1, DISH_2));
+                .andExpect(DISH_MATCHER.contentJson(DISH_5, DISH_6, DISH_1, DISH_2));
     }
 }

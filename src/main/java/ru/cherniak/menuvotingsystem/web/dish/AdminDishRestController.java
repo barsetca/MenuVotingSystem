@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.model.Dish;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
 public class AdminDishRestController extends AbstractDishController {
 
     static final String REST_ADMIN_DISHES = "/rest/admin/dishes";
-
 
     @Override
     @GetMapping("/{id}")
@@ -45,7 +45,7 @@ public class AdminDishRestController extends AbstractDishController {
 
 
     @PostMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createWithLocation(@RequestBody Dish dish, @RequestParam long restaurantId) {
+    public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish, @RequestParam long restaurantId) {
         Dish created = super.create(dish, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_ADMIN_DISHES + "/{id}")
@@ -56,7 +56,7 @@ public class AdminDishRestController extends AbstractDishController {
     @Override
     @PutMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Dish dish, @RequestParam long restaurantId) {
+    public void update(@Valid @RequestBody Dish dish, @RequestParam long restaurantId) {
         super.update(dish, restaurantId);
     }
 

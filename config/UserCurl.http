@@ -12,6 +12,12 @@ Authorization: Basic admin@gmail.com admin
 GET http://localhost:8080/mvs/rest/admin/users/100000
 Authorization: Basic admin@gmail.com admin
 
+### GET user NotFound (UNPROCESSABLE_ENTITY) id=1----------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/users/1 --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/users/1
+Authorization: Basic admin@gmail.com admin
+
+
 ### Create user--------------------------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"NewName","email":"new@nuevo.ru","password":"passwordNew","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/users
@@ -27,9 +33,24 @@ Content-Type: application/json
   ]
 }
 
+### Create user Validation Error---------------------------------------------------------------------------------------
+# curl -X POST -d '{"name":"N","email":"n@","password":"pass","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/users
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
+  "name": "Ne",
+  "email": "n@",
+  "password": "pass",
+  "roles": [
+    "ROLE_USER"
+  ]
+}
+
 ###update user (if exist)---------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100028 --user admin@gmail.com:admin
-PUT http://localhost:8080/mvs/rest/admin/users/100028
+# curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100019 --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/users/100019
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -43,9 +64,13 @@ Content-Type: application/json
 }
 
 ### DELETE user by id (if exist)-----------------------------------------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/users/100019 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/users/100019
+Authorization: Basic admin@gmail.com admin
 
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/users/100028 --user admin@gmail.com:admin
-DELETE http://localhost:8080/mvs/rest/admin/users/100028
+### DELETE  NotFound (UNPROCESSABLE_ENTITY) id=1-----------------------------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/users/1 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/users/1
 Authorization: Basic admin@gmail.com admin
 
 ###getByMail-----------------------------------------------------------------------------------------------------------
@@ -53,7 +78,12 @@ Authorization: Basic admin@gmail.com admin
 GET http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
 Authorization: Basic admin@gmail.com admin
 
-###enable--------------------------------------------------------------------------------------------------------------
+###getByMail NotFound (UNPROCESSABLE_ENTITY) not@exist.ru -------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/users/by?email=not@exist.ru --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/users/by?email=not@exist.ru
+Authorization: Basic admin@gmail.com admin
+
+###enable (false clouse auth)------------------------------------------------------------------------------------------
 # curl -X PATCH -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100000?enabled=false --user admin@gmail.com:admin
 PATCH http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
 Authorization: Basic admin@gmail.com admin
@@ -77,6 +107,20 @@ Content-Type: application/json
   "password": "passwordUpdate"
 }
 
+### update user profile Validation Error--------------------------------------------------------------------------------
+# curl -X PUT -d '{"name":"U","email":"@a","password":"wordU"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user update@a:passwordUpdate
+PUT http://localhost:8080/mvs/rest/profile
+Authorization: Basic update@a passwordUpdate
+Content-Type: application/json
+
+{
+  "name": "U",
+  "email": "@a",
+  "password": "wordU"
+}
+
+###
+
 ###get(check update)---------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/profile --user update@a:passwordUpdate
 GET http://localhost:8080/mvs/rest/profile
@@ -84,7 +128,7 @@ Authorization: Basic update@a passwordUpdate
 
 ###
 
-### register user--------------------------------------------------------------------------------------------------------
+### register user------------------------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"NewName","email":"new@nuevo.ru","password":"passwordNew"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
 POST http://localhost:8080/mvs/rest/profile/register
 Content-Type: application/json
@@ -95,15 +139,29 @@ Content-Type: application/json
   "password": "passwordNew"
 }
 
+### register user Validation Error--------------------------------------------------------------------------------------
+# curl -X POST -d '{"name":"N","email":"@u","password":"New"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
+POST http://localhost:8080/mvs/rest/profile/register
+Content-Type: application/json
+
+{
+  "name": "N",
+  "email": "@u",
+  "password": "New"
+}
+
+
 ###get(check create)---------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/profile --user new@nuevo.ru:passwordNew
 GET http://localhost:8080/mvs/rest/profile
 Authorization: Basic new@nuevo.ru passwordNew
 
 ### delete user profile------------------------------------------------------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
+# curl -X DELETE http://localhost:8080/mvs/rest/profile --user new@nuevo.ru:passwordNew
 DELETE http://localhost:8080/mvs/rest/profile
-Authorization: Basic user@yandex.ru password
+Authorization: Basic new@nuevo.ru passwordNew
+
+###
 
 ### getAll (check delete)----------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
@@ -111,5 +169,5 @@ GET http://localhost:8080/mvs/rest/admin/users
 Authorization: Basic admin@gmail.com admin
 
 ###C:\Users\barse\AppData\Roaming\JetBrains\IntelliJIdea2020.1\scratches\scratch.http
-###TooBox URL
+###ToolBox URL
 ###jetbrains://idea/navigate/reference?project=MenuVotingSystem&path=scratch.http

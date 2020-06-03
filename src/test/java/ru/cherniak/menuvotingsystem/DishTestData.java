@@ -2,6 +2,7 @@ package ru.cherniak.menuvotingsystem;
 
 import org.springframework.test.web.servlet.ResultMatcher;
 import ru.cherniak.menuvotingsystem.model.Dish;
+import ru.cherniak.menuvotingsystem.model.Vote;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -11,10 +12,13 @@ import java.util.List;
 import static java.time.LocalDate.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.cherniak.menuvotingsystem.model.AbstractBase.START_SEQ;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.readFromJsonMvcResult;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.readListFromJsonMvcResult;
+import static ru.cherniak.menuvotingsystem.TestUtil.readFromJsonMvcResult;
+import static ru.cherniak.menuvotingsystem.TestUtil.readListFromJsonMvcResult;
 
 public class DishTestData {
+    public static TestMatcher<Dish> DISH_MATCHER = TestMatcher.usingFieldsComparator(Dish.class, "restaurant");
+
+
     public static final long DISH_ID = START_SEQ + 4;
 
     public static final LocalDate DATE_290420 = of(2020, Month.APRIL, 29);
@@ -43,23 +47,4 @@ public class DishTestData {
         return new Dish(dish.getId(), "Обновленный пункт", dish.getDate(), 200);
     }
 
-    public static void assertMatch(Dish actual, Dish expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "restaurant");
-    }
-
-    public static void assertMatch(Iterable<Dish> actual, Dish... expected) {
-        assertMatch(actual, List.of(expected));
-    }
-
-    public static void assertMatch(Iterable<Dish> actual, Iterable<Dish> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("restaurant").isEqualTo(expected);
-    }
-
-    public static ResultMatcher contentJson(Dish... expected) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, Dish.class), List.of(expected));
-    }
-
-    public static ResultMatcher contentJson(Dish expected) {
-        return result -> assertMatch(readFromJsonMvcResult(result, Dish.class), expected);
-    }
 }

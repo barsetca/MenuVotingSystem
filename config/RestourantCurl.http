@@ -35,6 +35,11 @@ Authorization: Basic user@yandex.ru password
 GET http://localhost:8080/mvs/rest/admin/restaurants/100003
 Authorization: Basic admin@gmail.com admin
 
+###get restaurant NotFound (UNPROCESSABLE_ENTITY) id=1------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/restaurants/1 --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/restaurants/1
+Authorization: Basic admin@gmail.com admin
+
 ###getAll--------------------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/restaurants --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/restaurants
@@ -43,6 +48,11 @@ Authorization: Basic admin@gmail.com admin
 ###getByName-----------------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/restaurants/by?name=McDonalds --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/restaurants/by?name=McDonalds
+Authorization: Basic admin@gmail.com admin
+
+###getByName restaurant NotFound (UNPROCESSABLE_ENTITY) name=NotExist--------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/restaurants/by?name=NotExist --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/restaurants/by?name=NotExist
 Authorization: Basic admin@gmail.com admin
 
 ###createWithLocation--------------------------------------------------------------------------------------------------
@@ -59,9 +69,24 @@ Content-Type: application/json
   "url": "mamaroma.ru"
 }
 
-###update restaurant id=100027-----------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"Update_Roma","type":"UpdateItalian","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100027 --user admin@gmail.com:admin
-PUT http://localhost:8080/mvs/rest/admin/restaurants/100027
+###createWithLocation Validation Error---------------------------------------------------------------------------------
+# curl -X POST -d '{"name":"M","type":"It","address":"пр","phone":"318","url":"m"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/restaurants
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
+  "name": "M",
+  "type": "It",
+  "address": "пр",
+  "phone": "318",
+  "url": "m"
+}
+
+
+###update restaurant id=100017 (if exist)------------------------------------------------------------------------------
+# curl -X PUT -d '{"name":"Update_Roma","type":"UpdateItalian","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100017 --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/restaurants/100017
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -73,9 +98,28 @@ Content-Type: application/json
   "url": "update.ru"
 }
 
-### DELETE restaurant id=100027----------------------------------------------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100027 --user admin@gmail.com:admin
-DELETE http://localhost:8080/mvs/rest/admin/restaurants/100027
+###update restaurant NotFound (UNPROCESSABLE_ENTITY) id=1---------------------------------------------------------
+# curl -X PUT -d '{"name":"Update_Roma","type":"UpdateItalian","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/1 --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/restaurants/1
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
+  "name": "Up_Roma",
+  "type": "Upggfd",
+  "address": "пр.СтачекUp",
+  "phone": "(812)318-56-98",
+  "url": "up.ru"
+}
+
+### DELETE restaurant id=100017 (if exist)-----------------------------------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100017 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/restaurants/100017
+Authorization: Basic admin@gmail.com admin
+
+### DELETE restaurant NotFound (UNPROCESSABLE_ENTITY) id=1-------------------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/1 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/restaurants/1
 Authorization: Basic admin@gmail.com admin
 
 

@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.restaurant.JpaRestaurantRepository;
+import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
 import ru.cherniak.menuvotingsystem.repository.user.JpaUserRepository;
+import ru.cherniak.menuvotingsystem.repository.user.UserRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,17 +27,21 @@ public class VoteRepositoryImpl implements VoteRepository {
     private JpaVoteRepository repository;
 
     @Autowired
-    private JpaRestaurantRepository restaurantRepository;
+    private RestaurantRepository restaurantRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     @Transactional
     public Vote save(Vote vote, long userId, long restaurantId) {
         repository.delete(vote.getDate(), userId);
-        vote.setRestaurant(restaurantRepository.getOne(restaurantId));
-        vote.setUser(userRepository.getOne(userId));
+        Restaurant restaurant = restaurantRepository.get(restaurantId);
+        if (restaurant == null){
+            return null;
+        }
+        vote.setRestaurant(restaurant);
+        vote.setUser(userRepository.get(userId));
         return repository.save(vote);
     }
 

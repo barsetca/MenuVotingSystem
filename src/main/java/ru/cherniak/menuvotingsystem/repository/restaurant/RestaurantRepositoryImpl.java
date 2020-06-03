@@ -25,6 +25,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     @Override
     @Transactional
     public Restaurant save(Restaurant restaurant) {
+        if (!restaurant.isNew() && get(restaurant.id()) == null) {
+            return null;
+        }
         return repository.save(restaurant);
     }
 

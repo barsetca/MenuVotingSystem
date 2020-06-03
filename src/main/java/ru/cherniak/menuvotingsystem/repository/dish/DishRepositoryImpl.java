@@ -29,6 +29,9 @@ public class DishRepositoryImpl implements DishRepository {
     @Override
     @Transactional
     public Dish save(Dish dish, long restaurantId) {
+        if (!dish.isNew() && get(dish.id()) == null) {
+            return null;
+        }
         Restaurant restaurant = restaurantRepository.get(restaurantId);
         if (restaurant == null) {
             return null;

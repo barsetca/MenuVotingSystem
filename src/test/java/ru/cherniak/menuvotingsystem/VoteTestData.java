@@ -1,28 +1,26 @@
 package ru.cherniak.menuvotingsystem;
 
 
-import org.springframework.test.web.servlet.ResultMatcher;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static ru.cherniak.menuvotingsystem.DishTestData.DATE_290420;
 import static ru.cherniak.menuvotingsystem.DishTestData.DATE_300420;
 import static ru.cherniak.menuvotingsystem.model.AbstractBase.START_SEQ;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.readFromJsonMvcResult;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.readListFromJsonMvcResult;
 
 
 public class VoteTestData {
+
+    public static TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingFieldsComparator(Vote.class, "user", "restaurant");
+
     private final static LocalTime TIME_BORDER = LocalTime.of(11, 0, 0, 0);
-    private final static LocalTime TIME_BORDER_PLUS = LocalTime.now().plusHours(1);
-    private final static LocalTime TIME_BORDER_MINUS = LocalTime.now().minusMinutes(1);
+    private final static LocalTime TIME_BORDER_PLUS = LocalTime.now().withSecond(0).withNano(0).plusMinutes(1);
+    private final static LocalTime TIME_BORDER_MINUS = LocalTime.now().withSecond(0).withNano(0).minusMinutes(1);
 
 
     public static final long VOTE_ID = START_SEQ + 12;
@@ -44,26 +42,6 @@ public class VoteTestData {
         return new Vote(VOTE_2.getDate());
     }
 
-
-    public static void assertMatch(Vote actual, Vote expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "restaurant");
-    }
-
-    public static void assertMatch(Iterable<Vote> actual, Vote... expected) {
-        assertMatch(actual, Arrays.asList(expected));
-    }
-
-    public static void assertMatch(Iterable<Vote> actual, Iterable<Vote> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("restaurant", "user").isEqualTo(expected);
-    }
-
-    public static ResultMatcher contentJson(Vote... expected) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, Vote.class), List.of(expected));
-    }
-
-    public static ResultMatcher contentJson(Vote expected) {
-        return result -> assertMatch(readFromJsonMvcResult(result, Vote.class), expected);
-    }
 
     public static void timeBorderPlus() throws Exception {
         Field field = getTimeBorder();

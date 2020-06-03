@@ -11,11 +11,10 @@ import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.cherniak.menuvotingsystem.DishTestData.contentJson;
-import static ru.cherniak.menuvotingsystem.DishTestData.getCreatedToday;
+import static ru.cherniak.menuvotingsystem.DishTestData.*;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
 import static ru.cherniak.menuvotingsystem.UserTestData.USER;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
+import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
 
 class UserDishRestControllerTest extends AbstractControllerTest {
 
@@ -36,7 +35,7 @@ class UserDishRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(today2, today1));
+                .andExpect(DISH_MATCHER.contentJson(today2, today1));
     }
 
     @Test

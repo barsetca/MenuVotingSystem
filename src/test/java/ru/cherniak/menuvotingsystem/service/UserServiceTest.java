@@ -4,6 +4,7 @@ package ru.cherniak.menuvotingsystem.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import ru.cherniak.menuvotingsystem.UserTestData;
 import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
+import static ru.cherniak.menuvotingsystem.VoteTestData.VOTE_MATCHER;
 
 class UserServiceTest extends AbstractServiceTest {
 
@@ -22,74 +24,83 @@ class UserServiceTest extends AbstractServiceTest {
     private UserService service;
 
     @Test
-    void create() throws Exception {
+    void create() {
         User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", Role.ROLE_USER);
         User created = service.create(newUser);
         newUser.setId(created.getId());
-        assertMatch(service.getAll(), ADMIN, newUser, USER);
+        USER_MATCHER.assertMatch(service.getAll(), ADMIN, newUser, USER);
     }
 
     @Test
-    void duplicateMailCreate() throws Exception {
+    void duplicateMailCreate() {
         assertThrows(DataIntegrityViolationException.class, () ->
                 service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER)));
     }
 
     @Test
-    void delete() throws Exception {
+    void delete(){
         service.delete(USER_ID);
-        assertMatch(service.getAll(), ADMIN);
+        USER_MATCHER.assertMatch(service.getAll(), ADMIN);
     }
 
     @Test
-    public void deletedNotFound() throws Exception {
+    public void deletedNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.delete(1));
     }
 
     @Test
-    void get() throws Exception {
+    void get(){
         User user = service.get(USER_ID);
-        assertMatch(user, USER);
+        USER_MATCHER.assertMatch(user, USER);
     }
 
     @Test
-    public void getNotFound() throws Exception {
+    public void getNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.get(1));
     }
 
     @Test
-    void getByEmail() throws Exception {
+    void getByEmail() {
         User user = service.getByEmail("user@yandex.ru");
-        assertMatch(user, USER);
+        USER_MATCHER.assertMatch(user, USER);
     }
 
     @Test
-    public void getByEmailNotFound() throws Exception {
+    public void getByEmailNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.getByEmail("user@rambler.ru"));
     }
 
     @Test
-    void update() throws Exception {
+    void update() {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         service.update(updated);
-        assertMatch(service.get(USER_ID), updated);
+        USER_MATCHER.assertMatch(service.get(USER_ID), updated);
     }
 
     @Test
-    void getAll() throws Exception {
+    void updateNotFound() {
+        User updated = new User(USER);
+        updated.setEmail("Updated@Name");
+        updated.setId(1L);
+        assertThrows(NotFoundException.class, () ->
+                service.update(updated));
+    }
+
+    @Test
+    void getAll() {
         List<User> all = service.getAll();
-        assertMatch(all, ADMIN, USER);
+        USER_MATCHER.assertMatch(all, ADMIN, USER);
     }
 
     @Test
     void getWithVotes() {
         User user = service.getWithVotes(USER_ID);
         List<Vote> votes = user.getVotes();
-        VoteTestData.assertMatch(votes, VoteTestData.VOTE_3, VoteTestData.VOTE_1);
+        VOTE_MATCHER.assertMatch(votes, VoteTestData.VOTE_3, VoteTestData.VOTE_1);
     }
 
     @Test
@@ -107,7 +118,7 @@ class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void createWithException() throws Exception {
+    void createWithValidationException() {
         validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.ROLE_USER)), ConstraintViolationException.class);

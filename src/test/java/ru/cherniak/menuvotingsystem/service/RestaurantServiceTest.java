@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.cherniak.menuvotingsystem.DishTestData.DISH_MATCHER;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
+import static ru.cherniak.menuvotingsystem.VoteTestData.VOTE_MATCHER;
 
 
 class RestaurantServiceTest extends AbstractServiceTest {
@@ -26,11 +28,11 @@ class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void get() {
         Restaurant restaurant = service.get(RESTAURANT1_ID);
-        assertMatch(restaurant, RESTAURANT1);
+        RESTAURANT_MATCHER.assertMatch(restaurant, RESTAURANT1);
     }
 
     @Test
-    public void getNotFound() throws Exception {
+    public void getNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.get(1));
     }
@@ -39,11 +41,11 @@ class RestaurantServiceTest extends AbstractServiceTest {
     void create() {
         Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe", "пл. Новая, д.1", "315-00-00");
         service.create(newRestaurant);
-        assertMatch(service.getAll(), newRestaurant, RESTAURANT1, RESTAURANT2);
+        RESTAURANT_MATCHER.assertMatch(service.getAll(), newRestaurant, RESTAURANT1, RESTAURANT2);
     }
 
     @Test
-    void duplicateNameCreate() throws Exception {
+    void duplicateNameCreate() {
         assertThrows(DataIntegrityViolationException.class,
                 () -> service.create(new Restaurant("McDonalds", "Cafe", "пл. Новая, д.1", "315-00-00")));
     }
@@ -53,24 +55,33 @@ class RestaurantServiceTest extends AbstractServiceTest {
         Restaurant updated = new Restaurant(RESTAURANT2);
         updated.setName("updateName");
         service.update(updated);
-        assertMatch(service.get(RESTAURANT2_ID), updated);
+        RESTAURANT_MATCHER.assertMatch(service.get(RESTAURANT2_ID), updated);
+    }
+
+    @Test
+    void updateNotFound() {
+        Restaurant updated = new Restaurant(RESTAURANT2);
+        updated.setName("updateName");
+        updated.setId(1L);
+        assertThrows(NotFoundException.class, () ->
+                service.update(updated));
     }
 
     @Test
     void delete() {
         service.delete(RESTAURANT1_ID);
-        assertMatch(service.getAll(), RESTAURANT2);
+        RESTAURANT_MATCHER.assertMatch(service.getAll(), RESTAURANT2);
     }
 
     @Test
-    public void deletedNotFound() throws Exception {
+    public void deletedNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.delete(1));
     }
 
     @Test
     void getByName() {
-        assertMatch(service.getByName("McDonalds"), RESTAURANT1);
+        RESTAURANT_MATCHER.assertMatch(service.getByName("McDonalds"), RESTAURANT1);
     }
 
     @Test
@@ -82,8 +93,8 @@ class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void getByNameWithVotes() {
         Restaurant restaurant = service.getByNameWithVotes("McDonalds");
-        assertMatch(restaurant, RESTAURANT1);
-        VoteTestData.assertMatch(restaurant.getVotes(), VoteTestData.VOTE_1);
+        RESTAURANT_MATCHER.assertMatch(restaurant, RESTAURANT1);
+        VOTE_MATCHER.assertMatch(restaurant.getVotes(), VoteTestData.VOTE_1);
     }
 
     @Test
@@ -92,17 +103,16 @@ class RestaurantServiceTest extends AbstractServiceTest {
                 service.getByNameWithVotes("Donalds"));
     }
 
-
     @Test
     void getAll() {
         List<Restaurant> all = service.getAll();
-        assertMatch(all, RESTAURANT1, RESTAURANT2);
+        RESTAURANT_MATCHER.assertMatch(all, RESTAURANT1, RESTAURANT2);
     }
 
     @Test
     void getWithVotes() {
         Restaurant restaurant = service.getWithVotes(RESTAURANT2_ID);
-        VoteTestData.assertMatch(restaurant.getVotes(), VoteTestData.VOTE_3, VoteTestData.VOTE_2);
+        VOTE_MATCHER.assertMatch(restaurant.getVotes(), VoteTestData.VOTE_3, VoteTestData.VOTE_2);
     }
 
     @Test
@@ -114,7 +124,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void getWithDishes() {
         Restaurant restaurant = service.getWithDishes(RESTAURANT1_ID);
-        DishTestData.assertMatch(restaurant.getDishes(), DishTestData.ALL_DISHES_R1);
+        DISH_MATCHER.assertMatch(restaurant.getDishes(), DishTestData.ALL_DISHES_R1);
     }
 
     @Test
@@ -128,9 +138,8 @@ class RestaurantServiceTest extends AbstractServiceTest {
         List<Restaurant> restaurants = service.getAllWithDishes();
         Set<Dish> dishes1 = restaurants.get(0).getDishes();
         Set<Dish> dishes2 = restaurants.get(1).getDishes();
-        DishTestData.assertMatch(dishes1, DishTestData.ALL_DISHES_R1);
-        DishTestData.assertMatch(dishes2, DishTestData.ALL_DISHES_R2);
-
+        DISH_MATCHER.assertMatch(dishes1, DishTestData.ALL_DISHES_R1);
+        DISH_MATCHER.assertMatch(dishes2, DishTestData.ALL_DISHES_R2);
     }
 
     @Test
@@ -138,13 +147,13 @@ class RestaurantServiceTest extends AbstractServiceTest {
         List<Restaurant> restaurants = service.getAllWithVotes();
         Set<Vote> votes1 = restaurants.get(0).getVotes();
         Set<Vote> votes2 = restaurants.get(1).getVotes();
-        assertMatch(restaurants, RESTAURANT2, RESTAURANT1);
-        VoteTestData.assertMatch(votes2, VoteTestData.VOTE_1);
-        VoteTestData.assertMatch(votes1, VoteTestData.VOTE_3, VoteTestData.VOTE_2);
+        RESTAURANT_MATCHER.assertMatch(restaurants, RESTAURANT2, RESTAURANT1);
+        VOTE_MATCHER.assertMatch(votes2, VoteTestData.VOTE_1);
+        VOTE_MATCHER.assertMatch(votes1, VoteTestData.VOTE_3, VoteTestData.VOTE_2);
     }
 
     @Test
-    void createWithException() throws Exception {
+    void createWithValidationException() {
         validateRootCause(() -> service.create(new Restaurant("  ", "Italian", "Veteranov avenue", "1234567")), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Restaurant("M", "Italian", "Veteranov avenue", "1234567")), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Restaurant("MamaRoma", " ", "Veteranov avenue", "1234567")), ConstraintViolationException.class);

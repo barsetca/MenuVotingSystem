@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.UserTestData;
-import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
-import ru.cherniak.menuvotingsystem.web.TestUtil;
 
 import java.time.LocalDate;
 
@@ -18,9 +17,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
-import static ru.cherniak.menuvotingsystem.UserTestData.*;
+import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
+import static ru.cherniak.menuvotingsystem.UserTestData.USER;
+import static ru.cherniak.menuvotingsystem.UserTestData.USER_ID;
 import static ru.cherniak.menuvotingsystem.VoteTestData.*;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
 class UserVoteRestControllerTest extends AbstractControllerTest {
 
@@ -32,19 +32,43 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     @Test
     void createUpdateWithLocation() throws Exception {
         timeBorderPlus();
-        Vote newVote = new Vote(LocalDate.now());
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
                 .param("restaurantId", "100002")
                 .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
+        Vote newVote = new Vote(LocalDate.now());
         Vote created = TestUtil.readFromJson(action, Vote.class);
         Long newID = created.getId();
         newVote.setId(newID);
 
-        assertMatch(created, newVote);
-        assertMatch(voteService.getWithRestaurant(newID, UserTestData.USER_ID), newVote);
+        VOTE_MATCHER.assertMatch(created, newVote);
+        VOTE_MATCHER.assertMatch(voteService.getWithRestaurant(newID, UserTestData.USER_ID), newVote);
+        timeBorderFix();
+    }
+
+    @Test
+    void createUpdateNotFound() throws Exception {
+        timeBorderPlus();
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+                .param("restaurantId", "1")
+                .with(userHttpBasic(USER))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+        timeBorderFix();
+    }
+
+    @Test
+    void createUpdateOutsideTime() throws Exception {
+        timeBorderMinus();
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+                .param("restaurantId", "100002")
+                .with(userHttpBasic(USER))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isRequestedRangeNotSatisfiable())
+                .andDo(print());
         timeBorderFix();
     }
 
@@ -52,13 +76,34 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     void delete() throws Exception {
         timeBorderPlus();
         Vote created = voteService.save(new Vote(LocalDate.now()), UserTestData.USER_ID, RESTAURANT1_ID);
-        VoteTestData.assertMatch(voteService.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
+        VOTE_MATCHER.assertMatch(voteService.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
+
         mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL)
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        assertMatch(voteService.getAllByUserIdWithRestaurant(USER_ID), VOTE_3, VOTE_1);
+        VOTE_MATCHER.assertMatch(voteService.getAllByUserIdWithRestaurant(USER_ID), VOTE_3, VOTE_1);
+        timeBorderFix();
+    }
+
+    @Test
+    void deleteNotFound() throws Exception {
+        timeBorderPlus();
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+        timeBorderFix();
+    }
+
+    @Test
+    void deleteOutsideTime() throws Exception {
+        timeBorderMinus();
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isRequestedRangeNotSatisfiable())
+                .andDo(print());
         timeBorderFix();
     }
 
@@ -69,7 +114,15 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(VOTE_1));
+                .andExpect(VOTE_MATCHER.contentJson(VOTE_1));
+    }
+
+    @Test
+    void getWithRestaurantNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + 1)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test
@@ -85,7 +138,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(VOTE_3, VOTE_1));
+                .andExpect(VOTE_MATCHER.contentJson(VOTE_3, VOTE_1));
     }
 
     @Test
@@ -97,7 +150,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(VOTE_3, VOTE_1));
+                .andExpect(VOTE_MATCHER.contentJson(VOTE_3, VOTE_1));
     }
 
     @Test
@@ -109,6 +162,6 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(VOTE_3, VOTE_1));
+                .andExpect(VOTE_MATCHER.contentJson(VOTE_3, VOTE_1));
     }
 }

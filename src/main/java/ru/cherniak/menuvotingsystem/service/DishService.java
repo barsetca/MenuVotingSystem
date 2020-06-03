@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithId;
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithMsg;
 
 @Service
 public class DishService {
@@ -30,7 +31,7 @@ public class DishService {
     public Dish create(Dish dish, long restaurantId) {
         log.info("create dish {} of restaurant {}", dish, restaurantId);
         Assert.notNull(dish, "dish must not be null");
-        return repository.save(dish, restaurantId);
+        return checkNotFoundWithMsg(repository.save(dish, restaurantId), "restaurantId= " + restaurantId);
     }
 
     public void update(Dish dish, long restaurantId) {

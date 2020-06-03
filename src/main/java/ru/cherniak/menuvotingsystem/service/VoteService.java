@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static ru.cherniak.menuvotingsystem.util.DateTimeUtil.checkTimeBorder;
-import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithId;
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.*;
 
 @Service
 public class VoteService {
@@ -33,7 +33,7 @@ public class VoteService {
         log.info("save {} by user {} restaurant {}", vote, userId, restaurantId);
         checkTimeBorder();
         Assert.notNull(vote, "vote must not be null");
-        return repository.save(vote, userId, restaurantId);
+        return checkNotFoundWithMsg(repository.save(vote, userId, restaurantId), "restaurantId" + restaurantId);
     }
 
     public Vote getWithRestaurant(long id, long userId) {
@@ -45,7 +45,7 @@ public class VoteService {
         checkTimeBorder();
         LocalDate date = LocalDate.now();
         log.info("delete by user {} date {}", userId, date);
-        checkNotFoundWithId(repository.delete(date, userId), userId);
+        checkNotFound(repository.delete(date, userId), "date: " + date);
     }
 
     public long countByRestaurant(long restaurantId) {

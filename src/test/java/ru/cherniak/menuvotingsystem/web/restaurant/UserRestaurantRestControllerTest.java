@@ -15,8 +15,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
+import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
+import static ru.cherniak.menuvotingsystem.UserTestData.ADMIN;
 import static ru.cherniak.menuvotingsystem.UserTestData.USER;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
 class UserRestaurantRestControllerTest extends AbstractControllerTest {
 
@@ -32,7 +33,15 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJsonTo(RestaurantUtil.createTo(restaurantService.getWithVotes(RESTAURANT1_ID))));
+                .andExpect(RES_TO_MATCHER.contentJson(RestaurantUtil.createTo(restaurantService.getWithVotes(RESTAURANT1_ID))));
+    }
+
+    @Test
+    void getWithVotesNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + 1)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test
@@ -48,7 +57,15 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJsonTo(RestaurantUtil.createTo(restaurantService.getByNameWithVotes(RESTAURANT1.getName()))));
+                .andExpect(RES_TO_MATCHER.contentJson(RestaurantUtil.createTo(restaurantService.getByNameWithVotes(RESTAURANT1.getName()))));
+    }
+
+    @Test
+    void getByNameWithVotesNotFount() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + "unknown")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test
@@ -59,6 +76,6 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJsonTo(restaurantTos.get(0), restaurantTos.get(1)));
+                .andExpect(RES_TO_MATCHER.contentJson(restaurantTos.get(0), restaurantTos.get(1)));
     }
 }

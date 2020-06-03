@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class AdminRestaurantRestController {
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
         checkNew(restaurant);
         restaurantService.create(restaurant);
@@ -62,7 +63,7 @@ public class AdminRestaurantRestController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Restaurant update(@RequestBody Restaurant restaurant, @PathVariable long id) {
+    public Restaurant update(@Valid @RequestBody Restaurant restaurant, @PathVariable long id) {
         log.info("update {}", restaurant);
         assureIdConsistent(restaurant, id);
         return restaurantService.update(restaurant);

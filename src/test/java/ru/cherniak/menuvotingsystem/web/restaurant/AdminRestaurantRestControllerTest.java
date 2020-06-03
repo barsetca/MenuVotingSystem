@@ -5,22 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.cherniak.menuvotingsystem.RestaurantTestData;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
-import ru.cherniak.menuvotingsystem.web.TestUtil;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.cherniak.menuvotingsystem.DishTestData.DISH_ID;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
+import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
 import static ru.cherniak.menuvotingsystem.UserTestData.ADMIN;
 import static ru.cherniak.menuvotingsystem.UserTestData.USER;
-import static ru.cherniak.menuvotingsystem.VoteTestData.VOTE_ID;
-import static ru.cherniak.menuvotingsystem.web.TestUtil.userHttpBasic;
 
 
 class AdminRestaurantRestControllerTest extends AbstractControllerTest {
@@ -37,7 +36,15 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(RESTAURANT1));
+                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1));
+    }
+
+    @Test
+    void getNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + 1)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test
@@ -55,7 +62,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe","пл. Новая, д.1", "315-00-00");
+        Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe", "пл. Новая, д.1", "315-00-00");
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -66,20 +73,86 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
         Long newID = created.getId();
         newRestaurant.setId(newID);
 
-        RestaurantTestData.assertMatch(created, newRestaurant);
-        RestaurantTestData.assertMatch(restaurantService.get(newID), newRestaurant);
+        RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
+        RESTAURANT_MATCHER.assertMatch(restaurantService.get(newID), newRestaurant);
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
+    @Test
+    void createValidationError() throws Exception {
+        Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe", "пл. Новая, д.1", "315-00-00");
+        newRestaurant.setName("R");
+        newRestaurant.setType("Ty");
+        newRestaurant.setAddress("Adrs");
+        newRestaurant.setPhone("123");
+//        newRestaurant.setName(" ");
+//        newRestaurant.setType(" ");
+//        newRestaurant.setAddress(" ");
+//        newRestaurant.setPhone(" ");
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newRestaurant)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
+    @Test
+    void createDuplicateName() throws Exception {
+        Restaurant duplicateNameRestaurant = new Restaurant("McDonalds", "Cafe", "пл. Новая, д.1", "315-00-00");
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(duplicateNameRestaurant)))
+                .andExpect(status().isConflict())
+                .andDo(print());
     }
 
     @Test
     void update() throws Exception {
         Restaurant updated = new Restaurant(RESTAURANT2);
         updated.setName("updateName");
+
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT2_ID)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
-        assertMatch(restaurantService.get(RESTAURANT2_ID), updated);
+
+        RESTAURANT_MATCHER.assertMatch(restaurantService.get(RESTAURANT2_ID), updated);
+    }
+
+    @Test
+    void updateValidationError() throws Exception {
+        Restaurant updated = new Restaurant(RESTAURANT2);
+        updated.setName("U");
+        updated.setType("Ty");
+        updated.setAddress("Adrs");
+        updated.setPhone("123");
+//        updated.setName(" ");
+//        updated.setType(" ");
+//        updated.setAddress(" ");
+//        updated.setPhone(" ");
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT2_ID)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
+    @Test
+    void updateDuplicateName() throws Exception {
+        Restaurant updated = new Restaurant(RESTAURANT2);
+        updated.setName(RESTAURANT1.getName());
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT2_ID)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isConflict())
+                .andDo(print());
     }
 
     @Test
@@ -88,7 +161,8 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertMatch(restaurantService.getAll(), RESTAURANT2);
+
+        RESTAURANT_MATCHER.assertMatch(restaurantService.getAll(), RESTAURANT2);
     }
 
     @Test
@@ -98,7 +172,15 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(RESTAURANT1));
+                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1));
+    }
+
+    @Test
+    void getByNameNotFount() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + "unknown")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test
@@ -108,6 +190,6 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(RESTAURANT1, RESTAURANT2));
+                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1, RESTAURANT2));
     }
 }

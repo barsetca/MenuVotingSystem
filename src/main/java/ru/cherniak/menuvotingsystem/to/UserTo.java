@@ -13,7 +13,7 @@ public class UserTo extends BaseTo implements Serializable {
 
     @Email
     @NotBlank
-    @Size(max = 100)
+    @Size(min = 3, max = 100, message = "length must be between 3 and 100 characters")
     private String email;
 
     @NotBlank

@@ -1,5 +1,7 @@
 package ru.cherniak.menuvotingsystem.model;
 
+import ru.cherniak.menuvotingsystem.web.View;
+
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -16,12 +18,12 @@ public class Vote extends AbstractBase {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Restaurant.class)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private User user;
 
     public Vote() {

@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web;
+package ru.cherniak.menuvotingsystem;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,10 +30,10 @@ public class TestUtil {
         return JsonUtil.readValues(getContent(result), clazz);
     }
 
-    public static void mockAuthorize(User user) {
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(new AuthorizedUser(user), null, user.getRoles()));
-    }
+//    public static void mockAuthorize(User user) {
+//        SecurityContextHolder.getContext().setAuthentication(
+//                new UsernamePasswordAuthenticationToken(new AuthorizedUser(user), null, user.getRoles()));
+//    }
 
     public static RequestPostProcessor userHttpBasic(User user) {
         return SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword());

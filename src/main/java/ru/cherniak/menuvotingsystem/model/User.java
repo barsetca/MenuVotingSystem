@@ -21,7 +21,7 @@ public class User extends AbstractBaseNameId {
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
-    @Size(max = 100)
+    @Size(min = 3, max = 100)
     private String email;
 
     @Column(name = "password", nullable = false)
