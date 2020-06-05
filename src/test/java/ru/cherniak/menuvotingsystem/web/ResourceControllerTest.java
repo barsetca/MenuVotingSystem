@@ -16,5 +16,4 @@ public class ResourceControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/css"));
     }
-
 }

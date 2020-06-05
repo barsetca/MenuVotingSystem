@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.beans.ConstructorProperties;
 import java.io.Serializable;
 
 public class UserTo extends BaseTo implements Serializable {
@@ -23,6 +24,7 @@ public class UserTo extends BaseTo implements Serializable {
     public UserTo() {
     }
 
+    @ConstructorProperties({"id", "name", "email", "password"})
     public UserTo(Long id, String name, String email, String password) {
         super(id, name);
         this.email = email;

@@ -16,7 +16,7 @@ import static ru.cherniak.menuvotingsystem.TestUtil.readListFromJsonMvcResult;
 
 public class RestaurantTestData {
     public static TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingFieldsComparator(Restaurant.class, "registered", "dishes", "votes");
-    public static TestMatcher<RestaurantTo> RES_TO_MATCHER = TestMatcher.usingFieldsComparator(RestaurantTo.class);
+    public static TestMatcher<RestaurantTo> RES_TO_MATCHER = TestMatcher.usingEquals(RestaurantTo.class);
 
     public static final long RESTAURANT1_ID = START_SEQ + 2;
     public static final long RESTAURANT2_ID = START_SEQ + 3;

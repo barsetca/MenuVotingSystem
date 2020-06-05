@@ -12,7 +12,6 @@ import java.time.LocalDate;
         columnNames = {"date", "user_id"}, name = "votes_unique_date_user_id_idx")})
 public class Vote extends AbstractBase {
     @Column(name = "date", nullable = false, columnDefinition = "timestamp")
-    @FutureOrPresent
     @NotNull
     private LocalDate date;
 

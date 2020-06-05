@@ -65,35 +65,21 @@ public class ValidationUtil {
         return result;
     }
 
-    private static final Validator validator;
+//    private static final Validator validator;
+//
+//    static {
+//        //  From Javadoc: implementations are thread-safe and instances are typically cached and reused.
+//        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//        //  From Javadoc: implementations of this longerface must be thread-safe
+//        validator = factory.getValidator();
+//    }
+//
+//    public static <T> void validate(T bean) {
+//        // https://alexkosarev.name/2018/07/30/bean-validation-api/
+//        Set<ConstraintViolation<T>> violations = validator.validate(bean);
+//        if (!violations.isEmpty()) {
+//            throw new ConstraintViolationException(violations);
+//        }
+//    }
 
-    static {
-        //  From Javadoc: implementations are thread-safe and instances are typically cached and reused.
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        //  From Javadoc: implementations of this longerface must be thread-safe
-        validator = factory.getValidator();
     }
-
-    public static <T> void validate(T bean) {
-        // https://alexkosarev.name/2018/07/30/bean-validation-api/
-        Set<ConstraintViolation<T>> violations = validator.validate(bean);
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
-        }
-    }
-
-    public static ResponseEntity<String> getStringResponseEntityError(BindingResult result) {
-        StringJoiner joiner = new StringJoiner("<br>");
-        result.getFieldErrors().forEach(
-                fe -> {
-                    String msg = fe.getDefaultMessage();
-                    if (msg != null) {
-                        if (!msg.startsWith(fe.getField())) {
-                            msg = fe.getField() + ' ' + msg;
-                        }
-                        joiner.add(msg);
-                    }
-                });
-        return ResponseEntity.unprocessableEntity().body(joiner.toString());
-    }
-}

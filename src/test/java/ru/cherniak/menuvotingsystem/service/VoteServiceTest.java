@@ -1,17 +1,16 @@
 package ru.cherniak.menuvotingsystem.service;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
+import ru.cherniak.menuvotingsystem.to.VoteTo;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 import ru.cherniak.menuvotingsystem.util.exception.OutsideTimeException;
 
-import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +21,6 @@ import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
 import static ru.cherniak.menuvotingsystem.UserTestData.ADMIN_ID;
 import static ru.cherniak.menuvotingsystem.UserTestData.USER_ID;
 import static ru.cherniak.menuvotingsystem.VoteTestData.*;
-
 
 class VoteServiceTest extends AbstractServiceTest {
 
@@ -35,8 +33,8 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void create() throws Exception {
         VoteTestData.timeBorderPlus();
-        Vote created = service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID);
-        VOTE_MATCHER.assertMatch(service.getWithRestaurant(created.getId(), ADMIN_ID), created);
+        Vote created = service.save(ADMIN_ID, RESTAURANT2_ID);
+        VOTE_MATCHER.assertMatch(voteRepository.getWithRestaurant(created.getId(), ADMIN_ID), created);
         VoteTestData.timeBorderFix();
     }
 
@@ -44,7 +42,7 @@ class VoteServiceTest extends AbstractServiceTest {
     void createUpdateAfterTimeBorder() throws Exception {
         timeBorderMinus();
         assertThrows(OutsideTimeException.class, () ->
-                service.save(getCreatedToday(), ADMIN_ID, RESTAURANT2_ID));
+                service.save(ADMIN_ID, RESTAURANT2_ID));
         timeBorderFix();
     }
 
@@ -52,53 +50,53 @@ class VoteServiceTest extends AbstractServiceTest {
     void createUpdateNotOwner() throws Exception {
         timeBorderPlus();
         assertThrows(NotFoundException.class, () ->
-                service.save(getCreatedToday(), ADMIN_ID, 1));
+                service.save(ADMIN_ID, 1));
         timeBorderFix();
     }
 
     @Test
     void createUpdateDuplicate() throws Exception {
         timeBorderPlus();
-        Vote created = service.save(new Vote(LocalDate.now()), ADMIN_ID, RESTAURANT2_ID);
-        VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(ADMIN_ID), created, VOTE_2);
+        Vote created = service.save(ADMIN_ID, RESTAURANT2_ID);
+        VOTE_MATCHER.assertMatch(voteRepository.getAllByUserIdWithRestaurant(ADMIN_ID), created, VOTE_2);
 
-        Vote duplicatedDateUserId = service.save(new Vote(LocalDate.now()), ADMIN_ID, RESTAURANT2_ID);
-        VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(ADMIN_ID), duplicatedDateUserId, VOTE_2);
+        Vote duplicatedDateUserId = service.save(ADMIN_ID, RESTAURANT2_ID);
+        VOTE_MATCHER.assertMatch(voteRepository.getAllByUserIdWithRestaurant(ADMIN_ID), duplicatedDateUserId, VOTE_2);
         timeBorderFix();
     }
 
     @Test
     void update() throws Exception {
         timeBorderPlus();
-        Vote created = service.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT1_ID);
-        VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
+        Vote created = service.save(USER_ID, RESTAURANT1_ID);
+        VOTE_MATCHER.assertMatch(voteRepository.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
 
-        Vote updated = service.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT2_ID);
-        VOTE_MATCHER.assertMatch(service.getWithRestaurant(updated.getId(), USER_ID), updated);
-        VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(USER_ID), updated, VOTE_3, VOTE_1);
+        Vote updated = service.save(USER_ID, RESTAURANT2_ID);
+        VOTE_MATCHER.assertMatch(voteRepository.getWithRestaurant(updated.getId(), USER_ID), updated);
+        VOTE_MATCHER.assertMatch(voteRepository.getAllByUserIdWithRestaurant(USER_ID), updated, VOTE_3, VOTE_1);
         timeBorderFix();
     }
 
     @Test
-    void getWithRestaurant() {
-        Vote vote = service.getWithRestaurant(VOTE_ID, USER_ID);
-        VOTE_MATCHER.assertMatch(VOTE_1, vote);
-        RESTAURANT_MATCHER.assertMatch(vote.getRestaurant(), RESTAURANT1);
+    void getVoteTo() {
+        VoteTo voteTo = service.getVoteTo(VOTE_ID, USER_ID);
+        VOTE_TO_MATCHER.assertMatch(VOTE_TO_1, voteTo);
+        assertEquals(VOTE_TO_1.getName(), RESTAURANT1.getName());
     }
 
     @Test
     public void getWithRestaurantNotFound() {
         assertThrows(NotFoundException.class, () ->
-                service.getWithRestaurant(VOTE_ID, 1));
+                service.getVoteTo(VOTE_ID, 1));
     }
 
     @Test
     void delete() throws Exception {
         timeBorderPlus();
-        Vote created = service.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT2_ID);
-        VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
+        Vote created = service.save(USER_ID, RESTAURANT2_ID);
+        VOTE_MATCHER.assertMatch(voteRepository.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
         service.delete(USER_ID);
-        VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(USER_ID), VOTE_3, VOTE_1);
+        VOTE_MATCHER.assertMatch(voteRepository.getAllByUserIdWithRestaurant(USER_ID), VOTE_3, VOTE_1);
         timeBorderFix();
     }
 
@@ -112,7 +110,9 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void deleteAfterTimeBorder() throws Exception {
-       service.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT2_ID);
+        timeBorderPlus();
+        service.save(USER_ID, RESTAURANT2_ID);
+        timeBorderFix();
         timeBorderMinus();
         assertThrows(OutsideTimeException.class, () -> service.delete(USER_ID));
         timeBorderFix();
@@ -127,46 +127,40 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getAllByUserIdWithRestaurant() {
-        List<Vote> votes = service.getAllByUserIdWithRestaurant(USER_ID);
-        VOTE_MATCHER.assertMatch(votes, VOTE_3, VOTE_1);
-        RESTAURANT_MATCHER.assertMatch(votes.get(0).getRestaurant(), RESTAURANT2);
-        RESTAURANT_MATCHER.assertMatch(votes.get(1).getRestaurant(), RESTAURANT1);
+    void getAllVoteTos() {
+        List<VoteTo> voteTos = service.getAllVoteTos(USER_ID);
+        VOTE_TO_MATCHER.assertMatch(voteTos, VOTE_TO_3, VOTE_TO_1);
+        Assert.assertEquals(RESTAURANT2.getName(), voteTos.get(0).getName());
+        Assert.assertEquals(RESTAURANT1.getName(), voteTos.get(1).getName());
+
     }
 
     @Test
-    void getAllWithRestaurantByUserIdBetween() {
+    void getVoteTosBetweenInclusive() {
 
         Vote today = voteRepository.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT1_ID);
-        List<Vote> votes1 = service.getAllWithRestaurantByUserIdBetween(DATE_290420, DATE_300420, USER_ID);
-        List<Vote> votes2 = service.getAllWithRestaurantByUserIdBetween(DATE_300420, LocalDate.now(), USER_ID);
+        List<VoteTo> voteTos1 = service.getVoteTosBetweenInclusive(DATE_290420, DATE_300420, USER_ID);
+        List<VoteTo> voteTos2 = service.getVoteTosBetweenInclusive(DATE_300420, LocalDate.now(), USER_ID);
 
-        VOTE_MATCHER.assertMatch(votes1, VOTE_3, VOTE_1);
-        VOTE_MATCHER.assertMatch(votes2, today, VOTE_3);
+        VOTE_TO_MATCHER.assertMatch(voteTos1, VOTE_TO_3, VOTE_TO_1);
+        VOTE_TO_MATCHER.assertMatch(voteTos2, VoteTestData.getVoteTo(today, RESTAURANT1), VOTE_TO_3);
 
-        RESTAURANT_MATCHER.assertMatch(votes1.get(0).getRestaurant(), RESTAURANT2);
-        RESTAURANT_MATCHER.assertMatch(votes1.get(1).getRestaurant(), RESTAURANT1);
+        Assert.assertEquals(RESTAURANT2.getName(), voteTos1.get(0).getName());
+        Assert.assertEquals(RESTAURANT1.getName(), voteTos1.get(1).getName());
 
-        RESTAURANT_MATCHER.assertMatch(votes2.get(0).getRestaurant(), RESTAURANT1);
+        Assert.assertEquals(RESTAURANT1.getName(), voteTos2.get(0).getName());
+
     }
 
     @Test
-    void getAllWithRestaurantByUserIdBetweenWithNull() {
+    void getVoteTosBetweenInclusiveBetweenWithNull() {
         Vote today = voteRepository.save(new Vote(LocalDate.now()), USER_ID, RESTAURANT1_ID);
-        List<Vote> votes1 = service.getAllWithRestaurantByUserIdBetween(DATE_300420, null, USER_ID);
-        List<Vote> votes2 = service.getAllWithRestaurantByUserIdBetween(null, DATE_300420, USER_ID);
-        List<Vote> votes3 = service.getAllWithRestaurantByUserIdBetween(null, null, USER_ID);
+        List<VoteTo> voteTos1 = service.getVoteTosBetweenInclusive(DATE_300420, null, USER_ID);
+        List<VoteTo> voteTos2 = service.getVoteTosBetweenInclusive(null, DATE_300420, ADMIN_ID);
+        List<VoteTo> voteTos3 = service.getVoteTosBetweenInclusive(null, null, USER_ID);
 
-        VOTE_MATCHER.assertMatch(votes1, today, VOTE_3);
-        VOTE_MATCHER.assertMatch(votes2, VOTE_3, VOTE_1);
-        VOTE_MATCHER.assertMatch(votes3, today, VOTE_3, VOTE_1);
-    }
-
-    @Test
-    void createWithValidationException() throws Exception {
-        timeBorderPlus();
-        validateRootCause(() -> service.save(new Vote(LocalDate.of(2020, Month.APRIL, 30)), USER_ID, RESTAURANT1_ID),
-                ConstraintViolationException.class);
-        timeBorderFix();
+        VOTE_TO_MATCHER.assertMatch(voteTos1, VoteTestData.getVoteTo(today, RESTAURANT1), VOTE_TO_3);
+        VOTE_TO_MATCHER.assertMatch(voteTos2, VOTE_TO_2);
+        VOTE_TO_MATCHER.assertMatch(voteTos3, VoteTestData.getVoteTo(today, RESTAURANT1), VOTE_TO_3, VOTE_TO_1);
     }
 }

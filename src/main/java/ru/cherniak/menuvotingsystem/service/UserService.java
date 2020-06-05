@@ -105,9 +105,6 @@ public class UserService implements UserDetailsService {
         }
         return new AuthorizedUser(user);
     }
-
-
-
 }
 
 

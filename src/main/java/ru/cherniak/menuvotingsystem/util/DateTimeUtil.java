@@ -15,7 +15,6 @@ public class DateTimeUtil {
 
     private static LocalTime timeBorder = LocalTime.of(11, 0, 0, 0);
 
-    // HSQLDB doesn't support LocalDate.MIN/MAX
     private static final LocalDate MIN_DATE = LocalDate.of(1, 1, 1);
     private static final LocalDate MAX_DATE = LocalDate.of(3000, 1, 1);
 

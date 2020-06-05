@@ -20,7 +20,6 @@ public class RestaurantService {
 
     protected final Logger log = LoggerFactory.getLogger(RestaurantService.class);
 
-
     private final RestaurantRepository repository;
 
     @Autowired

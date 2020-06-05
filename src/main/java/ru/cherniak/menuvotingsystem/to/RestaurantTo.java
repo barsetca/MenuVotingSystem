@@ -4,8 +4,7 @@ import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class RestaurantTo extends BaseTo implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class RestaurantTo extends BaseTo {
 
     private final String type;
     private final String address;
@@ -41,6 +40,25 @@ public class RestaurantTo extends BaseTo implements Serializable {
 
     public long getCountOfVotes() {
         return countOfVotes;
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RestaurantTo that = (RestaurantTo) o;
+        return countOfVotes == that.countOfVotes &&
+                type.equals(that.type) &&
+                address.equals(that.address) &&
+                phone.equals(that.phone) &&
+                Objects.equals(url, that.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, address, phone, url, countOfVotes);
     }
 
     @Override

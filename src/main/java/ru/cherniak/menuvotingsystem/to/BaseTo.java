@@ -25,7 +25,6 @@ public abstract class BaseTo implements HasId {
         return id;
     }
 
-
     public void setId(Long id) {
         this.id = id;
     }

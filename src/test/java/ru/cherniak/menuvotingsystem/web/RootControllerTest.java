@@ -20,7 +20,7 @@ class RootControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getUsers() throws Exception {
+    void getRootView() throws Exception {
         mockMvc.perform(get("/")
                 .with(userAuth(ADMIN)))
                 .andDo(print())

@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
+import ru.cherniak.menuvotingsystem.to.VoteTo;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
+import ru.cherniak.menuvotingsystem.util.VoteUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,16 +31,18 @@ public class VoteService {
         this.repository = repository;
     }
 
-    public Vote save(Vote vote, long userId, long restaurantId) {
-        log.info("save {} by user {} restaurant {}", vote, userId, restaurantId);
+    public Vote save(long userId, long restaurantId) {
         checkTimeBorder();
+        Vote vote = new Vote(LocalDate.now());
+        log.info("save {} by user {} restaurant {}", vote, userId, restaurantId);
         Assert.notNull(vote, "vote must not be null");
         return checkNotFoundWithMsg(repository.save(vote, userId, restaurantId), "restaurantId" + restaurantId);
     }
 
-    public Vote getWithRestaurant(long id, long userId) {
+    public VoteTo getVoteTo(long id, long userId) {
         log.info("get {} by user {}", id, userId);
-        return checkNotFoundWithId(repository.getWithRestaurant(id, userId), id);
+        Vote voteWithRestaurant = checkNotFoundWithId(repository.getWithRestaurant(id, userId), id);
+        return VoteUtil.createTo(voteWithRestaurant);
     }
 
     public void delete(long userId) {
@@ -53,14 +57,19 @@ public class VoteService {
         return repository.countByRestaurant(restaurantId);
     }
 
-    public List<Vote> getAllByUserIdWithRestaurant(long userId) {
-        log.info("getAllByUserIdWithRestaurant by user {}", userId);
-        return repository.getAllByUserIdWithRestaurant(userId);
+    public List<VoteTo> getAllVoteTos(long userId) {
+        log.info("getAllVoteTos by user {}", userId);
+        List<Vote> votesWithRestaurant = repository.getAllByUserIdWithRestaurant(userId);
+        return VoteUtil.getVoteTos(votesWithRestaurant);
     }
 
-    public List<Vote> getAllWithRestaurantByUserIdBetween(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long userId) {
+    public List<VoteTo> getVoteTosBetweenInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long userId) {
         log.info("getAllWithRestaurantByUserIdBetween {} - {} of restaurant {}", startDate, endDate, userId);
-        return repository.getAllWithRestaurantByUserIdBetween(DateTimeUtil.getStartDate(startDate),
+        List<Vote> votesWithRestaurantBetween =  repository.getAllWithRestaurantByUserIdBetween(
+                DateTimeUtil.getStartDate(startDate),
                 DateTimeUtil.getEndDate(endDate), userId);
+        return VoteUtil.getVoteTos(votesWithRestaurantBetween);
     }
+
+
 }

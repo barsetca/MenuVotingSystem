@@ -23,7 +23,6 @@ class UserDishRestControllerTest extends AbstractControllerTest {
     @Autowired
     DishService dishService;
 
-
     @Test
     void getTodayMenu() throws Exception {
         Dish today1 = dishService.create(getCreatedToday(), RESTAURANT1_ID);
