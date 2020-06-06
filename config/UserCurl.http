@@ -70,7 +70,7 @@ Authorization: Basic admin@gmail.com admin
 
 ### DELETE  NotFound (UNPROCESSABLE_ENTITY) id=1-----------------------------------------------------------------------
 # curl -X DELETE http://localhost:8080/mvs/rest/admin/users/1 --user admin@gmail.com:admin
-DELETE http://localhost:8080/mvs/rest/admin/users/1
+DELETE http://localhost:8080/mvs/rest/admin/users/2000000
 Authorization: Basic admin@gmail.com admin
 
 ###getByMail-----------------------------------------------------------------------------------------------------------
@@ -145,6 +145,24 @@ Content-Type: application/json
   "password": "passwordNew"
 }
 
+
+###get(check create)---------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/profile --user new@nuevo.ru:passwordNew
+GET http://localhost:8080/mvs/rest/profile
+Authorization: Basic new@nuevo.ru passwordNew
+
+### register user Validation Error-------------------------------------------------------------------------------------
+# curl -X POST -d '{"name":"N","email":"ne","password":"passw"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
+POST http://localhost:8080/mvs/rest/profile/register
+Content-Type: application/json
+
+{
+  "name": "N",
+  "email": "ne",
+  "password": "passw"
+}
+
+
 ### register user Validation Error--------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"N","email":"@u","password":"New"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
 POST http://localhost:8080/mvs/rest/profile/register
@@ -155,12 +173,6 @@ Content-Type: application/json
   "email": "@u",
   "password": "New"
 }
-
-
-###get(check create)---------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/profile --user new@nuevo.ru:passwordNew
-GET http://localhost:8080/mvs/rest/profile
-Authorization: Basic new@nuevo.ru passwordNew
 
 ### delete user profile------------------------------------------------------------------------------------------------
 # curl -X DELETE http://localhost:8080/mvs/rest/profile --user new@nuevo.ru:passwordNew

@@ -1,6 +1,7 @@
 package ru.cherniak.menuvotingsystem.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -46,8 +48,7 @@ public class Restaurant extends AbstractBaseNameId {
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
-    private Date registered = new Date();
+    private LocalDateTime registered = LocalDateTime.now();
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
@@ -68,23 +69,23 @@ public class Restaurant extends AbstractBaseNameId {
     }
 
     public Restaurant(String name, String type, String address, String phone, String url) {
-        this(null, name, type, address, phone, url, new Date());
+        this(null, name, type, address, phone, url, LocalDateTime.now());
     }
 
     public Restaurant(String name, String type, String address, String phone) {
 
-        this(null, name, type, address, phone, "", new Date());
+        this(null, name, type, address, phone, "", LocalDateTime.now());
     }
 
     public Restaurant(Long id, String name, String type, String address, String phone) {
-        this(id, name, type, address, phone, "", new Date());
+        this(id, name, type, address, phone, "", LocalDateTime.now());
     }
 
     public Restaurant(Long id, String name, String type, String address, String phone, String url) {
-        this(id, name, type, address, phone, url, new Date());
+        this(id, name, type, address, phone, url, LocalDateTime.now());
     }
 
-    public Restaurant(Long id, String name, String type, String address, String phone, String url, Date registered) {
+    public Restaurant(Long id, String name, String type, String address, String phone, String url, LocalDateTime registered) {
         super(id, name);
         this.type = type;
         this.address = address;
@@ -92,12 +93,12 @@ public class Restaurant extends AbstractBaseNameId {
         this.phone = phone;
         this.registered = registered;
     }
-
-    public Date getRegistered() {
+    @JsonFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
+    public LocalDateTime getRegistered() {
         return registered;
     }
 
-    public void setRegistered(Date registered) {
+    public void setRegistered(LocalDateTime registered) {
         this.registered = registered;
     }
 

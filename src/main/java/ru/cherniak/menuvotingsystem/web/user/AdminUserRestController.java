@@ -43,7 +43,6 @@ public class AdminUserRestController extends AbstractUserController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Validated(View.Web.class) @RequestBody User user, @PathVariable long id) throws BindException {
-        checkAndValidateForUpdate(user, id);
         super.update(user, id);
     }
 

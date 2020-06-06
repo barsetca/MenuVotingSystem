@@ -40,7 +40,6 @@
         <property name="formatters">
             <set>
                 <bean class="ru.cherniak.menuvotingsystem.web.formatter.LocalDateFormatter"/>
-                <bean class="ru.cherniak.menuvotingsystem.web.formatter.LocalTimeFormatter"/>
             </set>
         </property>
     </bean>

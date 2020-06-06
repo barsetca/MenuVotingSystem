@@ -9,21 +9,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import static ru.cherniak.menuvotingsystem.util.DateTimeUtil.parseLocalDate;
+
 
 public class LocalDateFormatter implements Formatter<LocalDate> {
     @Override
-    public LocalDate parse(String text, Locale locale) throws ParseException {
-        if (text.length() == 0) {
-            return null;
-        }
-        return DateTimeUtil.parseLocalDate(text);
+    public LocalDate parse(String text, Locale locale) {
+        return parseLocalDate(text);
     }
 
     @Override
-    public String print(LocalDate localDate, Locale locale) {
-        if (localDate == null) {
-            return "";
-        }
-        return localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    public String print(LocalDate lt, Locale locale) {
+        return lt.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }

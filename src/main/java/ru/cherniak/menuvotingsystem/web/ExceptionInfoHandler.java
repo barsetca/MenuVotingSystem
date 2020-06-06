@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.cherniak.menuvotingsystem.util.ValidationUtil;
 import ru.cherniak.menuvotingsystem.util.exception.ErrorInfo;
-import ru.cherniak.menuvotingsystem.util.exception.ModificationRestrictionException;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 import ru.cherniak.menuvotingsystem.util.exception.OutsideTimeException;
 
@@ -48,12 +47,6 @@ public class ExceptionInfoHandler {
     public ErrorInfo handleError(HttpServletRequest req, OutsideTimeException e) {
         return logAndGetErrorInfo(req, e, false,
                 REQUESTED_RANGE_NOT_SATISFIABLE.value()+ " - " + REQUESTED_RANGE_NOT_SATISFIABLE.getReasonPhrase());
-    }
-
-    @ResponseStatus(value = UNPROCESSABLE_ENTITY)  // 422
-    @ExceptionHandler(ModificationRestrictionException.class)
-    public ErrorInfo handleError(HttpServletRequest req, ModificationRestrictionException e) {
-        return logAndGetErrorInfo(req, e, false, UNPROCESSABLE_ENTITY.value() + " - VALIDATION_ERROR");
     }
 
     @ResponseStatus(value = CONFLICT)  // 409

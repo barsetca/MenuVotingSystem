@@ -28,8 +28,7 @@ public class ProfileUserRestController extends AbstractUserController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal AuthorizedUser authUser) throws BindException {
-        checkAndValidateForUpdate(userTo, authUser.getId());
+    public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal AuthorizedUser authUser){
         super.updateTo(userTo, authUser.getId());
     }
 

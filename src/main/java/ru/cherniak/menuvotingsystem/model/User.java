@@ -1,5 +1,6 @@
 package ru.cherniak.menuvotingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
@@ -9,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.CollectionUtils;
 import ru.cherniak.menuvotingsystem.View;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
+import ru.cherniak.menuvotingsystem.web.formatter.LocalDateFormatter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -16,7 +18,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static java.time.temporal.WeekFields.ISO;
 
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -43,7 +48,6 @@ public class User extends AbstractBaseNameId {
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
     private LocalDateTime registered = LocalDateTime.now();
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -103,6 +107,7 @@ public class User extends AbstractBaseNameId {
         this.enabled = enabled;
     }
 
+    @JsonFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
     public LocalDateTime getRegistered() {
         return registered;
     }

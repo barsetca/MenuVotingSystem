@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 public class DateTimeUtil {
 
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 
     private static LocalTime timeBorder = LocalTime.of(11, 0, 0, 0);
 
@@ -30,11 +30,6 @@ public class DateTimeUtil {
     public static @Nullable
     LocalDate parseLocalDate(@Nullable String str) {
         return StringUtils.isEmpty(str) ? null : LocalDate.parse(str);
-    }
-
-    public static @Nullable
-    LocalTime parseLocalTime(@Nullable String str) {
-        return StringUtils.isEmpty(str) ? null : LocalTime.parse(str);
     }
 
     public static LocalDate getStartDate(LocalDate localDate) {
