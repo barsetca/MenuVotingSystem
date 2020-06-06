@@ -1,6 +1,7 @@
 package ru.cherniak.menuvotingsystem.service;
 
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,10 +10,15 @@ import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.model.Vote;
+import ru.cherniak.menuvotingsystem.repository.user.UserRepository;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
@@ -23,24 +29,31 @@ class UserServiceTest extends AbstractServiceTest {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private UserRepository repository;
+
     @Test
     void create() {
-        User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", Role.ROLE_USER);
+        User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", true,
+                LocalDateTime.now(), Set.of(Role.ROLE_USER, Role.ROLE_ADMIN)) ;
         User created = service.create(newUser);
-        newUser.setId(created.getId());
-        USER_MATCHER.assertMatch(service.getAll(), ADMIN, newUser, USER);
+        long newId = created.id();
+        newUser.setId(newId);
+        USER_MATCHER.assertMatch(created, newUser);
+        USER_MATCHER.assertMatch(service.get(newId), newUser);
     }
 
     @Test
     void duplicateMailCreate() {
         assertThrows(DataIntegrityViolationException.class, () ->
-                service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER)));
+                service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass",
+                        Role.ROLE_USER)));
     }
 
     @Test
     void delete(){
         service.delete(USER_ID);
-        USER_MATCHER.assertMatch(service.getAll(), ADMIN);
+        Assertions.assertNull(repository.get(USER_ID));
     }
 
     @Test
@@ -122,7 +135,6 @@ class UserServiceTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.ROLE_USER)), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "ddddd", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "V", "mail@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
     }
 }

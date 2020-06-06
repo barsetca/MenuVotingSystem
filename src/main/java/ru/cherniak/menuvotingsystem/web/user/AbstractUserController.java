@@ -3,10 +3,14 @@ package ru.cherniak.menuvotingsystem.web.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindException;
+import ru.cherniak.menuvotingsystem.HasId;
+import ru.cherniak.menuvotingsystem.model.AbstractBase;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.service.UserService;
 import ru.cherniak.menuvotingsystem.to.UserTo;
 import ru.cherniak.menuvotingsystem.util.UserUtil;
+import ru.cherniak.menuvotingsystem.util.exception.ModificationRestrictionException;
 
 import java.util.List;
 
@@ -18,7 +22,7 @@ public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     public List<User> getAll() {
         log.info("getAll");
@@ -37,26 +41,26 @@ public abstract class AbstractUserController {
     }
 
     public User createTo(UserTo userTo) {
-        log.info("create {}", userTo);
-        checkNew(userTo);
+        log.info("createTo {}", userTo);
         return create(UserUtil.createNewFromTo(userTo));
     }
 
 
     public void delete(long id) {
         log.info("delete {}", id);
+        checkModificationAllowed(id);
         service.delete(id);
     }
 
-    public void update(User user, long id) {
+    public void update(User user, long id) throws BindException {
         log.info("update {} with id={}", user, id);
-        assureIdConsistent(user, id);
         service.update(user);
     }
 
     public void updateTo(UserTo userTo, long id) {
         log.info("update {} with id={}", userTo, id);
         assureIdConsistent(userTo, id);
+        checkModificationAllowed(id);
         service.updateTo(userTo);
     }
 
@@ -74,5 +78,17 @@ public abstract class AbstractUserController {
     public void enable(long id, boolean enabled) {
         log.info(enabled ? "enable {}" : "disable {}", id);
         service.enable(id, enabled);
+    }
+
+    protected void checkAndValidateForUpdate(HasId user, long id) throws BindException {
+        log.info("update {} with id={}", user, id);
+        assureIdConsistent(user, id);
+        checkModificationAllowed(id);
+    }
+
+    private void checkModificationAllowed(long id) {
+        if (id < AbstractBase.START_SEQ) {
+            throw new ModificationRestrictionException();
+        }
     }
 }

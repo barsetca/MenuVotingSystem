@@ -24,19 +24,19 @@ public class UserRestaurantRestController {
 
     @GetMapping("/{id}")
     public RestaurantTo getWithCountVotes(@PathVariable long id) {
-        log.info("getWithListVotes {}", id);
+        log.info("getWithCountVotes {}", id);
         return RestaurantUtil.createTo(restaurantService.getWithVotes(id));
     }
 
     @GetMapping("/by")
     public RestaurantTo getByNameWithCountVotes(@RequestParam String name) {
-        log.info("getByName {}", name);
+        log.info("getByNameWithCountVotes {}", name);
         return RestaurantUtil.createTo(restaurantService.getByNameWithVotes(name));
     }
 
     @GetMapping
     public List<RestaurantTo> getAllWithCountVotes() {
-        log.info("findAllWithVotes");
+        log.info("getAllWithCountVotes");
         RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
         return RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
     }

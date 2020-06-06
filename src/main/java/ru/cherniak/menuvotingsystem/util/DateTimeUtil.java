@@ -11,6 +11,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
+
+    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private static LocalTime timeBorder = LocalTime.of(11, 0, 0, 0);
@@ -42,7 +44,6 @@ public class DateTimeUtil {
     public static LocalDate getEndDate(LocalDate localDate) {
         return localDate != null ? localDate : MAX_DATE;
     }
-
 
     public static void checkTimeBorder() {
         if (LocalDateTime.now().toLocalTime().isAfter(timeBorder)) {

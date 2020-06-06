@@ -1,5 +1,6 @@
 package ru.cherniak.menuvotingsystem.model;
 
+import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.HasId;
 
 import javax.persistence.*;
@@ -22,14 +23,21 @@ public abstract class AbstractBase implements HasId {
         this.id = id;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
+    public long id() {
+        Assert.notNull(id, "Entity must has id");
+        return id;
+    }
 
     @Override
     public String toString() {

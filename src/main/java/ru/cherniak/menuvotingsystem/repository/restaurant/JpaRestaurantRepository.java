@@ -15,7 +15,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-
     @Modifying
     @Query("DELETE FROM Restaurant r WHERE r.id =:id")
     int deleteById(@Param("id") long id);
@@ -35,7 +34,7 @@ public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long>
     List<Restaurant> findAllWithDishes(Sort sort);
 
     @EntityGraph(attributePaths = {"votes"})
-    @Query("SELECT r FROM Restaurant r ORDER BY r.votes.size DESC")
+    @Query("SELECT r FROM Restaurant r ORDER BY size(r.votes) DESC")
     List<Restaurant> findAllWithVotes();
 
     @EntityGraph(attributePaths = {"votes"})

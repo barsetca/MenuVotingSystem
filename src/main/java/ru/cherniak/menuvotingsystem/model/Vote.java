@@ -1,9 +1,10 @@
 package ru.cherniak.menuvotingsystem.model;
 
-import ru.cherniak.menuvotingsystem.web.View;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import ru.cherniak.menuvotingsystem.View;
 
 import javax.persistence.*;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -11,17 +12,20 @@ import java.time.LocalDate;
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(
         columnNames = {"date", "user_id"}, name = "votes_unique_date_user_id_idx")})
 public class Vote extends AbstractBase {
+
     @Column(name = "date", nullable = false, columnDefinition = "timestamp")
     @NotNull
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Restaurant.class)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull(groups = View.Persist.class)
     private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull(groups = View.Persist.class)
     private User user;
 

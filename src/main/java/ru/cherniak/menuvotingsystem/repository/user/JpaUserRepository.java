@@ -11,8 +11,6 @@ import ru.cherniak.menuvotingsystem.model.User;
 @Transactional(readOnly = true)
 public interface JpaUserRepository extends JpaRepository<User, Long> {
 
-
-
     @Modifying
     @Query("DELETE FROM User u WHERE u.id=:id")
     int delete(@Param("id") long id);

@@ -3,11 +3,12 @@ package ru.cherniak.menuvotingsystem.web.dish;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.model.Dish;
+import ru.cherniak.menuvotingsystem.View;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -45,7 +46,7 @@ public class AdminDishRestController extends AbstractDishController {
 
 
     @PostMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish, @RequestParam long restaurantId) {
+    public ResponseEntity<Dish> createWithLocation(@Validated(View.Web.class) @RequestBody Dish dish, @RequestParam long restaurantId) {
         Dish created = super.create(dish, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_ADMIN_DISHES + "/{id}")
@@ -56,7 +57,7 @@ public class AdminDishRestController extends AbstractDishController {
     @Override
     @PutMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Dish dish, @RequestParam long restaurantId) {
+    public void update(@Validated(View.Web.class) @RequestBody Dish dish, @RequestParam long restaurantId) {
         super.update(dish, restaurantId);
     }
 

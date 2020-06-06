@@ -43,7 +43,7 @@ public abstract class AbstractDishController {
     }
 
     public List<Dish> getAllByRestaurant(long restaurantId) {
-        log.info("getAll of restaurant {}", restaurantId);
+        log.info("getAllByRestaurant of restaurant {}", restaurantId);
         return dishService.getAllByRestaurant(restaurantId);
     }
 
@@ -52,14 +52,14 @@ public abstract class AbstractDishController {
         return dishService.getTodayMenu(restaurantId);
     }
 
-
     public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
                                                               long restaurantId) {
-        log.info("getAllBetweenDatesInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
+        log.info("getAllByRestaurantBetweenDatesInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
         return dishService.getAllByRestaurantBetweenDatesInclusive(startDate, endDate, restaurantId);
     }
 
     public Dish getWithRestaurant(long id, long restaurantId) {
+        log.info("getWithRestaurant dish {} of restaurant {}", id, restaurantId);
         return dishService.getWithRestaurant(id, restaurantId);
     }
 }

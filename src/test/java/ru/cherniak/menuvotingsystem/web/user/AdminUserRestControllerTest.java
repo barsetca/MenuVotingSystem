@@ -7,19 +7,23 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.cherniak.menuvotingsystem.UserTestData;
 import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.service.UserService;
+import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
 import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.UserTestData.*;
 import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
+import static ru.cherniak.menuvotingsystem.web.ExceptionInfoHandler.EXCEPTION_DUPLICATE_EMAIL;
 
 class AdminUserRestControllerTest extends AbstractControllerTest {
 
@@ -70,11 +74,11 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", Role.ROLE_USER);
+        User newUser = UserTestData.getNew();
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
-                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(newUser)))
+                .with(userHttpBasic(ADMIN))
+                .content(UserTestData.jsonWithPassword(newUser, "newPass")))
                 .andExpect(status().isCreated());
 
         User created = TestUtil.readFromJson(action, User.class);
@@ -89,7 +93,7 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     @Test
     void createValidationError() throws Exception {
-        User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", Role.ROLE_USER);
+        User newUser = UserTestData.getNew();
         newUser.setName("U");
         newUser.setEmail("a@");
         newUser.setPassword("pass");
@@ -107,14 +111,14 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     @Test
     void duplicateMailCreate() throws Exception {
-//        User newUser = UserTestData.getNew();
-        User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", Role.ROLE_USER);
+        User newUser = UserTestData.getNew();
         newUser.setEmail("admin@gmail.com");
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
-                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(jsonWithPassword(newUser, "newPass"))
                 .content(JsonUtil.writeValue(newUser)))
-                .andExpect(status().isConflict())
+                .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
 
@@ -124,9 +128,9 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
         User updated = new User(USER);
         updated.setEmail("admin@gmail.com");
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
-                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
+                .with(userHttpBasic(ADMIN))
+                .content(jsonWithPassword(updated, "password")))
                 .andExpect(status().isConflict())
                 .andDo(print());
     }
@@ -137,8 +141,7 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-
-        USER_MATCHER.assertMatch(userService.getAll(), ADMIN);
+        assertThrows(NotFoundException.class, () -> userService.get(USER_ID));
     }
 
     @Test
@@ -151,14 +154,14 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        User updated = new User(USER);
-        updated.setName("UpdatedName");
+        User updated = UserTestData.getUpdated();
+        updated.setId(null);
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
-                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
+                .with(userHttpBasic(ADMIN))
+                .content(UserTestData.jsonWithPassword(updated, "newPass")))
                 .andExpect(status().isNoContent());
-
+        updated.setId(USER.id());
         USER_MATCHER.assertMatch(userService.get(USER_ID), updated);
     }
 

@@ -42,8 +42,6 @@ public class RestaurantTo extends BaseTo {
         return countOfVotes;
     }
 
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

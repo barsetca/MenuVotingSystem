@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.cherniak.menuvotingsystem.util.ValidationUtil;
 import ru.cherniak.menuvotingsystem.util.exception.ErrorInfo;
+import ru.cherniak.menuvotingsystem.util.exception.ModificationRestrictionException;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 import ru.cherniak.menuvotingsystem.util.exception.OutsideTimeException;
 
@@ -30,6 +31,8 @@ import static org.springframework.http.HttpStatus.*;
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
+
+    public static final String EXCEPTION_DUPLICATE_EMAIL = "exception.user.duplicateEmail";
 
     //  http://stackoverflow.com/a/22358422/548473
 
@@ -45,6 +48,12 @@ public class ExceptionInfoHandler {
     public ErrorInfo handleError(HttpServletRequest req, OutsideTimeException e) {
         return logAndGetErrorInfo(req, e, false,
                 REQUESTED_RANGE_NOT_SATISFIABLE.value()+ " - " + REQUESTED_RANGE_NOT_SATISFIABLE.getReasonPhrase());
+    }
+
+    @ResponseStatus(value = UNPROCESSABLE_ENTITY)  // 422
+    @ExceptionHandler(ModificationRestrictionException.class)
+    public ErrorInfo handleError(HttpServletRequest req, ModificationRestrictionException e) {
+        return logAndGetErrorInfo(req, e, false, UNPROCESSABLE_ENTITY.value() + " - VALIDATION_ERROR");
     }
 
     @ResponseStatus(value = CONFLICT)  // 409
@@ -106,7 +115,6 @@ public class ExceptionInfoHandler {
             if (rootMsg.toLowerCase().contains("dishes_unique_date_name_restaurant_id_idx")) {
                 rootMsg = "Dish with this name on the date already exists";
             }
-
 
             detail = new String[] {rootMsg};
         }

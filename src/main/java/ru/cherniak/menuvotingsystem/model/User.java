@@ -1,17 +1,22 @@
 package ru.cherniak.menuvotingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.SafeHtml;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.CollectionUtils;
+import ru.cherniak.menuvotingsystem.View;
+import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.*;
-
 
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -22,11 +27,14 @@ public class User extends AbstractBaseNameId {
     @Email
     @NotBlank
     @Size(min = 3, max = 100)
+//    @SafeHtml(groups = {View.Web.class})
     private String email;
 
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 6, max = 100)
+    // https://stackoverflow.com/a/12505165/548473
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
@@ -34,11 +42,14 @@ public class User extends AbstractBaseNameId {
 
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
-    private Date registered = new Date();
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
+    private LocalDateTime registered = LocalDateTime.now();
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_idx")})
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)
@@ -56,10 +67,10 @@ public class User extends AbstractBaseNameId {
     }
 
     public User(Long id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, true, new Date(), EnumSet.of(role, roles));
+        this(id, name, email, password, true, LocalDateTime.now(), EnumSet.of(role, roles));
     }
 
-    public User(Long id, String name, String email, String password, boolean enabled, Date registered, Collection<Role> roles) {
+    public User(Long id, String name, String email, String password, boolean enabled, LocalDateTime registered, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
@@ -92,11 +103,11 @@ public class User extends AbstractBaseNameId {
         this.enabled = enabled;
     }
 
-    public Date getRegistered() {
+    public LocalDateTime getRegistered() {
         return registered;
     }
 
-    public void setRegistered(Date registered) {
+    public void setRegistered(LocalDateTime registered) {
         this.registered = registered;
     }
 

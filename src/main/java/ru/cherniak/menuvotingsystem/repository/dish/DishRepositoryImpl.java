@@ -17,7 +17,6 @@ public class DishRepositoryImpl implements DishRepository {
 
     private static final Sort SORT_DATE_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("name"));
     private static final Sort SORT_DATE_RID_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurant.id"), Sort.Order.asc("name"));
-    private static final Sort SORT_RID_NAME = Sort.by(Sort.Direction.ASC, "restaurant.id", "name");
     private static final Sort SORT_NAME = Sort.by(Sort.Order.asc("name"));
 
     @Autowired

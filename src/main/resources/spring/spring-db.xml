@@ -28,16 +28,11 @@
     <jpa:repositories base-package="ru.cherniak.**.repository"/>
 
     <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
-        <jdbc:script location="classpath:db/initDB_hsql.sql"/>
+        <jdbc:script location="classpath:db/${jdbc.initLocation}"/>
         <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>
     </jdbc:initialize-database>
 
     <tx:annotation-driven/>
-
-<!--    <bean id="jdbcTemplate"-->
-<!--          class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" >-->
-<!--        <constructor-arg ref="dbcpDataSource" />-->
-<!--    </bean>-->
 
     <!--no pooling-->
 
@@ -73,6 +68,12 @@
                 <entry key="#{T(org.hibernate.cache.jcache.ConfigSettings).PROVIDER}" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
                 <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SECOND_LEVEL_CACHE}" value="true"/>
                 <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_QUERY_CACHE}" value="false"/>
+
+                <entry key="javax.persistence.validation.group.pre-persist"
+                       value="ru.cherniak.menuvotingsystem.View$Persist"/>
+                <entry key="javax.persistence.validation.group.pre-update"
+                       value="ru.cherniak.menuvotingsystem.View$Persist"/>
+
             </map>
         </property>
 

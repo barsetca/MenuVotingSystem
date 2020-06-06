@@ -52,9 +52,24 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-
         USER_MATCHER.assertMatch(userService.get(USER_ID), UserUtil.updateFromTo(new User(USER), updated));
     }
+
+    @Test
+    void updateValidationError() throws Exception {
+        UserTo updated = UserUtil.asTo(USER);
+        updated.setName("U");
+        updated.setEmail("U");
+        updated.setPassword("U");
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL)
+                .with(userHttpBasic(USER))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+           }
+
+
 
     @Test
     void delete() throws Exception {
@@ -77,5 +92,16 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
         Long newID = created.getId();
 
         USER_MATCHER.assertMatch(userService.get(newID), created);
+    }
+
+    @Test
+    void registerValidationError()  throws Exception {
+        UserTo newUserTo = new UserTo(null, "C", "c", "c");
+
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newUserTo)))
+                .andExpect(status().isUnprocessableEntity());
+
     }
 }

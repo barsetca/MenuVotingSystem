@@ -1,9 +1,13 @@
 package ru.cherniak.menuvotingsystem.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import org.hibernate.annotations.Cache;
+import org.springframework.format.annotation.DateTimeFormat;
+import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -41,6 +45,8 @@ public class Restaurant extends AbstractBaseNameId {
 
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
     private Date registered = new Date();
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

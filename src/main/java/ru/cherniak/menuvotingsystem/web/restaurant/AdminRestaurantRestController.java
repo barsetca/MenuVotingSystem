@@ -6,12 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
+import ru.cherniak.menuvotingsystem.View;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -49,8 +50,8 @@ public class AdminRestaurantRestController {
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
-        log.info("create {}", restaurant);
+    public ResponseEntity<Restaurant> createWithLocation(@Validated(View.Web.class) @RequestBody Restaurant restaurant) {
+        log.info("createWithLocation {}", restaurant);
         checkNew(restaurant);
         restaurantService.create(restaurant);
         Restaurant created = restaurantService.create(restaurant);
@@ -63,7 +64,7 @@ public class AdminRestaurantRestController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Restaurant update(@Valid @RequestBody Restaurant restaurant, @PathVariable long id) {
+    public Restaurant update(@Validated(View.Web.class) @RequestBody Restaurant restaurant, @PathVariable long id) {
         log.info("update {}", restaurant);
         assureIdConsistent(restaurant, id);
         return restaurantService.update(restaurant);

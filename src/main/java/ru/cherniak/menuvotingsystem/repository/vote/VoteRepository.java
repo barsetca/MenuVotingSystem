@@ -12,12 +12,12 @@ public interface VoteRepository {
 
     Vote getWithRestaurant(long id, long userId);
 
-    boolean delete(@Nullable LocalDate date, long userId);
+    boolean delete(LocalDate date, long userId);
 
     long countByRestaurant(long restaurantId);
 
     List<Vote> getAllByUserIdWithRestaurant(long userId);
 
-    List<Vote> getAllWithRestaurantByUserIdBetween(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long userId);
+    List<Vote> getAllWithRestaurantByUserIdBetween(LocalDate startDate, LocalDate endDate, long userId);
 
 }

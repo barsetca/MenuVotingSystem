@@ -1,7 +1,9 @@
 package ru.cherniak.menuvotingsystem.model;
 
 
-import ru.cherniak.menuvotingsystem.web.View;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import ru.cherniak.menuvotingsystem.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
@@ -25,6 +27,7 @@ public class Dish extends AbstractBaseNameId {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Restaurant.class)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull(groups = View.Persist.class)
     private Restaurant restaurant;
 

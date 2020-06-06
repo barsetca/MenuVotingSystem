@@ -28,14 +28,12 @@ public class RestaurantService {
     }
 
     public Restaurant get(long id) {
-        log.info("get {}", id);
         return checkNotFoundWithId(repository.get(id), id);
 
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
-        log.info("create {}", restaurant);
         Assert.notNull(restaurant, "user must not be null");
         return repository.save(restaurant);
 
@@ -43,7 +41,6 @@ public class RestaurantService {
 
     @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant update(Restaurant restaurant) {
-        log.info("update {}", restaurant);
         Assert.notNull(restaurant, "user must not be null");
         return checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
 
@@ -52,12 +49,10 @@ public class RestaurantService {
 
     @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(long id) {
-        log.info("delete {}", id);
         checkNotFoundWithId(repository.delete(id), id);
     }
 
     public Restaurant getByName(String name) {
-        log.info("getByName {}", name);
         Assert.notNull(name, "name must not be null");
         return checkNotFound(repository.getByName(name), "name=" + name);
 
@@ -65,27 +60,22 @@ public class RestaurantService {
 
     @Cacheable("restaurants")
     public List<Restaurant> getAll() {
-        log.info("getAll");
         return repository.getAll();
     }
 
     public Restaurant getWithVotes(long id) {
-        log.info("getWithListVotes {}", id);
         return checkNotFoundWithId(repository.getWithVotes(id), id);
     }
 
     public Restaurant getWithDishes(long id) {
-        log.info("getWithListDishes {}", id);
         return checkNotFoundWithId(repository.getWithDishes(id), id);
     }
 
     public List<Restaurant> getAllWithDishes() {
-        log.info("findAllWithDishes");
         return repository.getAllWithDishes();
     }
 
     public List<Restaurant> getAllWithVotes() {
-        log.info("getAllWithVotes");
         return repository.getAllWithVotes();
     }
 
