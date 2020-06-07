@@ -49,7 +49,7 @@ Content-Type: application/json
 }
 
 ###update user (if exist)---------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100015 --user admin@gmail.com:admin
+# curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER","ROLE_ADMIN"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100015 --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/users/100015
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
@@ -58,6 +58,22 @@ Content-Type: application/json
   "name": "NameUpdate",
   "email": "nghhgjhh@gmail.com",
   "password": "passwordUpdate",
+  "roles": [
+    "ROLE_USER",
+    "ROLE_ADMIN"
+  ]
+}
+
+###update user (if exist) Validation error-----------------------------------------------------------------
+# curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100015 --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/users/100015
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
+  "name": "N",
+  "email": "",
+  "password": null,
   "roles": [
     "ROLE_USER"
   ]
@@ -70,7 +86,7 @@ Authorization: Basic admin@gmail.com admin
 
 ### DELETE  NotFound (UNPROCESSABLE_ENTITY) id=1-----------------------------------------------------------------------
 # curl -X DELETE http://localhost:8080/mvs/rest/admin/users/1 --user admin@gmail.com:admin
-DELETE http://localhost:8080/mvs/rest/admin/users/2000000
+DELETE http://localhost:8080/mvs/rest/admin/users/1
 Authorization: Basic admin@gmail.com admin
 
 ###getByMail-----------------------------------------------------------------------------------------------------------
@@ -125,7 +141,17 @@ Content-Type: application/json
   "password": "wordU"
 }
 
-###
+### update user profile Validation Error with empty OR null datas--------------------------------------------------------------------------------
+# curl -X PUT -d '{"name":"","email":null,"password":""}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user update@a:passwordUpdate
+PUT http://localhost:8080/mvs/rest/profile
+Authorization: Basic update@a passwordUpdate
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": null,
+  "password": ""
+}
 
 ###get(check update)---------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/profile --user update@a:passwordUpdate
@@ -151,7 +177,7 @@ Content-Type: application/json
 GET http://localhost:8080/mvs/rest/profile
 Authorization: Basic new@nuevo.ru passwordNew
 
-### register user Validation Error-------------------------------------------------------------------------------------
+### register Validation Error-------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"N","email":"ne","password":"passw"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
 POST http://localhost:8080/mvs/rest/profile/register
 Content-Type: application/json
@@ -162,16 +188,15 @@ Content-Type: application/json
   "password": "passw"
 }
 
-
-### register user Validation Error--------------------------------------------------------------------------------------
-# curl -X POST -d '{"name":"N","email":"@u","password":"New"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
+### register Validation Errorwith empty OR null datas ------------------------------------------------------------
+# curl -X POST -d '{"name":"","email":"","password":null}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
 POST http://localhost:8080/mvs/rest/profile/register
 Content-Type: application/json
 
 {
   "name": "N",
   "email": "@u",
-  "password": "New"
+  "password": null
 }
 
 ### delete user profile------------------------------------------------------------------------------------------------
@@ -181,11 +206,9 @@ Authorization: Basic new@nuevo.ru passwordNew
 
 ###
 
-### getAll (check delete)----------------------------------------------------------------------------------------------
+### getAll (check delete from admin)----------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/users
 Authorization: Basic admin@gmail.com admin
 
-###C:\Users\barse\AppData\Roaming\JetBrains\IntelliJIdea2020.1\scratches\scratch.http
-###ToolBox URL
-###jetbrains://idea/navigate/reference?project=MenuVotingSystem&path=scratch.http
+###

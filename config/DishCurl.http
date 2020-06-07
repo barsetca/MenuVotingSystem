@@ -37,7 +37,7 @@ Authorization: Basic admin@gmail.com admin
 GET http://localhost:8080/mvs/rest/admin/dishes
 Authorization: Basic admin@gmail.com admin
 
-###create newDish by restaurantId 100002 with Restaurant on date-------------------------------------------------------
+###create newDish by restaurantId 100002 with Restaurant on future date-------------------------------------------------------
 # curl -X POST -d '{"name":"FirstName","date":"2020-07-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
 Authorization: Basic admin@gmail.com admin
@@ -49,7 +49,29 @@ Content-Type: application/json
   "price": 5000
 }
 
-###
+###create newDish by restaurantId 100002 with Conflict (same nam jf the date)------------------------------------------
+# curl -X POST -d '{"name":"FirstName","date":"2020-07-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
+  "name": "FirstName",
+  "date": "2020-07-28",
+  "price": 500
+}
+
+###create newDish by restaurantId 100002 with Validation error (creat past date)---------------------------------------
+# curl -X POST -d '{"name":"FirstName","date":"2020-05-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
+  "name": "FirstName",
+  "date": "2020-05-28",
+  "price": 500
+}
 
 ###create newDish by restaurantId 100002 with Restaurant now-----------------------------------------------------------
 # curl -X POST -d '{"name":"SecondName","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
@@ -75,7 +97,7 @@ Content-Type: application/json
   "price": 500
 }
 
-###update NotFound Dish (UNPROCESSABLE_ENTITY) by restaurantId 100002---------------------------------------------------------------------------
+###update NotFound (UNPROCESSABLE_ENTITY) Dish by restaurantId 100002---------------------------------------------------------------------------
 # curl -X PUT -d '{"id":1,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
 Authorization: Basic admin@gmail.com admin
@@ -120,7 +142,3 @@ GET http://localhost:8080/mvs/rest/user/dishes/by?restaurantId=100002
 Authorization: Basic user@yandex.ru password
 
 ###
-
-###C:\Users\barse\AppData\Roaming\JetBrains\IntelliJIdea2020.1\scratches\scratch.http
-###ToolBox URL
-###jetbrains://idea/navigate/reference?project=MenuVotingSystem&path=scratch.http

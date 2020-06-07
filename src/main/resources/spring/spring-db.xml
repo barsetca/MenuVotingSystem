@@ -34,23 +34,12 @@
 
     <tx:annotation-driven/>
 
-    <!--no pooling-->
-
-<!--    <bean id="dataSource"-->
-<!--          class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-<!--        <property name="driverClassName" value="${database.driverClassName}"/>-->
-<!--        <property name="url" value="${database.url}"/>-->
-<!--        <property name="username" value="${database.username}"/>-->
-<!--        <property name="password" value="${database.password}"/>-->
-<!--    </bean>-->
-
     <bean id="dataSource"
           class="org.apache.tomcat.jdbc.pool.DataSource"
           p:driverClassName="${database.driverClassName}"
           p:url="${database.url}"
           p:username="${database.username}"
           p:password="${database.password}"/>
-
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="dataSource"
@@ -73,7 +62,6 @@
                        value="ru.cherniak.menuvotingsystem.View$Persist"/>
                 <entry key="javax.persistence.validation.group.pre-update"
                        value="ru.cherniak.menuvotingsystem.View$Persist"/>
-
             </map>
         </property>
 
