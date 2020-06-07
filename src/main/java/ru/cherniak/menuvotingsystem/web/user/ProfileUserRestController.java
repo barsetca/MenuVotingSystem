@@ -47,5 +47,4 @@ public class ProfileUserRestController extends AbstractUserController {
         super.delete(authUser.getId());
     }
 
-//    create!!!
 }

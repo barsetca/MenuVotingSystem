@@ -37,7 +37,7 @@
               auth="Container"
               factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
               type="javax.sql.DataSource"
-              url="jdbc:hsqldb:file:C:/temp/menuvotingsystem"
+              url="jdbc:hsqldb:mem:menuvotingsystem"
               username="sa"
               password=""
               driverClassName="org.hsqldb.jdbcDriver"
