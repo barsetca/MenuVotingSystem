@@ -33,7 +33,7 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     public void createNotOwner() {
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(DataIntegrityViolationException.class, () ->
                 service.create(getCreatedToday(), 1));
     }
 
@@ -71,7 +71,7 @@ class DishServiceTest extends AbstractServiceTest {
         Dish newDish = new Dish(null, "БигМак", LocalDate.now(), 500);
         Dish created = service.create(newDish, RESTAURANT1_ID);
         Dish updated = getUpdated(created);
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(DataIntegrityViolationException.class, () ->
                 service.update(updated, 1));
     }
 

@@ -52,13 +52,13 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createUpdateNotFound() throws Exception {
+    void createUpdateNotOwner() throws Exception {
         timeBorderPlus();
         mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
                 .param("restaurantId", "1")
                 .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isConflict())
                 .andDo(print());
         timeBorderFix();
     }

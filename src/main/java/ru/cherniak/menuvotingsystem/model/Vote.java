@@ -45,12 +45,12 @@ public class Vote extends AbstractBase {
         return date;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
     public void setRestaurant(Restaurant restaurant) {

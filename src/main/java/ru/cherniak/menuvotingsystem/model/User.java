@@ -32,7 +32,6 @@ public class User extends AbstractBaseNameId {
     @Email
     @NotBlank
     @Size(min = 3, max = 100)
-//    @SafeHtml(groups = {View.Web.class})
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -142,5 +141,4 @@ public class User extends AbstractBaseNameId {
                 ", roles=" + roles +
                 '}';
     }
-
 }

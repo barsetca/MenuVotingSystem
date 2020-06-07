@@ -50,6 +50,8 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
         DISH_MATCHER.assertMatch(dishService.get(newID), newDish);
     }
 
+
+
     @Transactional(propagation = Propagation.NEVER)
     @Test
     void createValidationError() throws Exception {
@@ -65,6 +67,17 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(newDish)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
+    }
+
+    @Test
+    void createNotOwner() throws Exception {
+        Dish newDish = new Dish("NewName", LocalDate.now(), 100);
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+                .param("restaurantId", "1")
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)))
+                .andExpect(status().isConflict());
     }
 
     @Transactional(propagation = Propagation.NEVER)
@@ -96,7 +109,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void updateNotFound() throws Exception {
+    void updateNotOwner() throws Exception {
         Dish updated = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
         updated.setName("UpdateName");
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
@@ -104,7 +117,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isConflict())
                 .andDo(print());
     }
 

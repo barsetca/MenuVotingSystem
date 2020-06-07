@@ -8,6 +8,8 @@ import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,8 +24,8 @@ public class DishRepositoryImpl implements DishRepository {
     @Autowired
     private JpaDishRepository repository;
 
-    @Autowired
-    private RestaurantRepository restaurantRepository;
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     @Transactional
@@ -31,11 +33,7 @@ public class DishRepositoryImpl implements DishRepository {
         if (!dish.isNew() && get(dish.id()) == null) {
             return null;
         }
-        Restaurant restaurant = restaurantRepository.get(restaurantId);
-        if (restaurant == null) {
-            return null;
-        }
-        dish.setRestaurant(restaurant);
+        dish.setRestaurant(em.getReference(Restaurant.class, restaurantId));
         return repository.save(dish);
     }
 

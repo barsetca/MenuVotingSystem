@@ -3,6 +3,7 @@ package ru.cherniak.menuvotingsystem.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
@@ -25,6 +26,7 @@ public class VoteService {
     public VoteService(VoteRepository repository) {
         this.repository = repository;
     }
+
 
     public Vote save(long userId, long restaurantId) {
         checkTimeBorder();

@@ -3,6 +3,7 @@ package ru.cherniak.menuvotingsystem.service;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
@@ -49,7 +50,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void createUpdateNotOwner() throws Exception {
         timeBorderPlus();
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(DataIntegrityViolationException.class, () ->
                 service.save(ADMIN_ID, 1));
         timeBorderFix();
     }
