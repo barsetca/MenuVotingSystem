@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService {
     public void enable(long id, boolean enabled) {
         User user = checkNotFoundWithId(get(id), id);
         user.setEnabled(enabled);
-        repository.save(user);;
+        repository.save(user);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class UserService implements UserDetailsService {
 
     private User prepareAndSave(User user) {
         return repository.save(prepareToSave(user, passwordEncoder));
-            }
+    }
 }
 
 

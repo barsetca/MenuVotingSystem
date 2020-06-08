@@ -5,12 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.SafeHtml;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.CollectionUtils;
-import ru.cherniak.menuvotingsystem.View;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
-import ru.cherniak.menuvotingsystem.web.formatter.LocalDateFormatter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -18,10 +14,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import static java.time.temporal.WeekFields.ISO;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -31,7 +27,7 @@ public class User extends AbstractBaseNameId {
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
-    @Size(min = 3, max = 100)
+    @Size(max = 100)
     private String email;
 
     @Column(name = "password", nullable = false)

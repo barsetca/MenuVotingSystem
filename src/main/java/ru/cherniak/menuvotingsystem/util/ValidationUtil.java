@@ -1,14 +1,7 @@
 package ru.cherniak.menuvotingsystem.util;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import ru.cherniak.menuvotingsystem.HasId;
-import ru.cherniak.menuvotingsystem.model.AbstractBase;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
-
-import javax.validation.*;
-import java.util.Set;
-import java.util.StringJoiner;
 
 public class ValidationUtil {
 
@@ -64,22 +57,4 @@ public class ValidationUtil {
         }
         return result;
     }
-
-//    private static final Validator validator;
-//
-//    static {
-//        //  From Javadoc: implementations are thread-safe and instances are typically cached and reused.
-//        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-//        //  From Javadoc: implementations of this longerface must be thread-safe
-//        validator = factory.getValidator();
-//    }
-//
-//    public static <T> void validate(T bean) {
-//        // https://alexkosarev.name/2018/07/30/bean-validation-api/
-//        Set<ConstraintViolation<T>> violations = validator.validate(bean);
-//        if (!violations.isEmpty()) {
-//            throw new ConstraintViolationException(violations);
-//        }
-//    }
-
-    }
+}

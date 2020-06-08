@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.View;
+import ru.cherniak.menuvotingsystem.model.Dish;
 
 import java.net.URI;
 import java.time.LocalDate;

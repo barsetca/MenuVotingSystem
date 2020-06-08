@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
-import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -53,7 +52,6 @@ public class DishRepositoryImpl implements DishRepository {
     public boolean delete(long id) {
         return repository.delete(id) != 0;
     }
-
 
     @Override
     public List<Dish> getAllByRestaurant(long restaurantId) {

@@ -10,7 +10,6 @@ import ru.cherniak.menuvotingsystem.util.VoteUtil;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 import static ru.cherniak.menuvotingsystem.DishTestData.DATE_290420;
 import static ru.cherniak.menuvotingsystem.DishTestData.DATE_300420;
@@ -35,7 +34,7 @@ public class VoteTestData {
     public static final VoteTo VOTE_TO_2 = getVoteTo(VOTE_2, RestaurantTestData.RESTAURANT2);
     public static final VoteTo VOTE_TO_3 = getVoteTo(VOTE_3, RestaurantTestData.RESTAURANT2);
 
-    public static VoteTo getVoteTo(Vote vote, Restaurant restaurant){
+    public static VoteTo getVoteTo(Vote vote, Restaurant restaurant) {
         vote.setRestaurant(restaurant);
         return VoteUtil.createTo(vote);
     }
@@ -65,5 +64,4 @@ public class VoteTestData {
         Class clazz = DateTimeUtil.class;
         return clazz.getDeclaredField("timeBorder");
     }
-
 }

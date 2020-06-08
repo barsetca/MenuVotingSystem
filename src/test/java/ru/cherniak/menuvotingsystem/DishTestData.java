@@ -1,8 +1,6 @@
 package ru.cherniak.menuvotingsystem;
 
-import org.springframework.test.web.servlet.ResultMatcher;
 import ru.cherniak.menuvotingsystem.model.Dish;
-import ru.cherniak.menuvotingsystem.model.Vote;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -10,10 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.time.LocalDate.of;
-import static org.assertj.core.api.Assertions.assertThat;
 import static ru.cherniak.menuvotingsystem.model.AbstractBase.START_SEQ;
-import static ru.cherniak.menuvotingsystem.TestUtil.readFromJsonMvcResult;
-import static ru.cherniak.menuvotingsystem.TestUtil.readListFromJsonMvcResult;
 
 public class DishTestData {
     public static TestMatcher<Dish> DISH_MATCHER = TestMatcher.usingFieldsComparator(Dish.class, "restaurant");
@@ -33,7 +28,6 @@ public class DishTestData {
     public static final Dish DISH_7 = new Dish(DISH_ID + 6, "Пицца", DATE_300420, 400);
     public static final Dish DISH_8 = new Dish(DISH_ID + 7, "Гаспачо", DATE_300420, 300);
 
-
     public static final List<Dish> ALL_DISHES_R1 = List.of(DISH_5, DISH_6, DISH_1, DISH_2);
     public static final List<Dish> ALL_DISHES_R2 = List.of(DISH_8, DISH_7, DISH_4, DISH_3);
     public static final Collection<Dish> ALL_DISHES = List.of(DISH_5, DISH_6, DISH_8, DISH_7, DISH_1, DISH_2, DISH_4, DISH_3);
@@ -46,5 +40,4 @@ public class DishTestData {
     public static Dish getUpdated(Dish dish) {
         return new Dish(dish.getId(), "Обновленный пункт", dish.getDate(), 200);
     }
-
 }

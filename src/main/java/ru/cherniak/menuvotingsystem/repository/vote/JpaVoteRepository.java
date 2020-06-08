@@ -15,7 +15,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
 
-
     @Modifying
     @Query("DELETE FROM Vote v WHERE v.date=:date AND v.user.id=:userId")
     int delete(@Param("date") LocalDate date, @Param("userId") long userId);
@@ -23,7 +22,6 @@ public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
 
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.id=:id AND v.user.id=:userId")
     Optional<Vote> findByDateAndUserIdWithRestaurant(@Param("id") long id, @Param("userId") long userId);
-
 
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.user.id=:userId")
     List<Vote> findAllByUserIdWithRestaurant(@Param("userId") long userId, Sort sort);

@@ -30,11 +30,6 @@ public class TestUtil {
         return JsonUtil.readValues(getContent(result), clazz);
     }
 
-//    public static void mockAuthorize(User user) {
-//        SecurityContextHolder.getContext().setAuthentication(
-//                new UsernamePasswordAuthenticationToken(new AuthorizedUser(user), null, user.getRoles()));
-//    }
-
     public static RequestPostProcessor userHttpBasic(User user) {
         return SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword());
     }

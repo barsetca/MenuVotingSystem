@@ -57,6 +57,4 @@ public class VoteService {
                 DateTimeUtil.getEndDate(endDate), userId);
         return VoteUtil.getVoteTos(votesWithRestaurantBetween);
     }
-
-
 }

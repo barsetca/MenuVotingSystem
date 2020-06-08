@@ -164,6 +164,4 @@ class RestaurantServiceTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Italian", "Veteranov avenue", "123")), ConstraintViolationException.class);
 
     }
-
-
 }

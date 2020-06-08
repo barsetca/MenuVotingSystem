@@ -1,10 +1,7 @@
 package ru.cherniak.menuvotingsystem.web.formatter;
 
 import org.springframework.format.Formatter;
-import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
-
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;

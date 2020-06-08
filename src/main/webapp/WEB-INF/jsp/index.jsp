@@ -1,14 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
-<jsp:include page="fragments/headTag.jsp"/>
+<link rel="stylesheet" href="resources/css/style.css">
+<title>where to have lunch</title>
 <body>
-<jsp:include page="fragments/bodyHeader.jsp"/>
 <br>
-<a href="https://github.com/barsetca/MenuVotingSystem">My REST API in the GitHub</a>
+<h3>Where to have your lunch today?</h3>
 
-<jsp:include page="fragments/footer.jsp"/>
+<h2><a href="https://github.com/barsetca/MenuVotingSystem/blob/master/README.md">My REST API in the GitHub</a></h2>
+
 </body>
 </html>

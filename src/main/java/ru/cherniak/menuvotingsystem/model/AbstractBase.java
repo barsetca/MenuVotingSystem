@@ -9,7 +9,7 @@ import java.util.Objects;
 @MappedSuperclass
 @Access(AccessType.FIELD)
 public abstract class AbstractBase implements HasId {
-    public static final int START_SEQ = 100000;
+    public static final int START_SEQ = 100_000;
 
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)

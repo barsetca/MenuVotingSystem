@@ -29,22 +29,18 @@ public class RestaurantService {
 
     public Restaurant get(long id) {
         return checkNotFoundWithId(repository.get(id), id);
-
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "user must not be null");
         return repository.save(restaurant);
-
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant update(Restaurant restaurant) {
         Assert.notNull(restaurant, "user must not be null");
         return checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
-
-
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)

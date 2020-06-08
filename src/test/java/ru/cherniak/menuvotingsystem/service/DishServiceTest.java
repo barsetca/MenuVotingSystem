@@ -3,7 +3,6 @@ package ru.cherniak.menuvotingsystem.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
@@ -53,8 +52,6 @@ class DishServiceTest extends AbstractServiceTest {
         service.update(updated, RESTAURANT1_ID);
         DISH_MATCHER.assertMatch(service.get(created.getId()), updated);
     }
-
-
 
     @Test
     void updateNotFound() {
@@ -119,6 +116,7 @@ class DishServiceTest extends AbstractServiceTest {
         List<Dish> allToday = service.getTodayMenu(RESTAURANT1_ID);
         DISH_MATCHER.assertMatch(allToday, today);
     }
+
     @Test
     void getAllBetweenDatesInclusive() {
         Dish today = service.create(getCreatedToday(), RESTAURANT1_ID);

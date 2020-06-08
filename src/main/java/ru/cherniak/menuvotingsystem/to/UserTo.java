@@ -13,11 +13,11 @@ public class UserTo extends BaseTo implements HasIdAndEmail, Serializable {
 
     @Email
     @NotBlank
-    @Size(min = 3, max = 100, message = "length must be between 3 and 100 characters")
+    @Size(max = 100)
     private String email;
 
     @NotBlank
-    @Size(min = 6, max = 100, message = "length must be between 6 and 100 characters")
+    @Size(min = 6, max = 100)
     private String password;
 
     public UserTo() {
@@ -28,7 +28,6 @@ public class UserTo extends BaseTo implements HasIdAndEmail, Serializable {
         super(id, name);
         this.email = email;
         this.password = password;
-
     }
 
     public String getPassword() {
@@ -47,7 +46,7 @@ public class UserTo extends BaseTo implements HasIdAndEmail, Serializable {
         this.email = email;
     }
 
-     @Override
+    @Override
     public String toString() {
         return "UserTo{" +
                 "id=" + id +

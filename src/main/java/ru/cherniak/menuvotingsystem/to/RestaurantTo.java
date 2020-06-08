@@ -1,7 +1,6 @@
 package ru.cherniak.menuvotingsystem.to;
 
 import java.beans.ConstructorProperties;
-import java.io.Serializable;
 import java.util.Objects;
 
 public class RestaurantTo extends BaseTo {

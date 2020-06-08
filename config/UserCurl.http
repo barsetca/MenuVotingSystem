@@ -99,6 +99,22 @@ Authorization: Basic admin@gmail.com admin
 GET http://localhost:8080/mvs/rest/admin/users/by?email=not@exist.ru
 Authorization: Basic admin@gmail.com admin
 
+### Create user duplicate email (Conflict) ----------------------------------------------------------------------------
+# curl -X POST -d '{"name":"NewName","email":"admin@gmail.com","password":"passwordNew","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/users
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
+  "name": "NewName",
+  "email": "admin@gmail.com",
+  "password": "passwordNew",
+  "roles": [
+    "ROLE_USER"
+  ]
+}
+
+
 ###enable (false clouse auth)------------------------------------------------------------------------------------------
 # curl -X PATCH -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100000?enabled=false --user admin@gmail.com:admin
 PATCH http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
@@ -118,21 +134,22 @@ GET http://localhost:8080/mvs/rest/profile
 Authorization: Basic user@yandex.ru password
 
 ### update user profile------------------------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"NameUpdate","email":"update@a","password":"passwordUpdate"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
+# curl -X PUT -d '{"name":"NameUpdate","email":"user@yandex.ru","password":"password"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 PUT http://localhost:8080/mvs/rest/profile
 Authorization: Basic user@yandex.ru password
 Content-Type: application/json
 
 {
   "name": "NameUpdate",
-  "email": "update@a",
-  "password": "passwordUpdate"
+  "email": "user@yandex.ru",
+  "password": "password"
 }
 
+
 ### update user profile Validation Error--------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"U","email":"@a","password":"wordU"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user update@a:passwordUpdate
+# curl -X PUT -d '{"name":"U","email":"@a","password":"wordU"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 PUT http://localhost:8080/mvs/rest/profile
-Authorization: Basic update@a passwordUpdate
+Authorization: Basic user@yandex.ru password
 Content-Type: application/json
 
 {
@@ -142,9 +159,9 @@ Content-Type: application/json
 }
 
 ### update user profile Validation Error with empty OR null datas--------------------------------------------------------------------------------
-# curl -X PUT -d '{"name":"","email":null,"password":""}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user update@a:passwordUpdate
+# curl -X PUT -d '{"name":"","email":null,"password":""}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 PUT http://localhost:8080/mvs/rest/profile
-Authorization: Basic update@a passwordUpdate
+Authorization: Basic user@yandex.ru password
 Content-Type: application/json
 
 {
@@ -154,9 +171,9 @@ Content-Type: application/json
 }
 
 ###get(check update)---------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/profile --user update@a:passwordUpdate
+# curl http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/profile
-Authorization: Basic update@a passwordUpdate
+Authorization: Basic user@yandex.ru password
 
 ###
 
@@ -172,7 +189,7 @@ Content-Type: application/json
 }
 
 
-###get(check create)---------------------------------------------------------------------------------------------------
+###get(check create/register)---------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/profile --user new@nuevo.ru:passwordNew
 GET http://localhost:8080/mvs/rest/profile
 Authorization: Basic new@nuevo.ru passwordNew

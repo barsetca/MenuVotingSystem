@@ -46,14 +46,14 @@ public class ExceptionInfoHandler {
     @ExceptionHandler(OutsideTimeException.class)
     public ErrorInfo handleError(HttpServletRequest req, OutsideTimeException e) {
         return logAndGetErrorInfo(req, e, false,
-                REQUESTED_RANGE_NOT_SATISFIABLE.value()+ " - " + REQUESTED_RANGE_NOT_SATISFIABLE.getReasonPhrase());
+                REQUESTED_RANGE_NOT_SATISFIABLE.value() + " - " + REQUESTED_RANGE_NOT_SATISFIABLE.getReasonPhrase());
     }
 
     @ResponseStatus(value = CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         return logAndGetErrorInfo(req, e, true,
-                CONFLICT.value()+ " - " + CONFLICT.getReasonPhrase());
+                CONFLICT.value() + " - " + CONFLICT.getReasonPhrase());
     }
 
     @ResponseStatus(value = UNPROCESSABLE_ENTITY)  // 422
@@ -86,7 +86,7 @@ public class ExceptionInfoHandler {
     }
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, String errorType, String...detail) {
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, String errorType, String... detail) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
@@ -109,7 +109,7 @@ public class ExceptionInfoHandler {
                 rootMsg = "Dish with this name on the date already exists";
             }
 
-            detail = new String[] {rootMsg};
+            detail = new String[]{rootMsg};
         }
 
         return new ErrorInfo(req.getRequestURL(), errorType, detail);
@@ -122,5 +122,4 @@ public class ExceptionInfoHandler {
         }
         return detail;
     }
-
 }

@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.cherniak.menuvotingsystem.UserTestData.*;
 import static ru.cherniak.menuvotingsystem.TestUtil.userAuth;
+import static ru.cherniak.menuvotingsystem.UserTestData.ADMIN;
 
 
 class RootControllerTest extends AbstractControllerTest {

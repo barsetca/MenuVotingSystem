@@ -7,8 +7,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.View;
+import ru.cherniak.menuvotingsystem.model.User;
 
 import java.net.URI;
 import java.util.List;

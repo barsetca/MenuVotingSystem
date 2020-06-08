@@ -7,13 +7,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.UserTestData;
-import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.service.UserService;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
-import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,9 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.cherniak.menuvotingsystem.UserTestData.*;
 import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
-import static ru.cherniak.menuvotingsystem.web.ExceptionInfoHandler.EXCEPTION_DUPLICATE_EMAIL;
+import static ru.cherniak.menuvotingsystem.UserTestData.*;
 
 class AdminUserRestControllerTest extends AbstractControllerTest {
 
@@ -200,7 +198,6 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
-
 
     @Test
     void enable() throws Exception {

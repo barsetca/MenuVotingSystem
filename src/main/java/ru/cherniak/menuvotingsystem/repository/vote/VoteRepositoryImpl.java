@@ -7,10 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.model.Vote;
-import ru.cherniak.menuvotingsystem.repository.restaurant.JpaRestaurantRepository;
-import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
-import ru.cherniak.menuvotingsystem.repository.user.JpaUserRepository;
-import ru.cherniak.menuvotingsystem.repository.user.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

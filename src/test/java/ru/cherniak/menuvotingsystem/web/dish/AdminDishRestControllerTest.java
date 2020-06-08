@@ -50,8 +50,6 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
         DISH_MATCHER.assertMatch(dishService.get(newID), newDish);
     }
 
-
-
     @Transactional(propagation = Propagation.NEVER)
     @Test
     void createValidationError() throws Exception {

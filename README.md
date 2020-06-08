@@ -19,7 +19,7 @@ Each restaurant provides new menu each day.
 
 As a result, provide a link to github repository. It should contain the code, README.md with API documentation and couple curl commands to test it.
 
-### ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Особенности реализации
+### ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Implementation Features
 
 -  ### application deployed in application context `mvs` (rootpath: http://localhost:8080/mvs). 
 curl samples and HTTP requests are at the **/MenuVotingSystem/config/
@@ -32,6 +32,7 @@ curl samples and HTTP requests are at the **/MenuVotingSystem/config/
 -  ### WebContainer Tomcat
 -  ### LOGGING 
 logging configured to output to the console. To save the logs to a file, uncomment the code in the file logback.xml and indicate your path to the yourLogFile.log
+-  ###Sequence Strategies: Sequence objects @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq") initialValue = 100_000
 
 -  ### Entity: User, Restaurant, Dish, Vote
 - User, Restaurant, Dish used Hibernate Second Level Cache Strategy: nonstrict read/write (the application only occasionally needs to update data (i.e. if it is extremely unlikely that two transactions would try to update the same item simultaneously, and strict transaction isolation is not required)

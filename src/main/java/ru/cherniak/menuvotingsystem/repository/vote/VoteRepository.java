@@ -1,6 +1,5 @@
 package ru.cherniak.menuvotingsystem.repository.vote;
 
-import org.springframework.lang.Nullable;
 import ru.cherniak.menuvotingsystem.model.Vote;
 
 import java.time.LocalDate;

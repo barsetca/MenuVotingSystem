@@ -1,7 +1,6 @@
 package ru.cherniak.menuvotingsystem.repository.dish;
 
 
-import org.springframework.lang.Nullable;
 import ru.cherniak.menuvotingsystem.model.Dish;
 
 import java.time.LocalDate;
@@ -25,4 +24,4 @@ public interface DishRepository {
 
     Dish getWithRestaurant(long id, long restaurantId);
 
-  }
+}

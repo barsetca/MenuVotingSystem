@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import ru.cherniak.menuvotingsystem.UserTestData;
 import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
@@ -14,9 +13,7 @@ import ru.cherniak.menuvotingsystem.repository.user.UserRepository;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +32,7 @@ class UserServiceTest extends AbstractServiceTest {
     @Test
     void create() {
         User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", true,
-                LocalDateTime.now(), Set.of(Role.ROLE_USER, Role.ROLE_ADMIN)) ;
+                LocalDateTime.now(), Set.of(Role.ROLE_USER, Role.ROLE_ADMIN));
         User created = service.create(newUser);
         long newId = created.id();
         newUser.setId(newId);
@@ -51,7 +48,7 @@ class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void delete(){
+    void delete() {
         service.delete(USER_ID);
         Assertions.assertNull(repository.get(USER_ID));
     }
@@ -63,7 +60,7 @@ class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void get(){
+    void get() {
         User user = service.get(USER_ID);
         USER_MATCHER.assertMatch(user, USER);
     }

@@ -45,7 +45,7 @@ Content-Type: application/json
 
 {
   "name": "FirstName",
-  "date": "2030-07-28",o
+  "date": "2030-07-28",
   "price": 5000
 }
 
@@ -110,7 +110,7 @@ Content-Type: application/json
   "price": 500
 }
 
-###update Dish 100004  by NotOwner (CONFLICT) restaurantId 1 ----------------------------------------------
+###update Dish 100004  by NotOwner (CONFLICT - foreign key no parent) restaurantId 1 ----------------------------------------------
 # curl -X PUT -d '{"id":100044,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=1 --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=1
 Authorization: Basic admin@gmail.com admin
@@ -123,9 +123,9 @@ Content-Type: application/json
   "price": 500
 }
 
-###delete dish (if exist) ---------------------------------------------------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/dishes/100022 --user admin@gmail.com:admin
-DELETE http://localhost:8080/mvs/rest/admin/dishes/100015
+###delete dish (choose id exist dish from getAll) ---------------------------------------------------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/dishes/100017 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/dishes/100017
 Authorization: Basic admin@gmail.com admin
 
 

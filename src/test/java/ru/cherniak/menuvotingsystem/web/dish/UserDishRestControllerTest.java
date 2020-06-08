@@ -11,10 +11,11 @@ import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.cherniak.menuvotingsystem.DishTestData.*;
+import static ru.cherniak.menuvotingsystem.DishTestData.DISH_MATCHER;
+import static ru.cherniak.menuvotingsystem.DishTestData.getCreatedToday;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
-import static ru.cherniak.menuvotingsystem.UserTestData.USER;
 import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
+import static ru.cherniak.menuvotingsystem.UserTestData.USER;
 
 class UserDishRestControllerTest extends AbstractControllerTest {
 

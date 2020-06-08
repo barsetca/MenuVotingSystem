@@ -20,7 +20,7 @@ import static ru.cherniak.menuvotingsystem.DishTestData.DISH_MATCHER;
 public class JsonUtilTest {
     @Test
     void readWriteValue() {
-        Restaurant newRestaurant = new Restaurant("CreateRest","Cafe", "пл. Новая, д.1", "315-00-00");
+        Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe", "пл. Новая, д.1", "315-00-00");
         String json = JsonUtil.writeValue(newRestaurant);
         System.out.println(json);
         Restaurant restaurant = JsonUtil.readValue(json, Restaurant.class);

@@ -3,10 +3,8 @@ package ru.cherniak.menuvotingsystem.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import org.hibernate.annotations.Cache;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
 import javax.persistence.*;
@@ -14,7 +12,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -73,7 +70,6 @@ public class Restaurant extends AbstractBaseNameId {
     }
 
     public Restaurant(String name, String type, String address, String phone) {
-
         this(null, name, type, address, phone, "", LocalDateTime.now());
     }
 
@@ -93,6 +89,7 @@ public class Restaurant extends AbstractBaseNameId {
         this.phone = phone;
         this.registered = registered;
     }
+
     @JsonFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
     public LocalDateTime getRegistered() {
         return registered;
@@ -153,13 +150,12 @@ public class Restaurant extends AbstractBaseNameId {
     @Override
     public String toString() {
         return "Restaurant{" +
-                "type='" + type + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", url='" + url + '\'' +
-                ", registered=" + registered +
-                ", name='" + name + '\'' +
-                ", id=" + id +
+                "type= " + type +
+                ", address= " + address +
+                ", phone= " + phone +
+                ", url= " + url +
+                ", name= " + name +
+                ", id= " + id +
                 '}';
     }
 }

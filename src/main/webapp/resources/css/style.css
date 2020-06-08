@@ -1,24 +1,13 @@
-dl {
+h3 {
     background: none repeat scroll 0 0 #FAFAFA;
+    color: blue;
     margin: 8px 0;
     padding: 0;
 }
 
-dt {
+a {
     display: inline-block;
-    width: 170px;
+    width: 500px;
+    color: crimson;
 }
 
-dd {
-    display: inline-block;
-    margin-left: 8px;
-    vertical-align: top;
-}
-
-header, footer {
-    background: none repeat scroll 0 0 #A6C9E2;
-    color: #2E6E9E;
-    font-size: 20px;
-    padding: 5px 20px;
-    margin: 6px 0;
-}

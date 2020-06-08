@@ -1,6 +1,5 @@
 package ru.cherniak.menuvotingsystem.service;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,7 +13,7 @@ import ru.cherniak.menuvotingsystem.util.exception.OutsideTimeException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.cherniak.menuvotingsystem.DishTestData.DATE_290420;
 import static ru.cherniak.menuvotingsystem.DishTestData.DATE_300420;
@@ -123,8 +122,8 @@ class VoteServiceTest extends AbstractServiceTest {
     void getAllVoteTos() {
         List<VoteTo> voteTos = service.getAllVoteTos(USER_ID);
         VOTE_TO_MATCHER.assertMatch(voteTos, VOTE_TO_3, VOTE_TO_1);
-        Assert.assertEquals(RESTAURANT2.getName(), voteTos.get(0).getName());
-        Assert.assertEquals(RESTAURANT1.getName(), voteTos.get(1).getName());
+        assertEquals(RESTAURANT2.getName(), voteTos.get(0).getName());
+        assertEquals(RESTAURANT1.getName(), voteTos.get(1).getName());
     }
 
     @Test
@@ -137,10 +136,10 @@ class VoteServiceTest extends AbstractServiceTest {
         VOTE_TO_MATCHER.assertMatch(voteTos1, VOTE_TO_3, VOTE_TO_1);
         VOTE_TO_MATCHER.assertMatch(voteTos2, VoteTestData.getVoteTo(today, RESTAURANT1), VOTE_TO_3);
 
-        Assert.assertEquals(RESTAURANT2.getName(), voteTos1.get(0).getName());
-        Assert.assertEquals(RESTAURANT1.getName(), voteTos1.get(1).getName());
+        assertEquals(RESTAURANT2.getName(), voteTos1.get(0).getName());
+        assertEquals(RESTAURANT1.getName(), voteTos1.get(1).getName());
 
-        Assert.assertEquals(RESTAURANT1.getName(), voteTos2.get(0).getName());
+        assertEquals(RESTAURANT1.getName(), voteTos2.get(0).getName());
 
     }
 

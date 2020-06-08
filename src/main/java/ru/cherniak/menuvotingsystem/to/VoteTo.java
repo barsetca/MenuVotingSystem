@@ -4,7 +4,7 @@ import java.beans.ConstructorProperties;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class VoteTo extends BaseTo{
+public class VoteTo extends BaseTo {
 
     private final LocalDate date;
 
