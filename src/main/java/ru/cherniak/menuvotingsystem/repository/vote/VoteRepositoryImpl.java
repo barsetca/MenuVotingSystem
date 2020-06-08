@@ -54,11 +54,6 @@ public class VoteRepositoryImpl implements VoteRepository {
     }
 
     @Override
-    public long countByRestaurant(long restaurantId) {
-        return repository.countAllByRestaurantId(restaurantId);
-    }
-
-    @Override
     @Transactional
     public List<Vote> getAllByUserIdWithRestaurant(long userId) {
         return repository.findAllByUserIdWithRestaurant(userId, SORT_DATE);

@@ -7,15 +7,8 @@
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <br>
-<section>
-    <form method="post" action="users">
-        Зайти как: <select name="userId">
-        <option value="100000" selected>User</option>
-        <option value="100001">Admin</option>
-    </select>
-        <button type="submit">Выбрать</button>
-    </form>
-</section>
+<a href="https://github.com/barsetca/MenuVotingSystem">My REST API in the GitHub</a>
+
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

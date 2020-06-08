@@ -120,20 +120,11 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void countByRestaurant() {
-        long R1 = service.countByRestaurant(RESTAURANT1_ID);
-        long R2 = service.countByRestaurant(RESTAURANT2_ID);
-        assertEquals(R1, 1);
-        assertEquals(R2, 2);
-    }
-
-    @Test
     void getAllVoteTos() {
         List<VoteTo> voteTos = service.getAllVoteTos(USER_ID);
         VOTE_TO_MATCHER.assertMatch(voteTos, VOTE_TO_3, VOTE_TO_1);
         Assert.assertEquals(RESTAURANT2.getName(), voteTos.get(0).getName());
         Assert.assertEquals(RESTAURANT1.getName(), voteTos.get(1).getName());
-
     }
 
     @Test

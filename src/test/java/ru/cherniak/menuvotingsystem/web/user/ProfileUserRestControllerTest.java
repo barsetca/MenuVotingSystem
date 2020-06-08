@@ -69,8 +69,6 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnprocessableEntity());
            }
 
-
-
     @Test
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL)
@@ -98,7 +96,7 @@ class ProfileUserRestControllerTest extends AbstractControllerTest {
     void registerValidationError()  throws Exception {
         UserTo newUserTo = new UserTo(null, "C", "c", "c");
 
-        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newUserTo)))
                 .andExpect(status().isUnprocessableEntity());

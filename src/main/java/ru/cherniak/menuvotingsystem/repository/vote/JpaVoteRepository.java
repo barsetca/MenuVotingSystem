@@ -24,8 +24,6 @@ public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.id=:id AND v.user.id=:userId")
     Optional<Vote> findByDateAndUserIdWithRestaurant(@Param("id") long id, @Param("userId") long userId);
 
-    long countAllByRestaurantId(long restaurantId);
-
 
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.user.id=:userId")
     List<Vote> findAllByUserIdWithRestaurant(@Param("userId") long userId, Sort sort);

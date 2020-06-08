@@ -55,7 +55,6 @@ public class RestaurantService {
     public Restaurant getByName(String name) {
         Assert.notNull(name, "name must not be null");
         return checkNotFound(repository.getByName(name), "name=" + name);
-
     }
 
     @Cacheable("restaurants")
@@ -75,6 +74,7 @@ public class RestaurantService {
         return repository.getAllWithDishes();
     }
 
+    @Cacheable("restaurants")
     public List<Restaurant> getAllWithVotes() {
         return repository.getAllWithVotes();
     }

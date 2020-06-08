@@ -4,7 +4,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Где пообедать</title>
+    <title>where to have lunch</title>
     <base href="${pageContext.request.contextPath}/"/>
     <link rel="stylesheet" href="resources/css/style.css">
 </head>

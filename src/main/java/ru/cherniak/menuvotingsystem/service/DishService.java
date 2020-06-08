@@ -1,6 +1,8 @@
 package ru.cherniak.menuvotingsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -53,7 +55,6 @@ public class DishService {
 
     public List<Dish> getDayMenu(@Nullable LocalDate date, long restaurantId) {
         return repository.getDayMenu(date, restaurantId);
-
     }
 
     public List<Dish> getTodayMenu(long restaurantId) {

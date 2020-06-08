@@ -1,6 +1,7 @@
 package ru.cherniak.menuvotingsystem.model;
 
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.cherniak.menuvotingsystem.View;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(
                 columnNames = {"date", "name", "restaurant_id"}, name = "dishes_unique_date_name_restaurant_id_idx")})
 public class Dish extends AbstractBaseNameId {

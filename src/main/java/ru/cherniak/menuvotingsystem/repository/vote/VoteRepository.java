@@ -14,8 +14,6 @@ public interface VoteRepository {
 
     boolean delete(LocalDate date, long userId);
 
-    long countByRestaurant(long restaurantId);
-
     List<Vote> getAllByUserIdWithRestaurant(long userId);
 
     List<Vote> getAllWithRestaurantByUserIdBetween(LocalDate startDate, LocalDate endDate, long userId);

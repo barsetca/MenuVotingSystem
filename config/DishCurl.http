@@ -45,11 +45,11 @@ Content-Type: application/json
 
 {
   "name": "FirstName",
-  "date": "2020-07-28",
+  "date": "2030-07-28",o
   "price": 5000
 }
 
-###create newDish by restaurantId 100002 with Conflict (same nam jf the date)------------------------------------------
+###create newDish by restaurantId 100002 with Conflict (same name of the date)------------------------------------------
 # curl -X POST -d '{"name":"FirstName","date":"2020-07-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
 Authorization: Basic admin@gmail.com admin
@@ -110,7 +110,7 @@ Content-Type: application/json
   "price": 500
 }
 
-###update Dish 100004  by NotFound (UNPROCESSABLE_ENTITY) restaurantId 1 ----------------------------------------------
+###update Dish 100004  by NotOwner (CONFLICT) restaurantId 1 ----------------------------------------------
 # curl -X PUT -d '{"id":100044,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=1 --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=1
 Authorization: Basic admin@gmail.com admin

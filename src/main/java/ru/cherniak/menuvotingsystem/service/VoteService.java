@@ -1,9 +1,10 @@
 package ru.cherniak.menuvotingsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
@@ -27,7 +28,6 @@ public class VoteService {
         this.repository = repository;
     }
 
-
     public Vote save(long userId, long restaurantId) {
         checkTimeBorder();
         Vote vote = new Vote(LocalDate.now());
@@ -44,10 +44,6 @@ public class VoteService {
         checkTimeBorder();
         LocalDate date = LocalDate.now();
         checkNotFound(repository.delete(date, userId), "date: " + date);
-    }
-
-    public long countByRestaurant(long restaurantId) {
-        return repository.countByRestaurant(restaurantId);
     }
 
     public List<VoteTo> getAllVoteTos(long userId) {
