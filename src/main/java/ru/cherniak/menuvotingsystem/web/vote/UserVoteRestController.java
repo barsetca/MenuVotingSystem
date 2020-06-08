@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.cherniak.menuvotingsystem.AuthorizedUser;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
 import ru.cherniak.menuvotingsystem.to.VoteTo;
@@ -16,8 +18,6 @@ import ru.cherniak.menuvotingsystem.util.VoteUtil;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-
-import static ru.cherniak.menuvotingsystem.web.SecurityUtil.authUserId;
 
 
 @RestController
@@ -32,31 +32,33 @@ public class UserVoteRestController {
     private VoteService voteService;
 
     @GetMapping("/{id}")
-    public VoteTo get(@PathVariable long id) {
-        long userId = authUserId();
+    public VoteTo get(@PathVariable long id, @AuthenticationPrincipal AuthorizedUser authUser) {
+        long userId = authUser.getId();
         log.info("get {} by user {}", id, userId);
         return voteService.getVoteTo(id, userId);
     }
 
     @GetMapping()
-    public List<VoteTo> getAll() {
-        long userId = authUserId();
+    public List<VoteTo> getAll(@AuthenticationPrincipal AuthorizedUser authUser) {
+        long userId = authUser.getId();
         log.info("getAll by user {}", userId);
         return voteService.getAllVoteTos(userId);
     }
 
     @GetMapping("/filter")
-    public List<VoteTo> getAllBetweenInclusive(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
-        long userId = authUserId();
+    public List<VoteTo> getAllBetweenInclusive(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
+                                               @AuthenticationPrincipal AuthorizedUser authUser) {
+        long userId = authUser.getId();
         log.info("getAllBetweenInclusive {} - {} of user {}", startDate, endDate, userId);
         return voteService.getVoteTosBetweenInclusive(startDate, endDate, userId);
     }
 
     @PostMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> createUpdateWithLocation(@RequestParam long restaurantId) {
-        long userId = authUserId();
+    public ResponseEntity<VoteTo> createUpdateWithLocation(@RequestParam long restaurantId,
+                                                           @AuthenticationPrincipal AuthorizedUser authUser) {
+        long userId = authUser.getId();
         log.info("createUpdateWithLocation by user {} restaurant {}", userId, restaurantId);
-        Vote created = voteService.save(authUserId(), restaurantId);
+        Vote created = voteService.save(userId, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_USER_VOTES + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -65,8 +67,8 @@ public class UserVoteRestController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete() {
-        long userId = authUserId();
+    public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {
+        long userId = authUser.getId();
         log.info("delete by user {}", userId);
         voteService.delete(userId);
     }

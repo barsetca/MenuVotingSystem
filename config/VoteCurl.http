@@ -31,6 +31,13 @@ POST http://localhost:8080/mvs/rest/user/votes/by?restaurantId=100003
 Authorization: Basic user@yandex.ru password
 Content-Type: application/json
 
+###create Conflict vote by restaurant not exist restaurantId=1(only LocalDate.now before 11-00 - the constant timeBorder is set in the **\ru\cherniak\menuvotingsystem\util\DateTimeUtil)------------------------------------------------------------
+# curl -X POST -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/by?restaurantId=1 --user user@yandex.ru:password
+POST http://localhost:8080/mvs/rest/user/votes/by?restaurantId=1
+Authorization: Basic user@yandex.ru password
+Content-Type: application/json
+
+
 ###update  vote (vote in favor of another one) for 100003 (only LocalDate.now before 11-00 - the constant timeBorder is set in the **\ru\cherniak\menuvotingsystem\util\DateTimeUtil
 # curl -X POST -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/by?restaurantId=100002 --user user@yandex.ru:password
 POST http://localhost:8080/mvs/rest/user/votes/by?restaurantId=100002
