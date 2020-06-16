@@ -13,7 +13,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = UserRestaurantRestController.REST_USER_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserRestaurantRestController {
+public class
+UserRestaurantRestController {
 
     static final String REST_USER_RESTAURANTS = "/rest/user/restaurants";
 
@@ -28,7 +29,7 @@ public class UserRestaurantRestController {
         return RestaurantUtil.createTo(restaurantService.getWithVotes(id));
     }
 
-    @GetMapping("/by")
+    @GetMapping("/byName")
     public RestaurantTo getByNameWithCountVotes(@RequestParam String name) {
         log.info("getByNameWithCountVotes {}", name);
         return RestaurantUtil.createTo(restaurantService.getByNameWithVotes(name));

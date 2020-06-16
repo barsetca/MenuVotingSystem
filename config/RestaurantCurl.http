@@ -105,13 +105,13 @@ GET http://localhost:8080/mvs/rest/user/restaurants/1
 Authorization: Basic user@yandex.ru password
 
 ###getByNameWithCountVotes---------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants/by?name=McDonalds --user user@yandex.ru:password
-GET http://localhost:8080/mvs/rest/user/restaurants/by?name=McDonalds
+# curl http://localhost:8080/mvs/rest/user/restaurants/byName?name=McDonalds --user user@yandex.ru:password
+GET http://localhost:8080/mvs/rest/user/restaurants/byName?name=McDonalds
 Authorization: Basic user@yandex.ru password
 
 ### getByNameWithCountVotes not found ---------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants/by?name=unknownName --user user@yandex.ru:password
-GET http://localhost:8080/mvs/rest/user/restaurants/by?name=unknownName
+# curl http://localhost:8080/mvs/rest/user/restaurants/byName?name=unknownName --user user@yandex.ru:password
+GET http://localhost:8080/mvs/rest/user/restaurants/byName?name=unknownName
 Authorization: Basic user@yandex.ru password
 
 ###getAllWithCountVotes------------------------------------------------------------------------------------------------

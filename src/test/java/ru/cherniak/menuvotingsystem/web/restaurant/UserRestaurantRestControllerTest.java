@@ -52,7 +52,7 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getByNameWithVotes() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + RESTAURANT1.getName())
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byName?name=" + RESTAURANT1.getName())
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -62,7 +62,7 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getByNameWithVotesNotFount() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + "unknown")
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byName?name=" + "unknown")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());

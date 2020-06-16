@@ -1,5 +1,6 @@
 package ru.cherniak.menuvotingsystem.service;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,10 +12,14 @@ import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.cherniak.menuvotingsystem.DishTestData.*;
+import static ru.cherniak.menuvotingsystem.DishTestData.DISH_COMPARATOR;
 import static ru.cherniak.menuvotingsystem.DishTestData.DISH_MATCHER;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
 import static ru.cherniak.menuvotingsystem.VoteTestData.VOTE_MATCHER;
@@ -24,6 +29,9 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Autowired
     private RestaurantService service;
+
+    @Autowired
+    private DishService dishService;
 
     @Test
     void get() {
@@ -124,7 +132,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void getWithDishes() {
         Restaurant restaurant = service.getWithDishes(RESTAURANT1_ID);
-        DISH_MATCHER.assertMatch(restaurant.getDishes(), DishTestData.ALL_DISHES_R1);
+        DISH_MATCHER.assertMatch(restaurant.getDishes(), ALL_DISHES_R1);
     }
 
     @Test
@@ -138,8 +146,8 @@ class RestaurantServiceTest extends AbstractServiceTest {
         List<Restaurant> restaurants = service.getAllWithDishes();
         Set<Dish> dishes1 = restaurants.get(0).getDishes();
         Set<Dish> dishes2 = restaurants.get(1).getDishes();
-        DISH_MATCHER.assertMatch(dishes1, DishTestData.ALL_DISHES_R1);
-        DISH_MATCHER.assertMatch(dishes2, DishTestData.ALL_DISHES_R2);
+        DISH_MATCHER.assertMatch(dishes1, ALL_DISHES_R1);
+        DISH_MATCHER.assertMatch(dishes2, ALL_DISHES_R2);
     }
 
     @Test
@@ -164,4 +172,22 @@ class RestaurantServiceTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Italian", "Veteranov avenue", "123")), ConstraintViolationException.class);
 
     }
+
+    @Test
+    void getAllWithDayMenu() {
+
+        Dish dish1 = dishService.create(new Dish("Uno", 100), RESTAURANT1_ID);
+        Dish dish2 = dishService.create(new Dish("Dos", 100), RESTAURANT1_ID);
+        Dish dish3 = dishService.create(new Dish("Tres", 100), RESTAURANT1_ID);
+        Dish dish4 = dishService.create(new Dish("Cuatro", 400), RESTAURANT2_ID);
+        Dish dish5 = dishService.create(new Dish("Cinco", 500), RESTAURANT2_ID);
+        Dish dish6 = dishService.create(new Dish("Seis", 600), RESTAURANT2_ID);
+
+          List<Restaurant> restaurants = service.getAllWithTodayMenu();
+        Assert.assertEquals(restaurants.size(), 2);
+        DISH_MATCHER.assertMatch(restaurants.get(0).getDishes().stream()
+                .sorted(DISH_COMPARATOR).collect(Collectors.toList()),  dish2, dish3, dish1);
+        DISH_MATCHER.assertMatch(restaurants.get(1).getDishes().stream()
+                .sorted(DISH_COMPARATOR).collect(Collectors.toList()),  dish5, dish4, dish6);
+     }
 }

@@ -10,7 +10,9 @@ import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.repository.restaurant.RestaurantRepository;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFound;
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithId;
@@ -68,6 +70,14 @@ public class RestaurantService {
 
     public List<Restaurant> getAllWithDishes() {
         return repository.getAllWithDishes();
+    }
+
+    public List<Restaurant> getAllWithTodayMenu() {
+
+       List<Restaurant> restaurants = getAllWithDishes();
+      restaurants.forEach(r-> r.setDishes(r.getDishes().stream().filter(d ->
+              d.getDate().isEqual(LocalDate.now())).collect(Collectors.toSet())));
+        return restaurants;
     }
 
     @Cacheable("restaurants")

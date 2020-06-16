@@ -2,10 +2,12 @@ package ru.cherniak.menuvotingsystem.repository.restaurant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -64,6 +66,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     public List<Restaurant> getAllWithDishes() {
         return repository.findAllWithDishes(SORT_BY_NAME);
     }
+
 
     @Override
 //    @Transactional
