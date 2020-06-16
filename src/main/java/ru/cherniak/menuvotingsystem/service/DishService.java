@@ -34,9 +34,9 @@ public class DishService {
         checkNotFoundWithId(repository.save(dish, restaurantId), dish.getId());
     }
 
-    public boolean delete(long id) {
+    public void delete(long id) {
         checkNotFoundWithId(repository.delete(id), id);
-        return repository.delete(id);
+//        return repository.delete(id);
     }
 
     public Dish get(long id) {

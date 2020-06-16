@@ -48,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public User getWithVotes(long id) {
         return repository.findOneWithVotes(id);
     }

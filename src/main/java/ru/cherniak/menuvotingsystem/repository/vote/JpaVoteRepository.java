@@ -30,4 +30,13 @@ public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
     List<Vote> findAllWithRestaurantByUserIdAndDateBetween(@Param("startDate") LocalDate startDate,
                                                            @Param("endDate") LocalDate endDate,
                                                            @Param("userId") long userId, Sort sort);
+
+
+    @Query("SELECT v FROM Vote v WHERE v.date=:date AND v.user.id=:userId")
+    Optional<Vote> findOneByDateAndUserId(@Param("date") LocalDate now, @Param("userId") long userId);
+
+
+    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.date=:date AND v.user.id=:userId")
+    Optional<Vote> findOneWithRestaurantByDateAndUserId(@Param("date") LocalDate now, @Param("userId") long userId);
 }
+

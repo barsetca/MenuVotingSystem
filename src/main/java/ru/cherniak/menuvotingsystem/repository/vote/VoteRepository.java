@@ -15,6 +15,10 @@ public interface VoteRepository {
 
     List<Vote> getAllByUserIdWithRestaurant(long userId);
 
+   Vote getByDateNow(long userId);
+
+   Vote getWithRestaurantByDateNow(long userId);
+
     List<Vote> getAllWithRestaurantByUserIdBetween(LocalDate startDate, LocalDate endDate, long userId);
 
 }

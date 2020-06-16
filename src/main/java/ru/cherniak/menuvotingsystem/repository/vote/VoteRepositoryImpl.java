@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -30,17 +31,25 @@ public class VoteRepositoryImpl implements VoteRepository {
     @Override
     @Transactional
     public Vote save(Vote vote, long userId, long restaurantId) {
-
-        repository.delete(vote.getDate(), userId);
         vote.setUser(em.getReference(User.class, userId));
         vote.setRestaurant(em.getReference(Restaurant.class, restaurantId));
         return repository.save(vote);
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Vote getWithRestaurant(long id, long userId) {
         return repository.findByDateAndUserIdWithRestaurant(id, userId).orElse(null);
+    }
+
+    @Override
+    public Vote getByDateNow(long userId) {
+        return repository.findOneByDateAndUserId(LocalDate.now(), userId).orElse(null);
+    }
+
+    @Override
+    public Vote getWithRestaurantByDateNow(long userId) {
+        return repository.findOneWithRestaurantByDateAndUserId(LocalDate.now(), userId).orElse(null);
     }
 
     @Override
@@ -50,13 +59,13 @@ public class VoteRepositoryImpl implements VoteRepository {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public List<Vote> getAllByUserIdWithRestaurant(long userId) {
         return repository.findAllByUserIdWithRestaurant(userId, SORT_DATE);
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public List<Vote> getAllWithRestaurantByUserIdBetween(LocalDate startDate, LocalDate endDate, long userId) {
         return repository.findAllWithRestaurantByUserIdAndDateBetween(startDate, endDate, userId, SORT_DATE);
     }

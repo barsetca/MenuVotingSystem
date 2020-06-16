@@ -64,7 +64,7 @@ public class AdminDishRestController extends AbstractDishController {
     @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public boolean delete(@PathVariable long id) {
-        return super.delete(id);
+    public void delete(@PathVariable long id) {
+        super.delete(id);
     }
 }

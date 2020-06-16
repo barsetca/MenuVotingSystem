@@ -1,10 +1,12 @@
 package ru.cherniak.menuvotingsystem.web.vote;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.UserTestData;
 import ru.cherniak.menuvotingsystem.VoteTestData;
@@ -12,17 +14,16 @@ import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
 import ru.cherniak.menuvotingsystem.to.VoteTo;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
+import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1;
-import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
+import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
 import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
-import static ru.cherniak.menuvotingsystem.UserTestData.USER;
-import static ru.cherniak.menuvotingsystem.UserTestData.USER_ID;
+import static ru.cherniak.menuvotingsystem.UserTestData.*;
 import static ru.cherniak.menuvotingsystem.VoteTestData.*;
 
 class UserVoteRestControllerTest extends AbstractControllerTest {
@@ -33,8 +34,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     VoteService voteService;
 
     @Test
-    void createUpdateWithLocation() throws Exception {
-        timeBorderPlus();
+    void createWithLocation() throws Exception {
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
                 .param("restaurantId", "100002")
                 .with(userHttpBasic(USER))
@@ -48,32 +48,45 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
         VOTE_TO_MATCHER.assertMatch(created, VoteTestData.getVoteTo(newVote, RESTAURANT1));
         VOTE_TO_MATCHER.assertMatch(voteService.getVoteTo(newID, UserTestData.USER_ID), VoteTestData.getVoteTo(newVote, RESTAURANT1));
-        timeBorderFix();
     }
 
     @Test
-    void createUpdateNotOwner() throws Exception {
-        timeBorderPlus();
-        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+    void createNotOwner() throws Exception {
+                mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
                 .param("restaurantId", "1")
                 .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
                 .andDo(print());
-        timeBorderFix();
-    }
+          }
 
     @Test
-    void createUpdateOutsideTime() throws Exception {
+    void updateOutsideTime() throws Exception {
+        voteService.save(ADMIN_ID, RESTAURANT2_ID);
         timeBorderMinus();
-        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
-                .param("restaurantId", "100002")
-                .with(userHttpBasic(USER))
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
+                .param("restaurantId", "" + RESTAURANT1_ID)
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isRequestedRangeNotSatisfiable())
                 .andDo(print());
         timeBorderFix();
     }
+
+    @Test
+    void updateBeforeTimeBorder() throws Exception {
+       voteService.save(ADMIN_ID, RESTAURANT2_ID);
+       timeBorderPlus();
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
+                .param("restaurantId", "" + RESTAURANT1_ID)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+       RestaurantTestData.RESTAURANT_MATCHER.assertMatch(voteService.getWithRestaurantToday(ADMIN_ID).getRestaurant(), RESTAURANT1);
+       timeBorderFix();
+    }
+
 
     @Test
     void delete() throws Exception {

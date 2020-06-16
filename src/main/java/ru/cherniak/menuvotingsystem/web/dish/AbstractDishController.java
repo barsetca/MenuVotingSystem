@@ -27,9 +27,9 @@ public abstract class AbstractDishController {
         dishService.update(dish, restaurantId);
     }
 
-    public boolean delete(long id) {
+    public void delete(long id) {
         log.info("delete {}", id);
-        return dishService.delete(id);
+        dishService.delete(id);
     }
 
     public Dish get(long id) {

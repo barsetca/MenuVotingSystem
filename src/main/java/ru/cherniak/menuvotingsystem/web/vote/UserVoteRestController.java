@@ -7,9 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.AuthorizedUser;
+import ru.cherniak.menuvotingsystem.View;
+import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
 import ru.cherniak.menuvotingsystem.to.VoteTo;
@@ -38,6 +41,13 @@ public class UserVoteRestController {
         return voteService.getVoteTo(id, userId);
     }
 
+    @GetMapping("/today")
+    public VoteTo getToday(@AuthenticationPrincipal AuthorizedUser authUser) {
+        long userId = authUser.getId();
+        log.info("getToday by user {}", userId);
+        return voteService.getVoteToToday(userId);
+    }
+
     @GetMapping()
     public List<VoteTo> getAll(@AuthenticationPrincipal AuthorizedUser authUser) {
         long userId = authUser.getId();
@@ -54,15 +64,25 @@ public class UserVoteRestController {
     }
 
     @PostMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> createUpdateWithLocation(@RequestParam long restaurantId,
-                                                           @AuthenticationPrincipal AuthorizedUser authUser) {
+    public ResponseEntity<VoteTo> createWithLocation(@RequestParam long restaurantId,
+                                                     @AuthenticationPrincipal AuthorizedUser authUser) {
         long userId = authUser.getId();
-        log.info("createUpdateWithLocation by user {} restaurant {}", userId, restaurantId);
+        log.info("createWithLocation by user {} restaurant {}", userId, restaurantId);
         Vote created = voteService.save(userId, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_USER_VOTES + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(VoteUtil.createTo(created));
+    }
+
+
+    @PutMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestParam long restaurantId,
+                       @AuthenticationPrincipal AuthorizedUser authUser) {
+        long userId = authUser.getId();
+        log.info("update by user {} restaurant {}", userId, restaurantId);
+        voteService.save(userId, restaurantId);
     }
 
     @DeleteMapping

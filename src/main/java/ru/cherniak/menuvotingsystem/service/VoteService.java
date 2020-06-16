@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.vote.VoteRepository;
@@ -28,12 +29,25 @@ public class VoteService {
         this.repository = repository;
     }
 
+    @Transactional
     public Vote save(long userId, long restaurantId) {
-        checkTimeBorder();
+        if (repository.getByDateNow(userId) != null) {
+            checkTimeBorder();
+            repository.delete(LocalDate.now(), userId);
+        }
         Vote vote = new Vote(LocalDate.now());
-        Assert.notNull(vote, "vote must not be null");
         return checkNotFoundWithMsg(repository.save(vote, userId, restaurantId), "restaurantId" + restaurantId);
     }
+
+    public Vote getWithRestaurantToday(long userId){
+        return checkNotFoundWithMsg(repository.getWithRestaurantByDateNow(userId), "userId" + userId);
+    }
+
+    public VoteTo getVoteToToday(long userId){
+        Vote voteWithRestaurantToday = getWithRestaurantToday(userId);
+        return VoteUtil.createTo(voteWithRestaurantToday);
+    }
+
 
     public VoteTo getVoteTo(long id, long userId) {
         Vote voteWithRestaurant = checkNotFoundWithId(repository.getWithRestaurant(id, userId), id);

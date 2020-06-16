@@ -42,7 +42,7 @@ public class DishRepositoryImpl implements DishRepository {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public List<Dish> getAllWithRestaurant() {
         return repository.findAllWithRestaurant(SORT_DATE_RID_NAME);
     }
@@ -69,7 +69,7 @@ public class DishRepositoryImpl implements DishRepository {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Dish getWithRestaurant(long id, long restaurantId) {
         return repository.findOneWithRestaurant(id, restaurantId).orElse(null);
     }

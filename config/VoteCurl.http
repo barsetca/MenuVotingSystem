@@ -26,8 +26,8 @@ Authorization: Basic user@yandex.ru password
 
 
 ###create vote for 100002 (only LocalDate.now before 11-00 - the constant timeBorder is set in the **\ru\cherniak\menuvotingsystem\util\DateTimeUtil)------------------------------------------------------------
-# curl -X POST -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/by?restaurantId=100003 --user user@yandex.ru:password
-POST http://localhost:8080/mvs/rest/user/votes/by?restaurantId=100003
+# curl -X POST -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/by?restaurantId=100002 --user user@yandex.ru:password
+POST http://localhost:8080/mvs/rest/user/votes/by?restaurantId=100002
 Authorization: Basic user@yandex.ru password
 Content-Type: application/json
 
@@ -49,4 +49,10 @@ Content-Type: application/json
 DELETE http://localhost:8080/mvs/rest/user/votes
 Authorization: Basic user@yandex.ru password
 
+###getToday---------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/votes/today --user user@yandex.ru:password
+GET http://localhost:8080/mvs/rest/user/votes/today
+Authorization: Basic user@yandex.ru password
+
 ###
+

@@ -66,7 +66,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public List<Restaurant> getAllWithVotes() {
         return repository.findAllWithVotes();
     }
