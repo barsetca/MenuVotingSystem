@@ -1,7 +1,6 @@
 package ru.cherniak.menuvotingsystem.service;
 
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,7 +8,6 @@ import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Role;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.model.Vote;
-import ru.cherniak.menuvotingsystem.repository.user.UserRepository;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
@@ -25,9 +23,6 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
     private UserService service;
-
-    @Autowired
-    private UserRepository repository;
 
     @Test
     void create() {
@@ -50,7 +45,8 @@ class UserServiceTest extends AbstractServiceTest {
     @Test
     void delete() {
         service.delete(USER_ID);
-        Assertions.assertNull(repository.get(USER_ID));
+        assertThrows(NotFoundException.class, () ->
+                service.get(USER_ID));
     }
 
     @Test
