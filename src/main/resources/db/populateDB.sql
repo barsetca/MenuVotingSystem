@@ -14,9 +14,9 @@ INSERT INTO USER_ROLES (role, user_id)
 VALUES ('ROLE_USER', 100000),
        ('ROLE_ADMIN', 100001);
 
-INSERT INTO RESTAURANTS (NAME, TYPE, ADDRESS, PHONE, URL)
-VALUES ('McDonalds', 'Фастфуд', 'пл. Ленина, д.1', '315-25-25', 'McDonalds.ru'),
-       ('Pizza_Hut', 'Итальянский', 'пл. Стачек, д.1', '374-52-52', 'pizzahut.ru');
+INSERT INTO RESTAURANTS (NAME, ADDRESS, PHONE, URL)
+VALUES ('McDonalds', 'пл. Ленина, д.1', '315-25-25', 'McDonalds.ru'),
+       ('Pizza_Hut', 'пл. Стачек, д.1', '374-52-52', 'pizzahut.ru');
 
 INSERT INTO DISHES (name, date, price, RESTAURANT_ID)
 VALUES ('БигМак', '2020-04-29 00:00:00', 500, 100002),

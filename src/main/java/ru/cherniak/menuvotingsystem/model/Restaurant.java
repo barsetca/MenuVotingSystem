@@ -19,14 +19,7 @@ import java.util.Set;
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurants_unique_name_idx")})
 public class Restaurant extends AbstractBaseNameId {
 
-    @Column(name = "type", nullable = false)
-    @NotBlank
-    @NotNull
-    @Size(min = 3, max = 100)
-    private String type;
-
-
-    @Column(name = "address", nullable = false)
+     @Column(name = "address", nullable = false)
     @NotBlank
     @NotNull
     @Size(min = 5, max = 100)
@@ -42,11 +35,6 @@ public class Restaurant extends AbstractBaseNameId {
     @NotNull
     private String url;
 
-    @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
-    @NotNull
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime registered = LocalDateTime.now();
-
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     @OrderBy("date DESC, name ASC")
@@ -61,42 +49,26 @@ public class Restaurant extends AbstractBaseNameId {
     }
 
     public Restaurant(Restaurant restaurant) {
-        this(restaurant.getId(), restaurant.getName(), restaurant.getType(), restaurant.getAddress(), restaurant.getPhone(), restaurant.getUrl(),
-                restaurant.getRegistered());
+        this(restaurant.getId(), restaurant.getName(), restaurant.getAddress(), restaurant.getPhone(), restaurant.getUrl());
     }
 
-    public Restaurant(String name, String type, String address, String phone, String url) {
-        this(null, name, type, address, phone, url, LocalDateTime.now());
+    public Restaurant(String name, String address, String phone, String url) {
+        this(null, name, address, phone, url);
     }
 
-    public Restaurant(String name, String type, String address, String phone) {
-        this(null, name, type, address, phone, "", LocalDateTime.now());
+    public Restaurant(String name, String address, String phone) {
+        this(null, name, address, phone, "");
     }
 
-    public Restaurant(Long id, String name, String type, String address, String phone) {
-        this(id, name, type, address, phone, "", LocalDateTime.now());
+    public Restaurant(Long id, String name, String address, String phone) {
+        this(id, name, address, phone, "");
     }
 
-    public Restaurant(Long id, String name, String type, String address, String phone, String url) {
-        this(id, name, type, address, phone, url, LocalDateTime.now());
-    }
-
-    public Restaurant(Long id, String name, String type, String address, String phone, String url, LocalDateTime registered) {
+    public Restaurant(Long id, String name, String address, String phone, String url) {
         super(id, name);
-        this.type = type;
         this.address = address;
         this.url = url;
         this.phone = phone;
-        this.registered = registered;
-    }
-
-    @JsonFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
-    public LocalDateTime getRegistered() {
-        return registered;
-    }
-
-    public void setRegistered(LocalDateTime registered) {
-        this.registered = registered;
     }
 
     public String getUrl() {
@@ -139,18 +111,9 @@ public class Restaurant extends AbstractBaseNameId {
         this.votes = votes;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     @Override
     public String toString() {
         return "Restaurant{" +
-                "type= " + type +
                 ", address= " + address +
                 ", phone= " + phone +
                 ", url= " + url +

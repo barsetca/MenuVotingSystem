@@ -13,7 +13,7 @@ public class RestaurantUtil {
     }
 
     public static RestaurantTo createTo(Restaurant restaurant) {
-        return new RestaurantTo(restaurant.getId(), restaurant.getName(), restaurant.getType(), restaurant.getAddress(), restaurant.getPhone(),
+        return new RestaurantTo(restaurant.getId(), restaurant.getName(), restaurant.getAddress(), restaurant.getPhone(),
                 restaurant.getUrl(), restaurant.getVotes().size());
     }
 

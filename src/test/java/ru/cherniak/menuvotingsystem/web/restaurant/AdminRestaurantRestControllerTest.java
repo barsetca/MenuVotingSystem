@@ -62,7 +62,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe", "пл. Новая, д.1", "315-00-00");
+        Restaurant newRestaurant = new Restaurant("CreateRest", "пл. Новая, д.1", "315-00-00");
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,11 +82,9 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     void createValidationError() throws Exception {
         Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe", "пл. Новая, д.1", "315-00-00");
         newRestaurant.setName("R");
-        newRestaurant.setType("Ty");
         newRestaurant.setAddress("Adrs");
         newRestaurant.setPhone("123");
 //        newRestaurant.setName(" ");
-//        newRestaurant.setType(" ");
 //        newRestaurant.setAddress(" ");
 //        newRestaurant.setPhone(" ");
         mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
@@ -100,7 +98,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     @Test
     void createDuplicateName() throws Exception {
-        Restaurant duplicateNameRestaurant = new Restaurant("McDonalds", "Cafe", "пл. Новая, д.1", "315-00-00");
+        Restaurant duplicateNameRestaurant = new Restaurant("McDonalds", "пл. Новая, д.1", "315-00-00");
         mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -127,11 +125,9 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     void updateValidationError() throws Exception {
         Restaurant updated = new Restaurant(RESTAURANT2);
         updated.setName("U");
-        updated.setType("Ty");
         updated.setAddress("Adrs");
         updated.setPhone("123");
 //        updated.setName(" ");
-//        updated.setType(" ");
 //        updated.setAddress(" ");
 //        updated.setPhone(" ");
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT2_ID)
