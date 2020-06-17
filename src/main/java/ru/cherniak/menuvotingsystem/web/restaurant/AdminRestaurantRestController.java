@@ -75,4 +75,5 @@ public class AdminRestaurantRestController {
         log.info("delete {}", id);
         restaurantService.delete(id);
     }
+
 }

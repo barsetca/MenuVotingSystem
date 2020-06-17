@@ -47,7 +47,7 @@ public class VoteService {
         Vote vote = new Vote(LocalDate.now());
         vote.setUser(em.getReference(User.class, userId));
         vote.setRestaurant(em.getReference(Restaurant.class, restaurantId));
-        return checkNotFoundWithMsg(voteRepository.save(vote), "restaurantId" + restaurantId);
+        return checkNotFoundWithMsg(voteRepository.save(vote), "restaurantId= " + restaurantId);
     }
 
     @Transactional
@@ -74,7 +74,7 @@ public class VoteService {
 
 
     public Vote getWithRestaurant(long id, long userId) {
-        return voteRepository.findByDateAndUserIdWithRestaurant(id, userId).orElse(null);
+        return checkNotFoundWithId(voteRepository.findByDateAndUserIdWithRestaurant(id, userId).orElse(null), id);
     }
 
     public VoteTo getVoteTo(long id, long userId) {

@@ -19,7 +19,7 @@ import java.util.Set;
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurants_unique_name_idx")})
 public class Restaurant extends AbstractBaseNameId {
 
-     @Column(name = "address", nullable = false)
+    @Column(name = "address", nullable = false)
     @NotBlank
     @NotNull
     @Size(min = 5, max = 100)

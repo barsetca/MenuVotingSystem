@@ -2,56 +2,51 @@
 ################################DISH####################################################################################
 
 ###AdminDishRestController---------------------------------------------------------------------------------------------
-###get (dish 100004)---------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/dishes/100004 --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/dishes/100004
+###get (dish 100004 restaurant 100002)---------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/100004 --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/100004
 Authorization: Basic admin@gmail.com admin
 
 ###
 
-###get NotFound Dish (UNPROCESSABLE_ENTITY) ---------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/dishes/1 --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/dishes/1
+###get NotFound Dish (422 - Unprocessable Entity) ---------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/1 --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/1
 Authorization: Basic admin@gmail.com admin
 
 ###
 
 ###getAllByRestaurant--------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+# curl http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 
 
 ###getAllByRestaurantBetweenDatesInclusive-----------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/dishes/filter?startDate=2020-04-28&endDate=2020-04-29&restaurantId=100002 --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/dishes/filter?startDate=2020-04-28&endDate=2020-04-29&restaurantId=100002
+# curl http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/filter?startDate=2020-04-28&endDate=2020-04-29 --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/filter?startDate=2020-04-28&endDate=2020-04-29
 Authorization: Basic admin@gmail.com admin
 
 ###getAllByRestaurantBetweenDatesInclusive witout datas of date--------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/dishes/filter?startDate=&endDate=&restaurantId=100002 --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/dishes/filter?startDate=&endDate=&restaurantId=100002
-Authorization: Basic admin@gmail.com admin
-
-###getAll With Restaurant----------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/dishes --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/dishes
+# curl http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/filter?startDate=&endDate= --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/filter?startDate=&endDate=
 Authorization: Basic admin@gmail.com admin
 
 ###create newDish by restaurantId 100002 with Restaurant on future date-------------------------------------------------------
-# curl -X POST -d '{"name":"FirstName","date":"2020-07-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
-POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+# curl -X POST -d '{"name":"FirstName","date":"2020-07-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
   "name": "FirstName",
-  "date": "2030-07-28",
+  "date": "2020-07-28",
   "price": 5000
 }
 
 ###create newDish by restaurantId 100002 with Conflict (same name of the date)------------------------------------------
-# curl -X POST -d '{"name":"FirstName","date":"2020-07-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
-POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+# curl -X POST -d '{"name":"FirstName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -62,8 +57,8 @@ Content-Type: application/json
 }
 
 ###create newDish by restaurantId 100002 with Validation error (creat past date)---------------------------------------
-# curl -X POST -d '{"name":"FirstName","date":"2020-05-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
-POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+# curl -X POST -d '{"name":"FirstName","date":"2020-05-28","price":5000}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -74,8 +69,8 @@ Content-Type: application/json
 }
 
 ###create newDish by restaurantId 100002 with Restaurant now-----------------------------------------------------------
-# curl -X POST -d '{"name":"SecondName","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
-POST http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+# curl -X POST -d '{"name":"SecondName","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
+POST http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -85,8 +80,8 @@ Content-Type: application/json
 }
 
 ###update Dish 100004 by restaurantId 100002---------------------------------------------------------------------------
-# curl -X PUT -d '{"id":100044,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
-PUT http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+# curl -X PUT -d '{"id":100044,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -97,9 +92,9 @@ Content-Type: application/json
   "price": 500
 }
 
-###update NotFound (UNPROCESSABLE_ENTITY) Dish by restaurantId 100002---------------------------------------------------------------------------
-# curl -X PUT -d '{"id":1,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002 --user admin@gmail.com:admin
-PUT http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=100002
+###update NotFound (422 - Unprocessable Entity) Dish by restaurantId 100002---------------------------------------------------------------------------
+# curl -X PUT -d '{"id":1,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -110,35 +105,33 @@ Content-Type: application/json
   "price": 500
 }
 
-###update Dish 100004  by NotOwner (CONFLICT - foreign key no parent) restaurantId 1 ----------------------------------------------
-# curl -X PUT -d '{"id":100044,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=1 --user admin@gmail.com:admin
-PUT http://localhost:8080/mvs/rest/admin/dishes/by?restaurantId=1
+###update Dish 100004  by NotOwner (422 - Unprocessable Entity) restaurantId 1 ----------------------------------------
+# curl -X PUT -d '{"id":100044,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/1/dishes/by?restaurantId=1 --user admin@gmail.com:admin
+PUT http://localhost:8080/mvs/rest/admin/restaurants/1/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
   "id": 100004,
-  "name": "UpdateNewName",
+  "name": "UpdateName",
   "date": "2020-07-28",
   "price": 500
 }
 
 ###delete dish (choose id exist dish from getAll) ---------------------------------------------------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/dishes/100017 --user admin@gmail.com:admin
-DELETE http://localhost:8080/mvs/rest/admin/dishes/100017
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/100015 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/100015
 Authorization: Basic admin@gmail.com admin
 
-
-###delete NotFound Dish (UNPROCESSABLE_ENTITY) by restaurantId 100002--------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/dishes/1 --user admin@gmail.com:admin
-DELETE http://localhost:8080/mvs/rest/admin/dishes/1
+###delete NotFound Dish (422 - Unprocessable Entity) by restaurantId 100002--------------------------------------------------
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/1 --user admin@gmail.com:admin
+DELETE http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes/1
 Authorization: Basic admin@gmail.com admin
-
 
 ###UserDishRestController----------------------------------------------------------------------------------------------
 ###getTodayMenu--------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/dishes/by?restaurantId=100002 --user user@yandex.ru:password
-GET http://localhost:8080/mvs/rest/user/dishes/by?restaurantId=100002
+# curl http://localhost:8080/mvs/rest/user/dishes --user user@yandex.ru:password
+GET http://localhost:8080/mvs/rest/user/restaurants/100002/dishes
 Authorization: Basic user@yandex.ru password
 
 ###

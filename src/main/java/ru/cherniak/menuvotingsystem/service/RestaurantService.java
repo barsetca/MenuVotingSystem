@@ -1,7 +1,6 @@
 package ru.cherniak.menuvotingsystem.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -82,6 +81,7 @@ public class RestaurantService {
         return checkNotFoundWithId(restaurantRepository.findOneWithDishes(id), id);
     }
 
+    @Transactional
     public List<Restaurant> getAllWithDishes() {
         return restaurantRepository.findAllWithDishes(SORT_BY_NAME);
     }

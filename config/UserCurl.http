@@ -40,7 +40,7 @@ Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
-  "name": "Ne",
+  "name": "N",
   "email": "n@",
   "password": "pass",
   "roles": [
@@ -94,12 +94,12 @@ Authorization: Basic admin@gmail.com admin
 GET http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
 Authorization: Basic admin@gmail.com admin
 
-###getByMail NotFound (UNPROCESSABLE_ENTITY) not@exist.ru -------------------------------------------------------------
+###getByMail NotFound (422 - Unprocessable Entity) not@exist.ru -------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users/by?email=not@exist.ru --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/users/by?email=not@exist.ru
 Authorization: Basic admin@gmail.com admin
 
-### Create user duplicate email (Conflict) ----------------------------------------------------------------------------
+### Create user duplicate email (409 - Conflict) ----------------------------------------------------------------------------
 # curl -X POST -d '{"name":"NewName","email":"admin@gmail.com","password":"passwordNew","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/users
 Authorization: Basic admin@gmail.com admin

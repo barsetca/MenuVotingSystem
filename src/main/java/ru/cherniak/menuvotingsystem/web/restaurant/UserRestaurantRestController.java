@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
 import ru.cherniak.menuvotingsystem.to.RestaurantTo;
 import ru.cherniak.menuvotingsystem.util.RestaurantUtil;
@@ -38,8 +39,16 @@ UserRestaurantRestController {
     @GetMapping
     public List<RestaurantTo> getAllWithCountVotes() {
         log.info("getAllWithCountVotes");
-        RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
+//        RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
         return RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
     }
+
+    @GetMapping("/today")
+    public List<Restaurant> getAllWithTodayMenu() {
+        log.info("getAllWithTodayMenu");
+        return restaurantService.getAllWithVotes();
+    }
+
+
 }
 

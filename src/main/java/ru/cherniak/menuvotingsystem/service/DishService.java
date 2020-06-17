@@ -16,8 +16,7 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithId;
-import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithMsg;
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,7 +25,6 @@ public class DishService {
     private static final Sort SORT_DATE_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("name"));
     private static final Sort SORT_DATE_RID_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurant.id"), Sort.Order.asc("name"));
     private static final Sort SORT_NAME = Sort.by(Sort.Order.asc("name"));
-
 
     private final JpaDishRepository dishRepository;
 
@@ -56,16 +54,17 @@ public class DishService {
     @Transactional
     public void update(Dish dish, long restaurantId) {
         Assert.notNull(dish, "dish must not be null");
-        checkNotFoundWithId(save(dish, restaurantId), dish.getId());
+        checkNotFoundWithMsg(save(dish, restaurantId), "id= " + dish.getId() + ", restaurantId= " + restaurantId);
     }
 
     @Transactional
     public void delete(long id, long restaurantId) {
-        checkNotFoundWithId(dishRepository.delete(id, restaurantId) != 0, id);
+        checkNotFoundBooleanMsg(dishRepository.delete(id, restaurantId) != 0, "id= " + id + ", restaurantId= " + restaurantId);
     }
 
     public Dish get(long id, long restaurantId) {
-        return checkNotFoundWithId(dishRepository.findOneByRestaurant( id, restaurantId).orElse(null), id);
+        return checkNotFoundWithMsg(dishRepository.findOneByRestaurant( id, restaurantId).orElse(null),
+                "id= " + id + ", restaurantId= " + restaurantId);
     }
 
     public List<Dish> getAllWithRestaurant() {
@@ -90,6 +89,7 @@ public class DishService {
     }
 
     public Dish getWithRestaurant(long id, long restaurantId) {
-        return checkNotFoundWithId(dishRepository.findOneWithRestaurant(id, restaurantId).orElse(null), id);
+        return checkNotFoundWithMsg(dishRepository.findOneWithRestaurant(id, restaurantId).orElse(null),
+                "id= " + id + ", restaurantId= " + restaurantId);
     }
 }
