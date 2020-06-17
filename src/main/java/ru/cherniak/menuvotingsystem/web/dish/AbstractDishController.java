@@ -27,19 +27,14 @@ public abstract class AbstractDishController {
         dishService.update(dish, restaurantId);
     }
 
-    public void delete(long id) {
+    public void delete(long id, long restaurantId) {
         log.info("delete {}", id);
-        dishService.delete(id);
+        dishService.delete(id, restaurantId);
     }
 
-    public Dish get(long id) {
+    public Dish get(long restaurantId, long id) {
         log.info("get {}", id);
-        return dishService.get(id);
-    }
-
-    public List<Dish> getAllWithRestaurant() {
-        log.info("getAllWithRestaurant");
-        return dishService.getAllWithRestaurant();
+        return dishService.get(restaurantId, id);
     }
 
     public List<Dish> getAllByRestaurant(long restaurantId) {
@@ -56,11 +51,6 @@ public abstract class AbstractDishController {
                                                               long restaurantId) {
         log.info("getAllByRestaurantBetweenDatesInclusive {} - {} of restaurant {}", startDate, endDate, restaurantId);
         return dishService.getAllByRestaurantBetweenDatesInclusive(startDate, endDate, restaurantId);
-    }
-
-    public Dish getWithRestaurant(long id, long restaurantId) {
-        log.info("getWithRestaurant dish {} of restaurant {}", id, restaurantId);
-        return dishService.getWithRestaurant(id, restaurantId);
     }
 }
 

@@ -75,7 +75,6 @@ public class UserVoteRestController {
         return ResponseEntity.created(uriOfNewResource).body(VoteUtil.createTo(created));
     }
 
-
     @PutMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestParam long restaurantId,

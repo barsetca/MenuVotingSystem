@@ -17,54 +17,47 @@ import java.util.List;
 @RequestMapping(value = AdminDishRestController.REST_ADMIN_DISHES, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminDishRestController extends AbstractDishController {
 
-    static final String REST_ADMIN_DISHES = "/rest/admin/dishes";
+    static final String REST_ADMIN_DISHES = "/rest/admin/restaurants/{restaurantId}/dishes";
 
     @Override
     @GetMapping("/{id}")
-    public Dish get(@PathVariable long id) {
-        return super.get(id);
+    public Dish get(@PathVariable long restaurantId, @PathVariable long id) {
+        return super.get(id, restaurantId);
     }
 
     @Override
-    @GetMapping("/by")
-    public List<Dish> getAllByRestaurant(@RequestParam long restaurantId) {
+    @GetMapping()
+    public List<Dish> getAllByRestaurant(@PathVariable long restaurantId) {
         return super.getAllByRestaurant(restaurantId);
     }
 
     @Override
     @GetMapping("/filter")
-    public List<Dish> getAllByRestaurantBetweenDatesInclusive(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate, @RequestParam long restaurantId) {
+    public List<Dish> getAllByRestaurantBetweenDatesInclusive(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate, @PathVariable long restaurantId) {
         log.info("getAllByRestaurantBetweenDatesInclusive {} - {} of user {}", startDate, endDate, restaurantId);
         return super.getAllByRestaurantBetweenDatesInclusive(startDate, endDate, restaurantId);
     }
 
-    @Override
-    @GetMapping
-    public List<Dish> getAllWithRestaurant() {
-        return super.getAllWithRestaurant();
-    }
-
-
-    @PostMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createWithLocation(@Validated(View.Web.class) @RequestBody Dish dish, @RequestParam long restaurantId) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Dish> createWithLocation(@Validated(View.Web.class) @RequestBody Dish dish, @PathVariable long restaurantId) {
         Dish created = super.create(dish, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_ADMIN_DISHES + "/{id}")
+                .path("/rest/admin/restaurants/" + restaurantId + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
     @Override
-    @PutMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Validated(View.Web.class) @RequestBody Dish dish, @RequestParam long restaurantId) {
+    public void update(@Validated(View.Web.class) @RequestBody Dish dish, @PathVariable long restaurantId) {
         super.update(dish, restaurantId);
     }
 
     @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long id) {
-        super.delete(id);
+    public void delete(@PathVariable long restaurantId, @PathVariable long id) {
+        super.delete(id, restaurantId);
     }
 }

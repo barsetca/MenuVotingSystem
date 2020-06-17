@@ -23,8 +23,6 @@ import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWith
 @Transactional(readOnly = true)
 public class RestaurantService {
 
-    protected final Logger log = LoggerFactory.getLogger(RestaurantService.class);
-
     private static final Sort SORT_BY_NAME = Sort.by(Sort.Direction.ASC, "name");
 
     private final JpaRestaurantRepository restaurantRepository;
@@ -84,7 +82,6 @@ public class RestaurantService {
         return checkNotFoundWithId(restaurantRepository.findOneWithDishes(id), id);
     }
 
-
     public List<Restaurant> getAllWithDishes() {
         return restaurantRepository.findAllWithDishes(SORT_BY_NAME);
     }
@@ -94,16 +91,17 @@ public class RestaurantService {
         return restaurantRepository.findAllWithVotes();
     }
 
-
     public Restaurant getByNameWithVotes(String name) {
         Assert.notNull(name, "name must not be null");
         return checkNotFound(restaurantRepository.findOneByNameWithVotes(name).orElse(null), "name=" + name);
     }
 
+    @Cacheable("restaurants")
     public List<Restaurant> getAllWithTodayMenu() {
        List<Restaurant> restaurants = getAllWithDishes();
       restaurants.forEach(r-> r.setDishes(r.getDishes().stream().filter(d ->
               d.getDate().isEqual(LocalDate.now())).collect(Collectors.toSet())));
+      restaurants = restaurants.stream().filter(r -> r.getDishes().size() > 0).collect(Collectors.toList());
         return restaurants;
     }
 

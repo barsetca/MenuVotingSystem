@@ -40,7 +40,7 @@ public class DishService {
 
 
     private Dish save(Dish dish, long restaurantId) {
-        if (!dish.isNew() && get(dish.id()) == null) {
+        if (!dish.isNew() && get(dish.id(), restaurantId) == null) {
             return null;
         }
         dish.setRestaurant(em.getReference(Restaurant.class, restaurantId));
@@ -60,12 +60,12 @@ public class DishService {
     }
 
     @Transactional
-    public void delete(long id) {
-        checkNotFoundWithId(dishRepository.delete(id) != 0, id);
+    public void delete(long id, long restaurantId) {
+        checkNotFoundWithId(dishRepository.delete(id, restaurantId) != 0, id);
     }
 
-    public Dish get(long id) {
-        return checkNotFoundWithId(dishRepository.findById(id).orElse(null), id);
+    public Dish get(long id, long restaurantId) {
+        return checkNotFoundWithId(dishRepository.findOneByRestaurant( id, restaurantId).orElse(null), id);
     }
 
     public List<Dish> getAllWithRestaurant() {

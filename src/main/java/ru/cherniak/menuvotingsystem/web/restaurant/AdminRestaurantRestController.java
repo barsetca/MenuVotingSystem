@@ -42,12 +42,11 @@ public class AdminRestaurantRestController {
         return restaurantService.getAll();
     }
 
-    @GetMapping("/by")
+    @GetMapping("/byName")
     public Restaurant getByName(@RequestParam String name) {
         log.info("getByName {}", name);
         return restaurantService.getByName(name);
     }
-
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@Validated(View.Web.class) @RequestBody Restaurant restaurant) {

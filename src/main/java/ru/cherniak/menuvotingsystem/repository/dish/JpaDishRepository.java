@@ -18,8 +18,12 @@ import java.util.Optional;
 public interface JpaDishRepository extends JpaRepository<Dish, Long> {
 
     @Modifying
-    @Query("DELETE FROM Dish d WHERE d.id=:id")
-    int delete(@Param("id") long id);
+    @Query("DELETE FROM Dish d WHERE d.id=:id  AND d.restaurant.id=:restaurantId")
+    int delete(@Param("id") long id, @Param("restaurantId") long restaurantId);
+
+
+    @Query("SELECT d FROM Dish d WHERE d.id=:id AND d.restaurant.id=:restaurantId")
+    Optional<Dish> findOneByRestaurant(@Param("id") long id, @Param("restaurantId") long restaurantId);
 
     List<Dish> findAllByDateAndRestaurantId(@Param("date") LocalDate date, @Param("restaurantId") long restaurantId, Sort sort);
 

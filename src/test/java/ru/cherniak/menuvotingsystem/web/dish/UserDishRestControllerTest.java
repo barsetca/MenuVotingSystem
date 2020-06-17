@@ -19,7 +19,8 @@ import static ru.cherniak.menuvotingsystem.UserTestData.USER;
 
 class UserDishRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = UserDishRestController.REST_USER_DISHES + '/';
+    private static final String REST_URL = "/rest/user/restaurants/"+ RESTAURANT1_ID + "/dishes" + '/';
+
 
     @Autowired
     DishService dishService;
@@ -30,7 +31,7 @@ class UserDishRestControllerTest extends AbstractControllerTest {
         Dish newDish = getCreatedToday();
         newDish.setName("Второе Имя");
         Dish today2 = dishService.create(newDish, RESTAURANT1_ID);
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?restaurantId=" + RESTAURANT1_ID)
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -40,7 +41,7 @@ class UserDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnAuth() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?restaurantId=" + RESTAURANT1_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isUnauthorized());
     }
 }

@@ -26,6 +26,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     private static final String REST_URL = AdminRestaurantRestController.REST_ADMIN_RESTAURANTS + '/';
 
+
     @Autowired
     RestaurantService restaurantService;
 
@@ -163,7 +164,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getByName() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + RESTAURANT1.getName())
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byName?name=" + RESTAURANT1.getName())
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -173,7 +174,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getByNameNotFount() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?name=" + "unknown")
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byName?name=" + "unknown")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());

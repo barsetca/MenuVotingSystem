@@ -177,15 +177,11 @@ class RestaurantServiceTest extends AbstractServiceTest {
         Dish dish1 = dishService.create(new Dish("Uno", 100), RESTAURANT1_ID);
         Dish dish2 = dishService.create(new Dish("Dos", 100), RESTAURANT1_ID);
         Dish dish3 = dishService.create(new Dish("Tres", 100), RESTAURANT1_ID);
-        Dish dish4 = dishService.create(new Dish("Cuatro", 400), RESTAURANT2_ID);
-        Dish dish5 = dishService.create(new Dish("Cinco", 500), RESTAURANT2_ID);
-        Dish dish6 = dishService.create(new Dish("Seis", 600), RESTAURANT2_ID);
 
           List<Restaurant> restaurants = service.getAllWithTodayMenu();
-        Assert.assertEquals(restaurants.size(), 2);
+        Assert.assertEquals(restaurants.size(), 1);
         DISH_MATCHER.assertMatch(restaurants.get(0).getDishes().stream()
                 .sorted(DISH_COMPARATOR).collect(Collectors.toList()),  dish2, dish3, dish1);
-        DISH_MATCHER.assertMatch(restaurants.get(1).getDishes().stream()
-                .sorted(DISH_COMPARATOR).collect(Collectors.toList()),  dish5, dish4, dish6);
+
      }
 }

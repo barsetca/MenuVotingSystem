@@ -50,7 +50,7 @@ class DishServiceTest extends AbstractServiceTest {
         Dish created = service.create(newDish, RESTAURANT1_ID);
         Dish updated = getUpdated(created);
         service.update(updated, RESTAURANT1_ID);
-        DISH_MATCHER.assertMatch(service.get(created.getId()), updated);
+        DISH_MATCHER.assertMatch(service.get(created.getId(), RESTAURANT1_ID), updated);
     }
 
     @Test
@@ -68,32 +68,32 @@ class DishServiceTest extends AbstractServiceTest {
         Dish newDish = new Dish(null, "БигМак", LocalDate.now(), 500);
         Dish created = service.create(newDish, RESTAURANT1_ID);
         Dish updated = getUpdated(created);
-        assertThrows(DataIntegrityViolationException.class, () ->
+        assertThrows(NotFoundException.class, () ->
                 service.update(updated, 1));
     }
 
     @Test
     void delete() {
-        service.delete(DISH_ID);
+        service.delete(DISH_ID, RESTAURANT1_ID);
         DISH_MATCHER.assertMatch(service.getDayMenu(DATE_290420, RESTAURANT1_ID), DISH_2);
     }
 
     @Test
     public void deletedNotFound() {
         assertThrows(NotFoundException.class, () ->
-                service.delete(1));
+                service.delete(1, RESTAURANT1_ID));
     }
 
     @Test
     void get() {
-        Dish getDish1 = service.get(DISH_ID);
+        Dish getDish1 = service.get(DISH_ID, RESTAURANT1_ID);
         DISH_MATCHER.assertMatch(service.getDayMenu(DATE_290420, RESTAURANT1_ID), getDish1, DISH_2);
     }
 
     @Test
     public void getNotFound() {
         assertThrows(NotFoundException.class, () ->
-                service.get(1));
+                service.get(1, RESTAURANT1_ID));
     }
 
     @Test
