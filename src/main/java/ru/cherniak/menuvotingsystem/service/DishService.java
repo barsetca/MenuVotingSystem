@@ -1,13 +1,18 @@
 package ru.cherniak.menuvotingsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Dish;
-import ru.cherniak.menuvotingsystem.repository.dish.DishRepository;
+import ru.cherniak.menuvotingsystem.model.Restaurant;
+import ru.cherniak.menuvotingsystem.repository.dish.JpaDishRepository;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,57 +20,76 @@ import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWith
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithMsg;
 
 @Service
+@Transactional(readOnly = true)
 public class DishService {
 
-    private final DishRepository repository;
+    private static final Sort SORT_DATE_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("name"));
+    private static final Sort SORT_DATE_RID_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurant.id"), Sort.Order.asc("name"));
+    private static final Sort SORT_NAME = Sort.by(Sort.Order.asc("name"));
+
+
+    private final JpaDishRepository dishRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
-    public DishService(DishRepository repository) {
-        this.repository = repository;
+    public DishService(JpaDishRepository dishRepository) {
+        this.dishRepository = dishRepository;
     }
 
+
+    private Dish save(Dish dish, long restaurantId) {
+        if (!dish.isNew() && get(dish.id()) == null) {
+            return null;
+        }
+        dish.setRestaurant(em.getReference(Restaurant.class, restaurantId));
+        return dishRepository.save(dish);
+    }
+
+    @Transactional
     public Dish create(Dish dish, long restaurantId) {
         Assert.notNull(dish, "dish must not be null");
-        return checkNotFoundWithMsg(repository.save(dish, restaurantId), "restaurantId= " + restaurantId);
+        return checkNotFoundWithMsg(save(dish, restaurantId), "restaurantId= " + restaurantId);
     }
 
+    @Transactional
     public void update(Dish dish, long restaurantId) {
         Assert.notNull(dish, "dish must not be null");
-        checkNotFoundWithId(repository.save(dish, restaurantId), dish.getId());
+        checkNotFoundWithId(save(dish, restaurantId), dish.getId());
     }
 
+    @Transactional
     public void delete(long id) {
-        checkNotFoundWithId(repository.delete(id), id);
-//        return repository.delete(id);
+        checkNotFoundWithId(dishRepository.delete(id) != 0, id);
     }
 
     public Dish get(long id) {
-        return checkNotFoundWithId(repository.get(id), id);
+        return checkNotFoundWithId(dishRepository.findById(id).orElse(null), id);
     }
 
     public List<Dish> getAllWithRestaurant() {
-        return repository.getAllWithRestaurant();
+        return dishRepository.findAllWithRestaurant(SORT_DATE_RID_NAME);
     }
 
     public List<Dish> getAllByRestaurant(long restaurantId) {
-        return repository.getAllByRestaurant(restaurantId);
+        return dishRepository.findAllByRestaurantId(restaurantId, SORT_DATE_NAME);
     }
 
     public List<Dish> getDayMenu(@Nullable LocalDate date, long restaurantId) {
-        return repository.getDayMenu(date, restaurantId);
+        return dishRepository.findAllByDateAndRestaurantId(date, restaurantId, SORT_NAME);
     }
 
     public List<Dish> getTodayMenu(long restaurantId) {
-        return repository.getDayMenu(LocalDate.now(), restaurantId);
+        return getDayMenu(LocalDate.now(), restaurantId);
     }
 
-    public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,
-                                                              long restaurantId) {
-        return repository.getAllByRestaurantBetweenInclusive(DateTimeUtil.getStartDate(startDate),
-                DateTimeUtil.getEndDate(endDate), restaurantId);
+    public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long restaurantId) {
+        return dishRepository.findAllByRestaurantIdAndDateBetween(restaurantId, DateTimeUtil.getStartDate(startDate),
+                DateTimeUtil.getEndDate(endDate), SORT_DATE_NAME);
     }
 
     public Dish getWithRestaurant(long id, long restaurantId) {
-        return checkNotFoundWithId(repository.getWithRestaurant(id, restaurantId), id);
+        return checkNotFoundWithId(dishRepository.findOneWithRestaurant(id, restaurantId).orElse(null), id);
     }
 }
