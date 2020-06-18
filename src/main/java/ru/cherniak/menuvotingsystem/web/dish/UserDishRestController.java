@@ -1,7 +1,10 @@
 package ru.cherniak.menuvotingsystem.web.dish;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.cherniak.menuvotingsystem.model.Dish;
 
 import java.util.List;

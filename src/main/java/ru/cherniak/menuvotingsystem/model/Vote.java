@@ -29,7 +29,7 @@ public class Vote extends AbstractBase {
     @NotNull(groups = View.Persist.class)
     private User user;
 
-     public Vote() {
+    public Vote() {
     }
 
     public Vote(LocalDate date) {

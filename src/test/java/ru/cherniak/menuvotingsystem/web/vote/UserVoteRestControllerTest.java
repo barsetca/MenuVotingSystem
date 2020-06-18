@@ -1,6 +1,5 @@
 package ru.cherniak.menuvotingsystem.web.vote;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,7 +13,6 @@ import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
 import ru.cherniak.menuvotingsystem.to.VoteTo;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
-import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import java.time.LocalDate;
 
@@ -52,13 +50,13 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createNotOwner() throws Exception {
-                mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
                 .param("restaurantId", "1")
                 .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
                 .andDo(print());
-          }
+    }
 
     @Test
     void updateOutsideTime() throws Exception {
@@ -75,18 +73,17 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateBeforeTimeBorder() throws Exception {
-       voteService.save(ADMIN_ID, RESTAURANT2_ID);
-       timeBorderPlus();
+        voteService.save(ADMIN_ID, RESTAURANT2_ID);
+        timeBorderPlus();
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
                 .param("restaurantId", "" + RESTAURANT1_ID)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
-       RestaurantTestData.RESTAURANT_MATCHER.assertMatch(voteService.getWithRestaurantToday(ADMIN_ID).getRestaurant(), RESTAURANT1);
-       timeBorderFix();
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(voteService.getWithRestaurantToday(ADMIN_ID).getRestaurant(), RESTAURANT1);
+        timeBorderFix();
     }
-
 
     @Test
     void delete() throws Exception {

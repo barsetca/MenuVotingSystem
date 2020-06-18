@@ -17,7 +17,8 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.cherniak.menuvotingsystem.util.ValidationUtil.*;
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundBooleanMsg;
+import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithMsg;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,12 +68,8 @@ public class DishService {
     }
 
     public Dish get(long id, long restaurantId) {
-        return checkNotFoundWithMsg(dishRepository.findOneByRestaurant( id, restaurantId).orElse(null),
+        return checkNotFoundWithMsg(dishRepository.findOneByRestaurant(id, restaurantId).orElse(null),
                 "id= " + id + ", restaurantId= " + restaurantId);
-    }
-
-    public List<Dish> getAllWithRestaurant() {
-        return dishRepository.findAllWithRestaurant(SORT_DATE_RID_NAME);
     }
 
     public List<Dish> getAllByRestaurant(long restaurantId) {
@@ -90,10 +87,5 @@ public class DishService {
     public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long restaurantId) {
         return dishRepository.findAllByRestaurantIdAndDateBetween(restaurantId, DateTimeUtil.getStartDate(startDate),
                 DateTimeUtil.getEndDate(endDate), SORT_DATE_NAME);
-    }
-
-    public Dish getWithRestaurant(long id, long restaurantId) {
-        return checkNotFoundWithMsg(dishRepository.findOneWithRestaurant(id, restaurantId).orElse(null),
-                "id= " + id + ", restaurantId= " + restaurantId);
     }
 }

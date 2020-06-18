@@ -21,7 +21,6 @@ public interface JpaDishRepository extends JpaRepository<Dish, Long> {
     @Query("DELETE FROM Dish d WHERE d.id=:id  AND d.restaurant.id=:restaurantId")
     int delete(@Param("id") long id, @Param("restaurantId") long restaurantId);
 
-
     @Query("SELECT d FROM Dish d WHERE d.id=:id AND d.restaurant.id=:restaurantId")
     Optional<Dish> findOneByRestaurant(@Param("id") long id, @Param("restaurantId") long restaurantId);
 
@@ -32,13 +31,5 @@ public interface JpaDishRepository extends JpaRepository<Dish, Long> {
     List<Dish> findAllByRestaurantIdAndDateBetween(@Param("restaurantId") long restaurantId,
                                                    @Param("startDate") LocalDate startDate,
                                                    @Param("endDate") LocalDate endDate, Sort sort);
-
-
-    @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.id=:id AND d.restaurant.id=:restaurantId")
-    Optional<Dish> findOneWithRestaurant(@Param("id") long id, @Param("restaurantId") long restaurantId);
-
-    @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant")
-    List<Dish> findAllWithRestaurant(Sort sort);
-
 }
 

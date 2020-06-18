@@ -48,7 +48,6 @@ public class UserService implements UserDetailsService {
         return prepareAndSave(user);
     }
 
-
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
     public void update(User user) {
@@ -83,10 +82,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll(SORT_NAME_EMAIL);
     }
 
-    public User getWithVotes(long id) {
-        return checkNotFoundWithId(userRepository.findOneWithVotes(id), id);
-    }
-
     @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void enable(long id, boolean enabled) {
@@ -106,7 +101,7 @@ public class UserService implements UserDetailsService {
 
     private User prepareAndSave(User user) {
         return save(prepareToSave(user, passwordEncoder));
-   }
+    }
 
     private User save(User user) {
         if (!user.isNew() && get(user.id()) == null) {

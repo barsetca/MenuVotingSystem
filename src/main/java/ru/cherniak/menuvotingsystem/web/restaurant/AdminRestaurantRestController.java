@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.cherniak.menuvotingsystem.View;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
-import ru.cherniak.menuvotingsystem.View;
 
 import java.net.URI;
 import java.util.List;
@@ -29,24 +29,6 @@ public class AdminRestaurantRestController {
 
     @Autowired
     RestaurantService restaurantService;
-
-    @GetMapping("/{id}")
-    public Restaurant get(@PathVariable long id) {
-        log.info("get {}", id);
-        return restaurantService.get(id);
-    }
-
-    @GetMapping
-    public List<Restaurant> getAll() {
-        log.info("getAll");
-        return restaurantService.getAll();
-    }
-
-    @GetMapping("/byName")
-    public Restaurant getByName(@RequestParam String name) {
-        log.info("getByName {}", name);
-        return restaurantService.getByName(name);
-    }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@Validated(View.Web.class) @RequestBody Restaurant restaurant) {

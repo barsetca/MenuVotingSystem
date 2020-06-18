@@ -33,7 +33,6 @@ public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
                                                            @Param("endDate") LocalDate endDate,
                                                            @Param("userId") long userId, Sort sort);
 
-
     @Query("SELECT v FROM Vote v WHERE v.date=:date AND v.user.id=:userId")
     Optional<Vote> findOneByDateAndUserId(@Param("date") LocalDate now, @Param("userId") long userId);
 

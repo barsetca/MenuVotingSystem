@@ -7,8 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
-import ru.cherniak.menuvotingsystem.to.RestaurantTo;
-import ru.cherniak.menuvotingsystem.util.RestaurantUtil;
 
 import java.util.List;
 
@@ -25,22 +23,21 @@ UserRestaurantRestController {
     RestaurantService restaurantService;
 
     @GetMapping("/{id}")
-    public RestaurantTo getWithCountVotes(@PathVariable long id) {
-        log.info("getWithCountVotes {}", id);
-        return RestaurantUtil.createTo(restaurantService.getWithVotes(id));
-    }
-
-    @GetMapping("/byName")
-    public RestaurantTo getByNameWithCountVotes(@RequestParam String name) {
-        log.info("getByNameWithCountVotes {}", name);
-        return RestaurantUtil.createTo(restaurantService.getByNameWithVotes(name));
+    public Restaurant get(@PathVariable long id) {
+        log.info("get {}", id);
+        return restaurantService.get(id);
     }
 
     @GetMapping
-    public List<RestaurantTo> getAllWithCountVotes() {
-        log.info("getAllWithCountVotes");
-        List<RestaurantTo> restaurantTos = RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
-        return restaurantTos;
+    public List<Restaurant> getAll() {
+        log.info("getAll");
+        return restaurantService.getAll();
+    }
+
+    @GetMapping("/byName")
+    public Restaurant getByName(@RequestParam String name) {
+        log.info("getByName {}", name);
+        return restaurantService.getByName(name);
     }
 
     @GetMapping("dishes/today")

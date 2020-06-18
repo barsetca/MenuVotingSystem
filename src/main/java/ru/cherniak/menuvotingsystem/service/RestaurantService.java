@@ -68,33 +68,18 @@ public class RestaurantService {
         return checkNotFound(restaurantRepository.getByName(name).orElse(null), "name=" + name);
     }
 
-    @Cacheable("restaurants")
     public List<Restaurant> getAll() {
         return restaurantRepository.findAll(SORT_BY_NAME);
-    }
-
-    public Restaurant getWithVotes(long id) {
-        return checkNotFoundWithId(restaurantRepository.findOneWithVotes(id), id);
     }
 
     public Restaurant getWithDishes(long id) {
         return checkNotFoundWithId(restaurantRepository.findOneWithDishes(id), id);
     }
-    @Transactional
+
     public List<Restaurant> getAllWithDishes() {
         return restaurantRepository.findAllWithDishes(SORT_BY_NAME);
     }
 
-    @Transactional
-//    @Cacheable("restaurants")
-    public List<Restaurant> getAllWithVotes() {
-        return restaurantRepository.findAllWithVotes();
-    }
-    @Transactional
-    public Restaurant getByNameWithVotes(String name) {
-        Assert.notNull(name, "name must not be null");
-        return checkNotFound(restaurantRepository.findOneByNameWithVotes(name).orElse(null), "name=" + name);
-    }
     @Transactional
     @Cacheable("restaurants")
     public List<Restaurant> getAllWithTodayMenu() {
@@ -104,5 +89,4 @@ public class RestaurantService {
         restaurants = restaurants.stream().filter(r -> r.getDishes().size() > 0).collect(Collectors.toList());
         return restaurants;
     }
-
 }

@@ -70,7 +70,7 @@ Content-Type: application/json
 
 ###create newDish by restaurantId 100002 with Restaurant now-----------------------------------------------------------
 # curl -X POST -d '{"name":"SecondName","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
-POST http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
+POST http://localhost:8080/mvs/rest/admin/restaurants/100003/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -80,14 +80,14 @@ Content-Type: application/json
 }
 
 ###update Dish 100004 by restaurantId 100002---------------------------------------------------------------------------
-# curl -X PUT -d '{"id":100044,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
+# curl -X PUT -d '{"id":100004,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
   "id": 100004,
-  "name": "UpdateNewName",
+  "name": "UpdateName",
   "date": "2020-07-28",
   "price": 500
 }
@@ -106,7 +106,7 @@ Content-Type: application/json
 }
 
 ###update Dish 100004  by NotOwner (422 - Unprocessable Entity) restaurantId 1 ----------------------------------------
-# curl -X PUT -d '{"id":100044,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/1/dishes/by?restaurantId=1 --user admin@gmail.com:admin
+# curl -X PUT -d '{"id":100004,"name":"UpdateName","date":"2020-07-28","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/1/dishes/by?restaurantId=1 --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/restaurants/1/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +25,6 @@ public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long>
 
     @Transactional
     //    https://stackoverflow.com/a/46013654/548473
-    @EntityGraph(attributePaths = {"votes"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
-    Restaurant findOneWithVotes(@Param("id") long id);
-
-    @Transactional
     @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
     Restaurant findOneWithDishes(@Param("id") long id);
@@ -39,14 +33,4 @@ public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long>
     @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r")
     List<Restaurant> findAllWithDishes(Sort sort);
-
-    @Transactional
-    @EntityGraph(attributePaths = {"votes"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r ORDER BY size(r.votes) DESC")
-    List<Restaurant> findAllWithVotes();
-
-    @Transactional
-    @EntityGraph(attributePaths = {"votes"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r WHERE r.name=:name")
-    Optional<Restaurant> findOneByNameWithVotes(@Param("name") String name);
 }

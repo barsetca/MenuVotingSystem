@@ -157,7 +157,7 @@ class VoteServiceTest extends AbstractServiceTest {
     void getWithRestaurantTodayNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.getWithRestaurantToday(1));
-           }
+    }
 
     @Test
     void getVoteToToday() {

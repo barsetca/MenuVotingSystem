@@ -7,7 +7,6 @@ import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 
 import static ru.cherniak.menuvotingsystem.model.AbstractBase.START_SEQ;
 

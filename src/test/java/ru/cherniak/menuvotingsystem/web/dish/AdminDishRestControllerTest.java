@@ -8,10 +8,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.DishTestData;
+import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.service.DishService;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
-import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import java.time.LocalDate;
@@ -21,16 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.cherniak.menuvotingsystem.DishTestData.*;
 import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
-import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT2_ID;
+import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
 import static ru.cherniak.menuvotingsystem.UserTestData.ADMIN;
 import static ru.cherniak.menuvotingsystem.UserTestData.USER;
-import static ru.cherniak.menuvotingsystem.TestUtil.userHttpBasic;
 
 class AdminDishRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = "/rest/admin/restaurants/"+ RESTAURANT1_ID + "/dishes" + '/';
-
-
+    private static final String REST_URL = "/rest/admin/restaurants/" + RESTAURANT1_ID + "/dishes" + '/';
 
     @Autowired
     DishService dishService;
@@ -71,7 +68,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
     @Test
     void createNotOwner() throws Exception {
         Dish newDish = new Dish("NewName", LocalDate.now(), 100);
-        mockMvc.perform(MockMvcRequestBuilders.post("/rest/admin/restaurants/"+ 1 + "/dishes")
+        mockMvc.perform(MockMvcRequestBuilders.post("/rest/admin/restaurants/" + 1 + "/dishes")
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
@@ -108,7 +105,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
     void updateNotOwner() throws Exception {
         Dish updated = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
         updated.setName("UpdateName");
-        mockMvc.perform(MockMvcRequestBuilders.put("/rest/admin/restaurants/"+ 1 + "/dishes")
+        mockMvc.perform(MockMvcRequestBuilders.put("/rest/admin/restaurants/" + 1 + "/dishes")
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
@@ -184,16 +181,6 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isForbidden());
     }
-
-//    @Test
-//    void getAllWithRestaurant() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
-//                .with(userHttpBasic(ADMIN)))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(DISH_MATCHER.contentJson(DISH_5, DISH_6, DISH_8, DISH_7, DISH_1, DISH_2, DISH_4, DISH_3));
-//    }
 
     @Test
     void getAllByRestaurant() throws Exception {

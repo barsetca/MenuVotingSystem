@@ -39,8 +39,8 @@ public class VoteService {
         this.voteRepository = voteRepository;
     }
 
-     @Transactional
-     @CacheEvict(value = "restaurants", allEntries = true)
+    @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Vote save(long userId, long restaurantId) {
         if (getByDateNow(userId) != null) {
             checkTimeBorder();
@@ -57,7 +57,7 @@ public class VoteService {
     public void delete(long userId) {
         checkTimeBorder();
         LocalDate date = LocalDate.now();
-        checkNotFound(voteRepository.delete(date, userId) != 0,"date: " + date);
+        checkNotFound(voteRepository.delete(date, userId) != 0, "date: " + date);
     }
 
     public Vote getByDateNow(long userId) {
@@ -70,7 +70,7 @@ public class VoteService {
                 "userId" + userId);
     }
 
-    public VoteTo getVoteToToday(long userId){
+    public VoteTo getVoteToToday(long userId) {
         Vote voteWithRestaurantToday = getWithRestaurantToday(userId);
         return VoteUtil.createTo(voteWithRestaurantToday);
     }

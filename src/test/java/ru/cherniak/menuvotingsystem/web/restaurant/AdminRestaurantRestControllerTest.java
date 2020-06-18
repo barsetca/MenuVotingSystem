@@ -30,23 +30,6 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     @Autowired
     RestaurantService restaurantService;
 
-    @Test
-    void get() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID)
-                .with(userHttpBasic(ADMIN)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1));
-    }
-
-    @Test
-    void getNotFound() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + 1)
-                .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isUnprocessableEntity())
-                .andDo(print());
-    }
 
     @Test
     void getUnAuth() throws Exception {
@@ -163,36 +146,8 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getByName() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byName?name=" + RESTAURANT1.getName())
-                .with(userHttpBasic(ADMIN)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1));
-    }
-
-    @Test
-    void getByNameNotFount() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byName?name=" + "unknown")
-                .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isUnprocessableEntity())
-                .andDo(print());
-    }
-
-    @Test
-    void getAll() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
-                .with(userHttpBasic(ADMIN)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1, RESTAURANT2));
-    }
-
-    @Test
     void getAllWithDishes() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL+ "dishes")
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "dishes")
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())

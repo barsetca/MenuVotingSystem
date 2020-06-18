@@ -2,31 +2,6 @@
 #############################RESTOURANT#################################################################################
 
 ###AdminRestaurantRestController---------------------------------------------------------------------------------------
-###get-----------------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants/100003 --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/restaurants/100003
-Authorization: Basic admin@gmail.com admin
-
-###get restaurant NotFound (UNPROCESSABLE_ENTITY) id=1------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants/1 --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/restaurants/1
-Authorization: Basic admin@gmail.com admin
-
-###getAll--------------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/restaurants
-Authorization: Basic admin@gmail.com admin
-
-###getByName-----------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants/bybyName?name=McDonalds --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/restaurants/byName?name=McDonalds
-Authorization: Basic admin@gmail.com admin
-
-###getByName restaurant NotFound (UNPROCESSABLE_ENTITY) name=unknownName--------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants/bybyName?name=unknownName --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/restaurants/byName?name=unknownName
-Authorization: Basic admin@gmail.com admin
-
 ###createWithLocation--------------------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"Mama_Roma","address":"пр.Стачек","phone":"318-56-98","url":"mamaroma.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/restaurants
@@ -80,7 +55,7 @@ Content-Type: application/json
 }
 
 ### DELETE restaurant id=100015 (if exist)-----------------------------------------------------------------------------
-# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100017 --user admin@gmail.com:admin
+# curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/100015 --user admin@gmail.com:admin
 DELETE http://localhost:8080/mvs/rest/admin/restaurants/100015
 Authorization: Basic admin@gmail.com admin
 
@@ -96,29 +71,29 @@ Authorization: Basic admin@gmail.com admin
 
 
 ###UserRestaurantRestController-----------------------------------------------------------------------------------------
-###getWithCountVotes----------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants/100002 --user user@yandex.ru:password
-GET http://localhost:8080/mvs/rest/user/restaurants/100002
+###get-----------------------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants/100003 --user user@yandex.ru:password
+GET http://localhost:8080/mvs/rest/user/restaurants/100003
 Authorization: Basic user@yandex.ru password
 
-###getWithCountVotes not found ----------------------------------------------------------------------------------------
+###get restaurant NotFound (UNPROCESSABLE_ENTITY) id=1-----------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/1 --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/1
 Authorization: Basic user@yandex.ru password
 
-###getByNameWithCountVotes---------------------------------------------------------------------------------------------
+###getAll--------------------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants --user user@yandex.ru:password
+GET http://localhost:8080/mvs/rest/user/restaurants
+Authorization: Basic user@yandex.ru password
+
+###getByName-----------------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/byName?name=McDonalds --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/byName?name=McDonalds
 Authorization: Basic user@yandex.ru password
 
-### getByNameWithCountVotes not found ---------------------------------------------------------------------------------
+###getByName restaurant NotFound (UNPROCESSABLE_ENTITY) name=unknownName--------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/byName?name=unknownName --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/byName?name=unknownName
-Authorization: Basic user@yandex.ru password
-
-###getAllWithCountVotes (for Anonymous) -------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants --user user@yandex.ru:password
-GET http://localhost:8080/mvs/rest/user/restaurants
 Authorization: Basic user@yandex.ru password
 
 ###getAllWithTodayMenu ------------------------------------------------------------------------------------------------
@@ -128,5 +103,3 @@ Authorization: Basic user@yandex.ru password
 
 ###
 
-
-###

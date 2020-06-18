@@ -4,19 +4,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import ru.cherniak.menuvotingsystem.model.Dish;
-import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.cherniak.menuvotingsystem.DishTestData.*;
-import static ru.cherniak.menuvotingsystem.RestaurantTestData.*;
+import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT1_ID;
+import static ru.cherniak.menuvotingsystem.RestaurantTestData.RESTAURANT2_ID;
 
 
 class DishServiceTest extends AbstractServiceTest {
@@ -141,33 +140,6 @@ class DishServiceTest extends AbstractServiceTest {
                 RESTAURANT1_ID);
         DISH_MATCHER.assertMatch(allBetweenNulls, today, DISH_5, DISH_6, DISH_1, DISH_2);
 
-    }
-
-    @Test
-    void getWithRestaurant() {
-        Dish dish = service.getWithRestaurant(DISH_ID, RESTAURANT1_ID);
-        Restaurant restaurant = dish.getRestaurant();
-        DISH_MATCHER.assertMatch(dish, DISH_1);
-        RESTAURANT_MATCHER.assertMatch(restaurant, RESTAURANT1);
-    }
-
-    @Test
-    public void getWithRestaurantNotFound() {
-        assertThrows(NotFoundException.class, () ->
-                service.getWithRestaurant(DISH_ID, 1));
-        assertThrows(NotFoundException.class, () ->
-                service.getWithRestaurant(1, RESTAURANT1_ID));
-    }
-
-    @Test
-    void getAllWithRestaurant() {
-        List<Dish> dishes = service.getAllWithRestaurant();
-        List<Restaurant> restaurants = new ArrayList<>();
-        dishes.forEach(d -> restaurants.add(d.getRestaurant()));
-        DISH_MATCHER.assertMatch(dishes, ALL_DISHES);
-        RESTAURANT_MATCHER.assertMatch(restaurants,
-                RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2,
-                RESTAURANT1, RESTAURANT1, RESTAURANT2, RESTAURANT2);
     }
 
     @Test

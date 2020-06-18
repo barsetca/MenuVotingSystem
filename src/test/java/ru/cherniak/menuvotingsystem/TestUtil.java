@@ -1,12 +1,10 @@
 package ru.cherniak.menuvotingsystem;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import ru.cherniak.menuvotingsystem.AuthorizedUser;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
