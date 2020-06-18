@@ -189,4 +189,14 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1, RESTAURANT2));
     }
+
+    @Test
+    void getAllWithDishes() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL+ "dishes")
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1, RESTAURANT2));
+    }
 }

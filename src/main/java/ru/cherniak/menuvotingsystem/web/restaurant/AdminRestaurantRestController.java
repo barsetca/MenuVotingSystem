@@ -76,4 +76,10 @@ public class AdminRestaurantRestController {
         restaurantService.delete(id);
     }
 
+    @GetMapping("/dishes")
+    public List<Restaurant> getAllWithTodayMenu() {
+        log.info("getAllWithTodayMenu");
+        return restaurantService.getAllWithDishes();
+    }
+
 }

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.cherniak.menuvotingsystem.DishTestData;
+import ru.cherniak.menuvotingsystem.service.DishService;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
 import ru.cherniak.menuvotingsystem.to.RestaurantTo;
 import ru.cherniak.menuvotingsystem.util.RestaurantUtil;
@@ -26,8 +28,11 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
     @Autowired
     RestaurantService restaurantService;
 
+    @Autowired
+    DishService dishService;
+
     @Test
-    void getWithVotes() throws Exception {
+    void getWithCountVotes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID)
                 .with(userHttpBasic(USER)))
                 .andDo(print())
@@ -37,7 +42,7 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getWithVotesNotFound() throws Exception {
+    void getWithCountVotesNotFound() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + 1)
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isUnprocessableEntity())
@@ -51,7 +56,7 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getByNameWithVotes() throws Exception {
+    void getByNameWithCountVotes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byName?name=" + RESTAURANT1.getName())
                 .with(userHttpBasic(USER)))
                 .andDo(print())
@@ -61,7 +66,7 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getByNameWithVotesNotFount() throws Exception {
+    void getByNameWithCountVotesNotFount() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byName?name=" + "unknown")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
@@ -69,7 +74,7 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getAllWithVotes() throws Exception {
+    void getAllWithCountVotes() throws Exception {
         List<RestaurantTo> restaurantTos = RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(USER)))
@@ -77,5 +82,18 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RES_TO_MATCHER.contentJson(restaurantTos.get(0), restaurantTos.get(1)));
+    }
+
+    @Test
+    void getAllWithTodayMenu() throws Exception {
+        DishTestData.getCreatedToday();
+        dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
+        //dishService.create(DishTestData.getCreatedToday(), RESTAURANT2_ID);
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL+ "dishes/today")
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(List.of(RESTAURANT1)));
     }
 }

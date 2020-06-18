@@ -43,10 +43,10 @@ UserRestaurantRestController {
         return RestaurantUtil.getRestaurantTosSortedByCountVotes(restaurantService.getAllWithVotes());
     }
 
-    @GetMapping("/today")
+    @GetMapping("dishes/today")
     public List<Restaurant> getAllWithTodayMenu() {
         log.info("getAllWithTodayMenu");
-        return restaurantService.getAllWithVotes();
+        return restaurantService.getAllWithTodayMenu();
     }
 
 
