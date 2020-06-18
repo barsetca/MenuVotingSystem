@@ -80,28 +80,28 @@ public class RestaurantService {
     public Restaurant getWithDishes(long id) {
         return checkNotFoundWithId(restaurantRepository.findOneWithDishes(id), id);
     }
-
     @Transactional
     public List<Restaurant> getAllWithDishes() {
         return restaurantRepository.findAllWithDishes(SORT_BY_NAME);
     }
 
-    @Cacheable("restaurants")
+    @Transactional
+//    @Cacheable("restaurants")
     public List<Restaurant> getAllWithVotes() {
         return restaurantRepository.findAllWithVotes();
     }
-
+    @Transactional
     public Restaurant getByNameWithVotes(String name) {
         Assert.notNull(name, "name must not be null");
         return checkNotFound(restaurantRepository.findOneByNameWithVotes(name).orElse(null), "name=" + name);
     }
-
+    @Transactional
     @Cacheable("restaurants")
     public List<Restaurant> getAllWithTodayMenu() {
-       List<Restaurant> restaurants = getAllWithDishes();
-      restaurants.forEach(r-> r.setDishes(r.getDishes().stream().filter(d ->
-              d.getDate().isEqual(LocalDate.now())).collect(Collectors.toSet())));
-      restaurants = restaurants.stream().filter(r -> r.getDishes().size() > 0).collect(Collectors.toList());
+        List<Restaurant> restaurants = getAllWithDishes();
+        restaurants.forEach(r -> r.setDishes(r.getDishes().stream().filter(d ->
+                d.getDate().isEqual(LocalDate.now())).collect(Collectors.toSet())));
+        restaurants = restaurants.stream().filter(r -> r.getDishes().size() > 0).collect(Collectors.toList());
         return restaurants;
     }
 
