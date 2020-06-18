@@ -34,7 +34,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Dish newDish = new Dish("NewName", LocalDate.now(), 100);
+        Dish newDish = getCreatedToday();
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -52,7 +52,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     @Test
     void createValidationError() throws Exception {
-        Dish newDish = new Dish("NewName", LocalDate.now(), 100);
+        Dish newDish = getCreatedToday();
         newDish.setName("R");
         newDish.setPrice(-1);
         newDish.setDate(LocalDate.now().minusDays(1));
@@ -67,7 +67,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createNotOwner() throws Exception {
-        Dish newDish = new Dish("NewName", LocalDate.now(), 100);
+        Dish newDish = getCreatedToday();
         mockMvc.perform(MockMvcRequestBuilders.post("/rest/admin/restaurants/" + 1 + "/dishes")
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -90,7 +90,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        Dish updated = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
+        Dish updated = dishService.create(getCreatedToday(), RESTAURANT1_ID);
         updated.setName("UpdateName");
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL)
                 .with(userHttpBasic(ADMIN))
@@ -103,7 +103,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateNotOwner() throws Exception {
-        Dish updated = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
+        Dish updated = dishService.create(getCreatedToday(), RESTAURANT1_ID);
         updated.setName("UpdateName");
         mockMvc.perform(MockMvcRequestBuilders.put("/rest/admin/restaurants/" + 1 + "/dishes")
                 .with(userHttpBasic(ADMIN))
@@ -115,7 +115,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateValidationError() throws Exception {
-        Dish updated = dishService.create(DishTestData.getCreatedToday(), RESTAURANT1_ID);
+        Dish updated = dishService.create(getCreatedToday(), RESTAURANT1_ID);
         updated.setName("R");
         updated.setPrice(-1);
         updated.setDate(LocalDate.now().minusDays(1));

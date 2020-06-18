@@ -23,8 +23,7 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        User newUser = new User(null, "CreateUser", "create@gmail.com", "newPass", true,
-                LocalDateTime.now(), Set.of(Role.ROLE_USER, Role.ROLE_ADMIN));
+        User newUser = getNew();
         User created = service.create(newUser);
         long newId = created.id();
         newUser.setId(newId);

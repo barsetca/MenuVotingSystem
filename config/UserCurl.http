@@ -12,11 +12,10 @@ Authorization: Basic admin@gmail.com admin
 GET http://localhost:8080/mvs/rest/admin/users/100000
 Authorization: Basic admin@gmail.com admin
 
-### GET user NotFound (UNPROCESSABLE_ENTITY) id=1----------------------------------------------------------------------
+### GET user NotFound (422 - Unprocessable Entity) id=1----------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users/1 --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/users/1
 Authorization: Basic admin@gmail.com admin
-
 
 ### Create user--------------------------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"NewName","email":"new@nuevo.ru","password":"passwordNew","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
@@ -48,7 +47,7 @@ Content-Type: application/json
   ]
 }
 
-###update user (if exist)---------------------------------------------------------------------------------------
+###update user (if exist)----------------------------------------------------------------------------------------------
 # curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER","ROLE_ADMIN"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100015 --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/users/100015
 Authorization: Basic admin@gmail.com admin
@@ -64,8 +63,9 @@ Content-Type: application/json
   ]
 }
 
-###update user Validation error-----------------------------------------------------------------
-# curl -X PUT -d '{"name":"NameUpdate","email":"nghhgjhh@gmail.com","password":"passwordUpdate","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100015 --user admin@gmail.com:admin
+###update user Validation error----------------------------------------------------------------------------------------
+#
+# curl -X PUT -d '{"name":"N","email":"","password":null,"roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100015 --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/users/100015
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
@@ -79,27 +79,27 @@ Content-Type: application/json
   ]
 }
 
-### DELETE user by id (if exist)-----------------------------------------------------------------------------------
+### DELETE user by id (if exist)---------------------------------------------------------------------------------------
 # curl -X DELETE http://localhost:8080/mvs/rest/admin/users/100015 --user admin@gmail.com:admin
 DELETE http://localhost:8080/mvs/rest/admin/users/100015
 Authorization: Basic admin@gmail.com admin
 
-### DELETE  NotFound (UNPROCESSABLE_ENTITY) id=1-----------------------------------------------------------------------
+### DELETE  NotFound (422 - Unprocessable Entity) id=1-----------------------------------------------------------------
 # curl -X DELETE http://localhost:8080/mvs/rest/admin/users/1 --user admin@gmail.com:admin
 DELETE http://localhost:8080/mvs/rest/admin/users/1
 Authorization: Basic admin@gmail.com admin
 
 ###getByMail-----------------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/users/by?email=user@yandex.ru
+# curl http://localhost:8080/mvs/rest/admin/users/byEmail?email=user@yandex.ru --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/admin/users/byEmail?email=user@yandex.ru
 Authorization: Basic admin@gmail.com admin
 
-###getByMail NotFound (422 - Unprocessable Entity) not@exist.ru -------------------------------------------------------------
+###getByMail NotFound (422 - Unprocessable Entity) not@exist.ru -------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users/by?email=not@exist.ru --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/users/by?email=not@exist.ru
+GET http://localhost:8080/mvs/rest/admin/users/byEmail?email=not@exist.ru
 Authorization: Basic admin@gmail.com admin
 
-### Create user duplicate email (409 - Conflict) ----------------------------------------------------------------------------
+### Create user duplicate email (409 - Conflict) ----------------------------------------------------------------------
 # curl -X POST -d '{"name":"NewName","email":"admin@gmail.com","password":"passwordNew","roles":["ROLE_USER"]}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/users
 Authorization: Basic admin@gmail.com admin
@@ -121,7 +121,7 @@ PATCH http://localhost:8080/mvs/rest/admin/users/100000?enabled=false
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
-###enable (true open auth)------------------------------------------------------------------------------------------
+###enable (true open auth)---------------------------------------------------------------------------------------------
 # curl -X PATCH -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/users/100000?enabled=true --user admin@gmail.com:admin
 PATCH http://localhost:8080/mvs/rest/admin/users/100000?enabled=true
 Authorization: Basic admin@gmail.com admin
@@ -145,8 +145,12 @@ Content-Type: application/json
   "password": "password"
 }
 
+###get(check update)---------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
+GET http://localhost:8080/mvs/rest/profile
+Authorization: Basic user@yandex.ru password
 
-### update user profile Validation Error--------------------------------------------------------------------------------
+### update user profile Validation Error-------------------------------------------------------------------------------
 # curl -X PUT -d '{"name":"U","email":"@a","password":"wordU"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 PUT http://localhost:8080/mvs/rest/profile
 Authorization: Basic user@yandex.ru password
@@ -158,7 +162,7 @@ Content-Type: application/json
   "password": "wordU"
 }
 
-### update user profile Validation Error with empty OR null datas--------------------------------------------------------------------------------
+### update user profile Validation Error with empty OR null datas------------------------------------------------------
 # curl -X PUT -d '{"name":"","email":null,"password":""}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
 PUT http://localhost:8080/mvs/rest/profile
 Authorization: Basic user@yandex.ru password
@@ -169,13 +173,6 @@ Content-Type: application/json
   "email": null,
   "password": ""
 }
-
-###get(check update)---------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/profile --user user@yandex.ru:password
-GET http://localhost:8080/mvs/rest/profile
-Authorization: Basic user@yandex.ru password
-
-###
 
 ### register user------------------------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"NewName","email":"new@nuevo.ru","password":"passwordNew"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
@@ -188,13 +185,12 @@ Content-Type: application/json
   "password": "passwordNew"
 }
 
-
-###get(check create/register)---------------------------------------------------------------------------------------------------
+###get(check create/register)------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/profile --user new@nuevo.ru:passwordNew
 GET http://localhost:8080/mvs/rest/profile
 Authorization: Basic new@nuevo.ru passwordNew
 
-### register Validation Error-------------------------------------------------------------------------------------
+### register Validation Error------------------------------------------------------------------------------------------
 # curl -X POST -d '{"name":"N","email":"ne","password":"passw"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
 POST http://localhost:8080/mvs/rest/profile/register
 Content-Type: application/json
@@ -205,7 +201,7 @@ Content-Type: application/json
   "password": "passw"
 }
 
-### register Validation Errorwith empty OR null datas ------------------------------------------------------------
+### register Validation Errorwith empty OR null datas -----------------------------------------------------------------
 # curl -X POST -d '{"name":"","email":"","password":null}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/profile/register
 POST http://localhost:8080/mvs/rest/profile/register
 Content-Type: application/json
@@ -223,7 +219,7 @@ Authorization: Basic new@nuevo.ru passwordNew
 
 ###
 
-### getAll (check delete from admin)----------------------------------------------------------------------------------------------
+### getAll (check delete from admin)-----------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/users --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/users
 Authorization: Basic admin@gmail.com admin

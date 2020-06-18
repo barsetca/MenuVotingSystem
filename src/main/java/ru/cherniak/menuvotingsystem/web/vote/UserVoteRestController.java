@@ -60,7 +60,7 @@ public class UserVoteRestController {
         return voteService.getVoteTosBetweenInclusive(startDate, endDate, userId);
     }
 
-    @PostMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/byRestaurant", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VoteTo> createWithLocation(@RequestParam long restaurantId,
                                                      @AuthenticationPrincipal AuthorizedUser authUser) {
         long userId = authUser.getId();
@@ -72,7 +72,7 @@ public class UserVoteRestController {
         return ResponseEntity.created(uriOfNewResource).body(VoteUtil.createTo(created));
     }
 
-    @PutMapping(value = "/by", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/byRestaurant", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestParam long restaurantId,
                        @AuthenticationPrincipal AuthorizedUser authUser) {

@@ -33,7 +33,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/byRestaurant")
                 .param("restaurantId", "100002")
                 .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -50,7 +50,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createNotOwner() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/by")
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/byRestaurant")
                 .param("restaurantId", "1")
                 .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -62,7 +62,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     void updateOutsideTime() throws Exception {
         voteService.save(ADMIN_ID, RESTAURANT2_ID);
         timeBorderMinus();
-        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/byRestaurant")
                 .param("restaurantId", "" + RESTAURANT1_ID)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -75,7 +75,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     void updateBeforeTimeBorder() throws Exception {
         voteService.save(ADMIN_ID, RESTAURANT2_ID);
         timeBorderPlus();
-        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/by")
+        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/byRestaurant")
                 .param("restaurantId", "" + RESTAURANT1_ID)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON))

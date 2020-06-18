@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
@@ -40,7 +41,7 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Restaurant newRestaurant = new Restaurant("CreateRest", "пл. Новая, д.1", "315-00-00");
+        Restaurant newRestaurant = getCreated();
         service.create(newRestaurant);
         RESTAURANT_MATCHER.assertMatch(service.getAll(), newRestaurant, RESTAURANT1, RESTAURANT2);
     }

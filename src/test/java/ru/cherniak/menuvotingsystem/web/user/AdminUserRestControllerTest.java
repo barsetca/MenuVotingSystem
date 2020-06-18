@@ -182,7 +182,7 @@ class AdminUserRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getByMail() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?email=" + USER.getEmail())
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "byEmail?email=" + USER.getEmail())
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

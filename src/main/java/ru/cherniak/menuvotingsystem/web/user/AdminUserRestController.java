@@ -53,7 +53,7 @@ public class AdminUserRestController extends AbstractUserController {
         super.delete(id);
     }
 
-    @GetMapping("/by")
+    @GetMapping("/byEmail")
     public User getByMail(@RequestParam String email) {
         return super.getByMail(email);
     }

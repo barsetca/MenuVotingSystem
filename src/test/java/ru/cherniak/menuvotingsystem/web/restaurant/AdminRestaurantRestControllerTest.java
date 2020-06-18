@@ -46,7 +46,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Restaurant newRestaurant = new Restaurant("CreateRest", "пл. Новая, д.1", "315-00-00");
+        Restaurant newRestaurant = getCreated();
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +64,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     @Test
     void createValidationError() throws Exception {
-        Restaurant newRestaurant = new Restaurant("CreateRest", "Cafe", "пл. Новая, д.1", "315-00-00");
+        Restaurant newRestaurant = getCreated();
         newRestaurant.setName("R");
         newRestaurant.setAddress("Adrs");
         newRestaurant.setPhone("123");

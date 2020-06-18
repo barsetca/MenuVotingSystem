@@ -35,7 +35,7 @@ class UserDishRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(today2, today1));
+                .andExpect(DISH_MATCHER.contentJson(today1, today2));
     }
 
     @Test

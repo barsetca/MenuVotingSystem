@@ -37,10 +37,12 @@ public class DishTestData {
 
 
     public static Dish getCreatedToday() {
-        return new Dish(null, "Картофель Фри", LocalDate.now(), 300);
+        return new Dish(null, "БигМак", LocalDate.now(), 300);
     }
 
     public static Dish getUpdated(Dish dish) {
         return new Dish(dish.getId(), "Обновленный пункт", dish.getDate(), 200);
     }
+
+
 }

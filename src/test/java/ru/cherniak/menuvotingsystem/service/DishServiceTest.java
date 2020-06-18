@@ -37,7 +37,7 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateNameWithDateCreate() {
-        Dish created = new Dish(null, "БигМак", LocalDate.now(), 500);
+        Dish created = getCreatedToday();;
         service.create(created, RESTAURANT1_ID);
         Dish createdDuplicateName = new Dish(null, "БигМак", LocalDate.now(), 5000);
         assertThrows(DataIntegrityViolationException.class, () -> service.create(createdDuplicateName, RESTAURANT1_ID));
@@ -45,7 +45,7 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        Dish newDish = new Dish(null, "БигМак", LocalDate.now(), 500);
+        Dish newDish = getCreatedToday();
         Dish created = service.create(newDish, RESTAURANT1_ID);
         Dish updated = getUpdated(created);
         service.update(updated, RESTAURANT1_ID);
@@ -54,7 +54,7 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void updateNotFound() {
-        Dish newDish = new Dish(null, "БигМак", LocalDate.now(), 500);
+        Dish newDish = getCreatedToday();;
         Dish created = service.create(newDish, RESTAURANT1_ID);
         Dish updated = getUpdated(created);
         updated.setId(1L);
@@ -64,7 +64,7 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void updateNotOwner() {
-        Dish newDish = new Dish(null, "БигМак", LocalDate.now(), 500);
+        Dish newDish = getCreatedToday();
         Dish created = service.create(newDish, RESTAURANT1_ID);
         Dish updated = getUpdated(created);
         assertThrows(NotFoundException.class, () ->

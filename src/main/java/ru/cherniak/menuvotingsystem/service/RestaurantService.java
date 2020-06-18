@@ -35,7 +35,6 @@ public class RestaurantService {
         return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
     }
 
-
     private Restaurant save(Restaurant restaurant) {
         if (!restaurant.isNew() && get(restaurant.id()) == null) {
             return null;

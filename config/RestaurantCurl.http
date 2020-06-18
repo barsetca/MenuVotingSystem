@@ -41,8 +41,8 @@ Content-Type: application/json
   "url": "update.ru"
 }
 
-###update restaurant NotFound (422 - Unprocessable Entity) id=1---------------------------------------------------------
-# curl -X PUT -d '{"name":"Update_Roma","address":"пр.СтачекUpdate","phone":"(812)318-56-98","url":"update.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/1 --user admin@gmail.com:admin
+###update restaurant NotFound (422 - Unprocessable Entity) id=1--------------------------------------------------------
+# curl -X PUT -d '{"name":"Up_Roma","address":"пр.СтачекUp","phone":"(812)318-56-98","url":"up.ru"}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/1 --user admin@gmail.com:admin
 PUT http://localhost:8080/mvs/rest/admin/restaurants/1
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
@@ -59,39 +59,64 @@ Content-Type: application/json
 DELETE http://localhost:8080/mvs/rest/admin/restaurants/100015
 Authorization: Basic admin@gmail.com admin
 
-### DELETE restaurant NotFound (422 - Unprocessable Entity) id=1-------------------------------------------------------------
+### DELETE restaurant NotFound (422 - Unprocessable Entity) id=1-------------------------------------------------------
 # curl -X DELETE http://localhost:8080/mvs/rest/admin/restaurants/1 --user admin@gmail.com:admin
 DELETE http://localhost:8080/mvs/rest/admin/restaurants/1
 Authorization: Basic admin@gmail.com admin
 
-###getAllWithDishes ------------------------------------------------------------------------------------------------
+###getAllWithDishes ---------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/restaurants/dishes --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/restaurants/dishes
 Authorization: Basic admin@gmail.com admin
 
+###getAllWithDishes (403 – Forbidden) ---------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/admin/restaurants/dishes --user user@yandex.ru:password
+GET http://localhost:8080/mvs/rest/admin/restaurants/dishes
+Authorization: Basic user@yandex.ru password
 
-###UserRestaurantRestController-----------------------------------------------------------------------------------------
+###
+
+###UserRestaurantRestController----------------------------------------------------------------------------------------
 ###get-----------------------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/100003 --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/100003
 Authorization: Basic user@yandex.ru password
+
+###get(check for ROLE_ADMIN)-------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants/100003 --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/user/restaurants/100003
+Authorization: Basic admin@gmail.com admin
+
+###get (401 – Unauthorized)--------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants/100003 --user not@exist.com notexist
+GET http://localhost:8080/mvs/rest/user/restaurants/100003
+Authorization: Basic not@exist.com notexist
 
 ###get restaurant NotFound (UNPROCESSABLE_ENTITY) id=1-----------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/1 --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/1
 Authorization: Basic user@yandex.ru password
 
-###getAll--------------------------------------------------------------------------------------------------------------
+###getAll(ROLE_USER)---------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants
 Authorization: Basic user@yandex.ru password
+
+###getAll(ROLE_ADMIN)--------------------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants  --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/user/restaurants
+Authorization: Basic admin@gmail.com admin
+
+###getAll(ROLE_ROLE_ANONYMOUS)-----------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants
+GET http://localhost:8080/mvs/rest/user/restaurants
 
 ###getByName-----------------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/byName?name=McDonalds --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/byName?name=McDonalds
 Authorization: Basic user@yandex.ru password
 
-###getByName restaurant NotFound (UNPROCESSABLE_ENTITY) name=unknownName--------------------------------------------------
+###getByName restaurant NotFound (422 - Unprocessable Entity") name=unknownName----------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/byName?name=unknownName --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/byName?name=unknownName
 Authorization: Basic user@yandex.ru password
@@ -102,4 +127,3 @@ GET http://localhost:8080/mvs/rest/user/restaurants/dishes/today
 Authorization: Basic user@yandex.ru password
 
 ###
-
