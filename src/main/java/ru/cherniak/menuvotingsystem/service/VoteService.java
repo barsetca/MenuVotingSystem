@@ -1,6 +1,7 @@
 package ru.cherniak.menuvotingsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class VoteService {
     }
 
      @Transactional
+     @CacheEvict(value = "restaurants", allEntries = true)
     public Vote save(long userId, long restaurantId) {
         if (getByDateNow(userId) != null) {
             checkTimeBorder();
@@ -51,6 +53,7 @@ public class VoteService {
     }
 
     @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(long userId) {
         checkTimeBorder();
         LocalDate date = LocalDate.now();

@@ -121,18 +121,12 @@ Authorization: Basic user@yandex.ru password
 GET http://localhost:8080/mvs/rest/user/restaurants
 Authorization: Basic user@yandex.ru password
 
-###
-
-###
 ###getAllWithTodayMenu ------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/today --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/dishes/today
 Authorization: Basic user@yandex.ru password
 
 ###
-
-
-
 
 
 ###

@@ -19,7 +19,8 @@ public interface JpaUserRepository extends JpaRepository<User, Long> {
 
     User getByEmail(@Param("email") String email);
 
-    @EntityGraph(attributePaths = {"votes", "roles"})
+    //    https://stackoverflow.com/a/46013654/548473
+    @EntityGraph(attributePaths = {"votes", "roles"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT u FROM User u WHERE u.id=:userId")
     User findOneWithVotes(@Param("userId") long userId);
 

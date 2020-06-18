@@ -1,6 +1,7 @@
 package ru.cherniak.menuvotingsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -46,18 +47,21 @@ public class DishService {
     }
 
     @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Dish create(Dish dish, long restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         return checkNotFoundWithMsg(save(dish, restaurantId), "restaurantId= " + restaurantId);
     }
 
     @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void update(Dish dish, long restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         checkNotFoundWithMsg(save(dish, restaurantId), "id= " + dish.getId() + ", restaurantId= " + restaurantId);
     }
 
     @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(long id, long restaurantId) {
         checkNotFoundBooleanMsg(dishRepository.delete(id, restaurantId) != 0, "id= " + id + ", restaurantId= " + restaurantId);
     }
