@@ -40,7 +40,6 @@ public class VoteService {
     }
 
     @Transactional
-    @CacheEvict(value = "restaurants", allEntries = true)
     public Vote save(long userId, long restaurantId) {
         if (getByDateNow(userId) != null) {
             checkTimeBorder();
@@ -53,7 +52,6 @@ public class VoteService {
     }
 
     @Transactional
-    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(long userId) {
         checkTimeBorder();
         LocalDate date = LocalDate.now();
