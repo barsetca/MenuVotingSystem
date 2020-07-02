@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.user;
+package ru.cherniak.menuvotingsystem.web.admin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.service.UserService;
 import ru.cherniak.menuvotingsystem.util.exception.NotFoundException;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
+import ru.cherniak.menuvotingsystem.web.admin.AdminUserRestController;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.user;
+package ru.cherniak.menuvotingsystem.web.admin;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.View;
 import ru.cherniak.menuvotingsystem.model.User;
+import ru.cherniak.menuvotingsystem.web.AbstractUserController;
 
 import java.net.URI;
 import java.util.List;

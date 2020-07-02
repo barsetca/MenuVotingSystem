@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.dish;
+package ru.cherniak.menuvotingsystem.web.user;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cherniak.menuvotingsystem.model.Dish;
+import ru.cherniak.menuvotingsystem.web.AbstractDishController;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.restaurant;
+package ru.cherniak.menuvotingsystem.web.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.service.DishService;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
+import ru.cherniak.menuvotingsystem.web.user.UserRestaurantRestController;
 
 import java.util.List;
 

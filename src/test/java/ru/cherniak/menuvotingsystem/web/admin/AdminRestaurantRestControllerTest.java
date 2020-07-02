@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.restaurant;
+package ru.cherniak.menuvotingsystem.web.admin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
+import ru.cherniak.menuvotingsystem.web.admin.AdminRestaurantRestController;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

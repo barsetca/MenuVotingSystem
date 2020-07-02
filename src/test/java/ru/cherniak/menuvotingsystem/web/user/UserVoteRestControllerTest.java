@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.vote;
+package ru.cherniak.menuvotingsystem.web.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
 import ru.cherniak.menuvotingsystem.to.VoteTo;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
+import ru.cherniak.menuvotingsystem.web.user.UserVoteRestController;
 
 import java.time.LocalDate;
 

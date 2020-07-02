@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.dish;
+package ru.cherniak.menuvotingsystem.web.admin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

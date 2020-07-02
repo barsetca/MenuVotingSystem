@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.vote;
+package ru.cherniak.menuvotingsystem.web.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

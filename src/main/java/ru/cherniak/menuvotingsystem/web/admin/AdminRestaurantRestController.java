@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.web.restaurant;
+package ru.cherniak.menuvotingsystem.web.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

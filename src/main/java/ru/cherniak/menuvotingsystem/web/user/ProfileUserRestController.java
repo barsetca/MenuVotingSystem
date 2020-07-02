@@ -9,6 +9,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.cherniak.menuvotingsystem.AuthorizedUser;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.to.UserTo;
+import ru.cherniak.menuvotingsystem.web.AbstractUserController;
 
 import javax.validation.Valid;
 import java.net.URI;
