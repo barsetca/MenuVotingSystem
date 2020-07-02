@@ -53,7 +53,7 @@ Content-Type: application/json
 DELETE http://localhost:8080/mvs/rest/user/votes
 Authorization: Basic user@yandex.ru password
 
-###getToday if not exist - 422 - Unprocessable Entity)-----------------------------------------------------------------
+###getToday (if not exist - 422 - Unprocessable Entity)-----------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/votes/today --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/votes/today
 Authorization: Basic user@yandex.ru password

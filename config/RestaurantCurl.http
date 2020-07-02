@@ -87,11 +87,6 @@ Authorization: Basic user@yandex.ru password
 GET http://localhost:8080/mvs/rest/user/restaurants/100003
 Authorization: Basic admin@gmail.com admin
 
-###get (401 – Unauthorized)--------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants/100003 --user not@exist.com notexist
-GET http://localhost:8080/mvs/rest/user/restaurants/100003
-Authorization: Basic not@exist.com notexist
-
 ###get restaurant NotFound (UNPROCESSABLE_ENTITY) id=1-----------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/restaurants/1 --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/1
