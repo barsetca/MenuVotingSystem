@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.UserTestData;
@@ -33,6 +34,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     VoteService voteService;
 
     @Test
+    @Transactional
     void createWithLocation() throws Exception {
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/byRestaurant")
                 .param("restaurantId", "100002")

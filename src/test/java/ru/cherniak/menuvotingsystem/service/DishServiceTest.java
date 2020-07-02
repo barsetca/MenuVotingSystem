@@ -31,7 +31,7 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     public void createNotOwner() {
-        assertThrows(DataIntegrityViolationException.class, () ->
+        assertThrows(NotFoundException.class, () ->
                 service.create(getCreatedToday(), 1));
     }
 

@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.model.Vote;
+import ru.cherniak.menuvotingsystem.repository.JpaRestaurantRepository;
+import ru.cherniak.menuvotingsystem.repository.JpaUserRepository;
 import ru.cherniak.menuvotingsystem.repository.JpaVoteRepository;
 import ru.cherniak.menuvotingsystem.to.VoteTo;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
@@ -29,13 +31,15 @@ public class VoteService {
     private static final Sort SORT_DATE = Sort.by(Sort.Order.desc("date"));
 
     private final JpaVoteRepository voteRepository;
-
-    @PersistenceContext(type = PersistenceContextType.EXTENDED)
-    private EntityManager em;
+    private final JpaUserRepository userRepository;
+    private final JpaRestaurantRepository restaurantRepository;
 
     @Autowired
-    public VoteService(JpaVoteRepository voteRepository) {
+    public VoteService(JpaVoteRepository voteRepository, JpaUserRepository userRepository, JpaRestaurantRepository restaurantRepository  ) {
         this.voteRepository = voteRepository;
+        this.userRepository = userRepository;
+        this.restaurantRepository = restaurantRepository;
+
     }
 
     @Transactional
@@ -45,8 +49,8 @@ public class VoteService {
             delete(userId);
         }
         Vote vote = new Vote(LocalDate.now());
-        vote.setUser(em.getReference(User.class, userId));
-        vote.setRestaurant(em.getReference(Restaurant.class, restaurantId));
+        vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+        vote.setUser(userRepository.getOne(userId));
         return checkNotFoundWithMsg(voteRepository.save(vote), "restaurantId= " + restaurantId);
     }
 
@@ -66,7 +70,7 @@ public class VoteService {
                 voteRepository.findOneWithRestaurantByDateAndUserId(LocalDate.now(), userId).orElse(null),
                 "userId" + userId);
     }
-
+    @Transactional
     public VoteTo getVoteToToday(long userId) {
         Vote voteWithRestaurantToday = getWithRestaurantToday(userId);
         return VoteUtil.createTo(voteWithRestaurantToday);

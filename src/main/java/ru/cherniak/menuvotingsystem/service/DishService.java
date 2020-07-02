@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.repository.JpaDishRepository;
+import ru.cherniak.menuvotingsystem.repository.JpaRestaurantRepository;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
 import javax.persistence.EntityManager;
@@ -25,24 +26,26 @@ import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWith
 public class DishService {
 
     private static final Sort SORT_DATE_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("name"));
-    private static final Sort SORT_DATE_RID_NAME = Sort.by(Sort.Order.desc("date"), Sort.Order.asc("restaurant.id"), Sort.Order.asc("name"));
     private static final Sort SORT_NAME = Sort.by(Sort.Order.asc("name"));
 
     private final JpaDishRepository dishRepository;
-
-    @PersistenceContext
-    private EntityManager em;
+    private final JpaRestaurantRepository restaurantRepository;
 
     @Autowired
-    public DishService(JpaDishRepository dishRepository) {
+    public DishService(JpaDishRepository dishRepository, JpaRestaurantRepository restaurantRepository) {
         this.dishRepository = dishRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     private Dish save(Dish dish, long restaurantId) {
         if (!dish.isNew() && get(dish.id(), restaurantId) == null) {
             return null;
         }
-        dish.setRestaurant(em.getReference(Restaurant.class, restaurantId));
+        Restaurant restaurant =  restaurantRepository.findById(restaurantId).orElse(null);
+        if (restaurant == null){
+            return null;
+        }
+        dish.setRestaurant(restaurant);
         return dishRepository.save(dish);
     }
 

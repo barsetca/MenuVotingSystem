@@ -72,7 +72,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Transactional(propagation = Propagation.NEVER)

@@ -3,6 +3,7 @@ package ru.cherniak.menuvotingsystem.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.VoteTestData;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.to.VoteTo;
@@ -160,6 +161,7 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    @Transactional
     void getVoteToToday() {
         Vote vote = service.save(ADMIN_ID, RESTAURANT2_ID);
         VoteTo today = service.getVoteToToday(ADMIN_ID);
