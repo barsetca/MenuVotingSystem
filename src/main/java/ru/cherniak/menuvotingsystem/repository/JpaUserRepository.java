@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.repository.user;
+package ru.cherniak.menuvotingsystem.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

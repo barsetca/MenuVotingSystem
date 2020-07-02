@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
-import ru.cherniak.menuvotingsystem.repository.dish.JpaDishRepository;
+import ru.cherniak.menuvotingsystem.repository.JpaDishRepository;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
 import javax.persistence.EntityManager;

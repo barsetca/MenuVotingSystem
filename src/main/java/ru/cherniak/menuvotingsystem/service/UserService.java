@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.AuthorizedUser;
 import ru.cherniak.menuvotingsystem.model.User;
-import ru.cherniak.menuvotingsystem.repository.user.JpaUserRepository;
+import ru.cherniak.menuvotingsystem.repository.JpaUserRepository;
 import ru.cherniak.menuvotingsystem.to.UserTo;
 import ru.cherniak.menuvotingsystem.util.UserUtil;
 

@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.repository.restaurant;
+package ru.cherniak.menuvotingsystem.repository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;

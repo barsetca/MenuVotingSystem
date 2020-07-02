@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
-import ru.cherniak.menuvotingsystem.repository.restaurant.JpaRestaurantRepository;
+import ru.cherniak.menuvotingsystem.repository.JpaRestaurantRepository;
 
 import java.time.LocalDate;
 import java.util.List;

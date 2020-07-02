@@ -1,4 +1,4 @@
-package ru.cherniak.menuvotingsystem.repository.dish;
+package ru.cherniak.menuvotingsystem.repository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
