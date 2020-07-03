@@ -7,12 +7,17 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.TestUtil;
+import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
+import ru.cherniak.menuvotingsystem.service.DishService;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
 import ru.cherniak.menuvotingsystem.web.AbstractControllerTest;
 import ru.cherniak.menuvotingsystem.web.admin.AdminRestaurantRestController;
 import ru.cherniak.menuvotingsystem.web.json.JsonUtil;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -30,6 +35,9 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Autowired
     RestaurantService restaurantService;
+
+    @Autowired
+    private DishService dishService;
 
 
     @Test
@@ -147,12 +155,15 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getAllWithDishes() throws Exception {
+    void getAllWithTodayMenu() throws Exception {
+
+        dishService.create(new Dish("Uno", 100), RESTAURANT1_ID);
+
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "dishes")
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT1, RESTAURANT2));
+                .andExpect(RESTAURANT_MATCHER.contentJson(List.of(RESTAURANT1)));
     }
 }

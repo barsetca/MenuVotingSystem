@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.RestaurantTestData;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
@@ -112,12 +113,19 @@ class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getAllWithDishes() {
-        List<Restaurant> restaurants = service.getAllWithDishes();
+    void getAllWithTodayMenu() {
+
+        Dish dish1 = dishService.create(new Dish("Uno", 100), RESTAURANT1_ID);
+        Dish dish2 = dishService.create(new Dish("Dos", 100), RESTAURANT1_ID);
+        Dish dish3 = dishService.create(new Dish("Tres", 100), RESTAURANT2_ID);
+
+        List<Restaurant> restaurants = service.getAllWithTodayMenu();
+        Assert.assertEquals(restaurants.size(), 2);
         Set<Dish> dishes1 = restaurants.get(0).getDishes();
         Set<Dish> dishes2 = restaurants.get(1).getDishes();
-        DISH_MATCHER.assertMatch(dishes1, ALL_DISHES_R1);
-        DISH_MATCHER.assertMatch(dishes2, ALL_DISHES_R2);
+        DISH_MATCHER.assertMatch(dishes1, dish2, dish1);
+        DISH_MATCHER.assertMatch(dishes2, dish3);
+
     }
 
     @Test
@@ -128,20 +136,6 @@ class RestaurantServiceTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Vete", "1234567")), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Veteranov avenue", "  ")), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Restaurant("MamaRoma", "Veteranov avenue", "123")), ConstraintViolationException.class);
-
-    }
-
-    @Test
-    void getAllWithDayMenu() {
-
-        Dish dish1 = dishService.create(new Dish("Uno", 100), RESTAURANT1_ID);
-        Dish dish2 = dishService.create(new Dish("Dos", 100), RESTAURANT1_ID);
-        Dish dish3 = dishService.create(new Dish("Tres", 100), RESTAURANT1_ID);
-
-        List<Restaurant> restaurants = service.getAllWithTodayMenu();
-        Assert.assertEquals(restaurants.size(), 1);
-        DISH_MATCHER.assertMatch(restaurants.get(0).getDishes().stream()
-                .sorted(DISH_COMPARATOR).collect(Collectors.toList()), dish2, dish3, dish1);
 
     }
 }

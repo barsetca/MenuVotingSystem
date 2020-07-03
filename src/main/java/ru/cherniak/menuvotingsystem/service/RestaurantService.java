@@ -3,7 +3,6 @@ package ru.cherniak.menuvotingsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,6 @@ import ru.cherniak.menuvotingsystem.repository.JpaRestaurantRepository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFound;
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNotFoundWithId;
@@ -75,17 +73,8 @@ public class RestaurantService {
         return checkNotFoundWithId(restaurantRepository.findOneWithDishes(id), id);
     }
 
-    public List<Restaurant> getAllWithDishes() {
-        return restaurantRepository.findAllWithDishes(SORT_BY_NAME);
-    }
-
     @Transactional
-    @Cacheable("restaurants")
     public List<Restaurant> getAllWithTodayMenu() {
-        List<Restaurant> restaurants = getAllWithDishes();
-        restaurants.forEach(r -> r.setDishes(r.getDishes().stream().filter(d ->
-                d.getDate().isEqual(LocalDate.now())).collect(Collectors.toSet())));
-        restaurants = restaurants.stream().filter(r -> r.getDishes().size() > 0).collect(Collectors.toList());
-        return restaurants;
+        return restaurantRepository.findAllWithTodayMenu(LocalDate.now(), SORT_BY_NAME);
     }
 }

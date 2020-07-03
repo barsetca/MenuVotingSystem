@@ -1,12 +1,10 @@
 package ru.cherniak.menuvotingsystem;
 
-import ru.cherniak.menuvotingsystem.model.AbstractBaseNameId;
 import ru.cherniak.menuvotingsystem.model.Dish;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 import static java.time.LocalDate.of;
@@ -14,8 +12,6 @@ import static ru.cherniak.menuvotingsystem.model.AbstractBase.START_SEQ;
 
 public class DishTestData {
     public static TestMatcher<Dish> DISH_MATCHER = TestMatcher.usingFieldsComparator(Dish.class, "restaurant");
-
-    public static final Comparator<Dish> DISH_COMPARATOR = Comparator.comparing(AbstractBaseNameId::getName);
 
     public static final long DISH_ID = START_SEQ + 4;
 

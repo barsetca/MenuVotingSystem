@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Restaurant;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,8 @@ public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long>
     Restaurant findOneWithDishes(@Param("id") long id);
 
     @Transactional
-    @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r")
-    List<Restaurant> findAllWithDishes(Sort sort);
+    @Query("SELECT DISTINCT r FROM Restaurant r INNER JOIN FETCH r.dishes d WHERE d.date=:date")
+    List<Restaurant> findAllWithTodayMenu(@Param("date") LocalDate date, Sort sort);
+
+
 }

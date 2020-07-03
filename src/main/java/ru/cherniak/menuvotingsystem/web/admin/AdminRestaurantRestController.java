@@ -61,7 +61,7 @@ public class AdminRestaurantRestController {
     @GetMapping("/dishes")
     public List<Restaurant> getAllWithTodayMenu() {
         log.info("getAllWithTodayMenu");
-        return restaurantService.getAllWithDishes();
+        return restaurantService.getAllWithTodayMenu();
     }
 
 }
