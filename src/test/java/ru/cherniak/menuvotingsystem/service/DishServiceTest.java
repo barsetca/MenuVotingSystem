@@ -30,12 +30,6 @@ class DishServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void createNotOwner() {
-        assertThrows(NotFoundException.class, () ->
-                service.create(getCreatedToday(), 1));
-    }
-
-    @Test
     void duplicateNameWithDateCreate() {
         Dish created = getCreatedToday();;
         service.create(created, RESTAURANT1_ID);

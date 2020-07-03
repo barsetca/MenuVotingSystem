@@ -52,18 +52,8 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createNotOwner() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/byRestaurant")
-                .param("restaurantId", "1")
-                .with(userHttpBasic(USER))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isConflict())
-                .andDo(print());
-    }
-
-    @Test
     void updateOutsideTime() throws Exception {
-        voteService.save(ADMIN_ID, RESTAURANT2_ID);
+        voteService.create(ADMIN_ID, RESTAURANT2_ID);
         timeBorderMinus();
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/byRestaurant")
                 .param("restaurantId", "" + RESTAURANT1_ID)
@@ -76,7 +66,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateBeforeTimeBorder() throws Exception {
-        voteService.save(ADMIN_ID, RESTAURANT2_ID);
+        voteService.create(ADMIN_ID, RESTAURANT2_ID);
         timeBorderPlus();
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + "/byRestaurant")
                 .param("restaurantId", "" + RESTAURANT1_ID)
@@ -91,7 +81,7 @@ class UserVoteRestControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         timeBorderPlus();
-        Vote created = voteService.save(UserTestData.USER_ID, RESTAURANT1_ID);
+        Vote created = voteService.create(UserTestData.USER_ID, RESTAURANT1_ID);
         VOTE_TO_MATCHER.assertMatch(voteService.getAllVoteTos(USER_ID), VoteTestData.getVoteTo(created, RESTAURANT1),
                 VOTE_TO_3, VOTE_TO_1);
 

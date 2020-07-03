@@ -31,6 +31,9 @@ public interface JpaRestaurantRepository extends JpaRepository<Restaurant, Long>
     Restaurant findOneWithDishes(@Param("id") long id);
 
     @Transactional
+    Optional<Restaurant> findById(long id);
+
+    @Transactional
     @Query("SELECT DISTINCT r FROM Restaurant r INNER JOIN FETCH r.dishes d WHERE d.date=:date")
     List<Restaurant> findAllWithTodayMenu(@Param("date") LocalDate date, Sort sort);
 

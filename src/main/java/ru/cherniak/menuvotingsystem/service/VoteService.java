@@ -5,8 +5,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.cherniak.menuvotingsystem.model.Restaurant;
-import ru.cherniak.menuvotingsystem.model.User;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.repository.JpaRestaurantRepository;
 import ru.cherniak.menuvotingsystem.repository.JpaUserRepository;
@@ -15,9 +13,6 @@ import ru.cherniak.menuvotingsystem.to.VoteTo;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 import ru.cherniak.menuvotingsystem.util.VoteUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,23 +30,35 @@ public class VoteService {
     private final JpaRestaurantRepository restaurantRepository;
 
     @Autowired
-    public VoteService(JpaVoteRepository voteRepository, JpaUserRepository userRepository, JpaRestaurantRepository restaurantRepository  ) {
+    public VoteService(JpaVoteRepository voteRepository, JpaUserRepository userRepository, JpaRestaurantRepository restaurantRepository) {
         this.voteRepository = voteRepository;
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
-
     }
 
     @Transactional
-    public Vote save(long userId, long restaurantId) {
+    public Vote create(long userId, long restaurantId) {
+
         if (getByDateNow(userId) != null) {
-            checkTimeBorder();
-            delete(userId);
+            throw new IllegalArgumentException("Today's vote by " + userId + " already exists");
         }
         Vote vote = new Vote(LocalDate.now());
-        vote.setRestaurant(restaurantRepository.getOne(restaurantId));
         vote.setUser(userRepository.getOne(userId));
-        return checkNotFoundWithMsg(voteRepository.save(vote), "restaurantId= " + restaurantId);
+        vote.setRestaurant(restaurantRepository.findById(restaurantId).orElse(null));
+
+        return voteRepository.save(vote);
+    }
+
+    @Transactional
+    public Vote update(long userId, long restaurantId) {
+
+        Vote update = getByDateNow(userId);
+        if (update == null) {
+            return null;
+        }
+        checkTimeBorder();
+        update.setRestaurant(restaurantRepository.findById(restaurantId).orElse(null));
+        return voteRepository.save(update);
     }
 
     @Transactional
@@ -70,6 +77,7 @@ public class VoteService {
                 voteRepository.findOneWithRestaurantByDateAndUserId(LocalDate.now(), userId).orElse(null),
                 "userId" + userId);
     }
+
     @Transactional
     public VoteTo getVoteToToday(long userId) {
         Vote voteWithRestaurantToday = getWithRestaurantToday(userId);

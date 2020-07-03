@@ -14,7 +14,6 @@ import ru.cherniak.menuvotingsystem.model.Restaurant;
 import ru.cherniak.menuvotingsystem.service.RestaurantService;
 
 import java.net.URI;
-import java.util.List;
 
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.assureIdConsistent;
 import static ru.cherniak.menuvotingsystem.util.ValidationUtil.checkNew;
@@ -57,11 +56,4 @@ public class AdminRestaurantRestController {
         log.info("delete {}", id);
         restaurantService.delete(id);
     }
-
-    @GetMapping("/dishes")
-    public List<Restaurant> getAllWithTodayMenu() {
-        log.info("getAllWithTodayMenu");
-        return restaurantService.getAllWithTodayMenu();
-    }
-
 }

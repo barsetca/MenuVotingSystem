@@ -63,7 +63,7 @@ Content-Type: application/json
   "price": 500
 }
 
-###create newDish by restaurantId 100002 with Restaurant now-----------------------------------------------------------
+###create newDish by restaurantId 100002 now-----------------------------------------------------------
 # curl -X POST -d '{"name":"SecondName","price":500}' -H "Content-Type:application/json" http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes --user admin@gmail.com:admin
 POST http://localhost:8080/mvs/rest/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin

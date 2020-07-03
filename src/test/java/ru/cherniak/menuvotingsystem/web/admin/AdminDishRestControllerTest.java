@@ -65,16 +65,6 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    void createNotOwner() throws Exception {
-        Dish newDish = getCreatedToday();
-        mockMvc.perform(MockMvcRequestBuilders.post("/rest/admin/restaurants/" + 1 + "/dishes")
-                .with(userHttpBasic(ADMIN))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(newDish)))
-                .andExpect(status().isUnprocessableEntity());
-    }
-
     @Transactional(propagation = Propagation.NEVER)
     @Test
     void createDuplicateNameOneDateByRestaurant() throws Exception {

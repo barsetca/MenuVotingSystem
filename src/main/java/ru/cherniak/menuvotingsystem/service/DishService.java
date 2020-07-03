@@ -13,8 +13,6 @@ import ru.cherniak.menuvotingsystem.repository.JpaDishRepository;
 import ru.cherniak.menuvotingsystem.repository.JpaRestaurantRepository;
 import ru.cherniak.menuvotingsystem.util.DateTimeUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,8 +39,8 @@ public class DishService {
         if (!dish.isNew() && get(dish.id(), restaurantId) == null) {
             return null;
         }
-        Restaurant restaurant =  restaurantRepository.findById(restaurantId).orElse(null);
-        if (restaurant == null){
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        if (restaurant == null) {
             return null;
         }
         dish.setRestaurant(restaurant);
@@ -53,7 +51,7 @@ public class DishService {
     @CacheEvict(value = "restaurants", allEntries = true)
     public Dish create(Dish dish, long restaurantId) {
         Assert.notNull(dish, "dish must not be null");
-        return checkNotFoundWithMsg(save(dish, restaurantId), "restaurantId= " + restaurantId);
+        return save(dish, restaurantId);
     }
 
     @Transactional

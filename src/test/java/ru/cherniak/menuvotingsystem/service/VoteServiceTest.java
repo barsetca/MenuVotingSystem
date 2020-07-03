@@ -30,44 +30,37 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        service.save(ADMIN_ID, RESTAURANT2_ID);
+        service.create(ADMIN_ID, RESTAURANT2_ID);
         RESTAURANT_MATCHER.assertMatch(service.getWithRestaurantToday(ADMIN_ID).getRestaurant(), RESTAURANT2);
     }
 
     @Test
     void updateBeforeTimeBorder() throws Exception {
-        service.save(ADMIN_ID, RESTAURANT2_ID);
+        Vote create = service.create(ADMIN_ID, RESTAURANT2_ID);
         timeBorderPlus();
-        service.save(ADMIN_ID, RESTAURANT1_ID);
+        Vote update = service.update(ADMIN_ID, RESTAURANT1_ID);
         RESTAURANT_MATCHER.assertMatch(service.getWithRestaurantToday(ADMIN_ID).getRestaurant(), RESTAURANT1);
+        assertEquals(create.getId(), update.getId());
         timeBorderFix();
     }
 
     @Test
     void updateAfterTimeBorder() throws Exception {
-        service.save(ADMIN_ID, RESTAURANT2_ID);
+        service.create(ADMIN_ID, RESTAURANT2_ID);
         timeBorderMinus();
         assertThrows(OutsideTimeException.class, () ->
-                service.save(ADMIN_ID, RESTAURANT1_ID));
+                service.update(ADMIN_ID, RESTAURANT1_ID));
         timeBorderFix();
     }
 
-    @Test
-    void createUpdateNotOwner() throws Exception {
-        timeBorderPlus();
-        assertThrows(DataIntegrityViolationException.class, () ->
-                service.save(ADMIN_ID, 1));
-        timeBorderFix();
-    }
 
     @Test
-    void saveDuplicate() throws Exception {
-        Vote created = service.save(ADMIN_ID, RESTAURANT2_ID);
+    void createIfAlreadyExist() throws Exception {
+        Vote created = service.create(ADMIN_ID, RESTAURANT2_ID);
         VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(ADMIN_ID), created, VOTE_2);
-
         timeBorderPlus();
-        Vote duplicatedDateUserId = service.save(ADMIN_ID, RESTAURANT2_ID);
-        VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(ADMIN_ID), duplicatedDateUserId, VOTE_2);
+        assertThrows(IllegalArgumentException.class, () ->
+                service.create(ADMIN_ID, RESTAURANT2_ID));
         timeBorderFix();
     }
 
@@ -86,7 +79,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void delete() throws Exception {
-        Vote created = service.save(USER_ID, RESTAURANT2_ID);
+        Vote created = service.create(USER_ID, RESTAURANT2_ID);
         VOTE_MATCHER.assertMatch(service.getAllByUserIdWithRestaurant(USER_ID), created, VOTE_3, VOTE_1);
 
         timeBorderPlus();
@@ -105,7 +98,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void deleteAfterTimeBorder() throws Exception {
-        service.save(USER_ID, RESTAURANT2_ID);
+        service.create(USER_ID, RESTAURANT2_ID);
         timeBorderMinus();
         assertThrows(OutsideTimeException.class, () -> service.delete(USER_ID));
         timeBorderFix();
@@ -121,7 +114,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void getVoteTosBetweenInclusive() {
-        Vote today = service.save(USER_ID, RESTAURANT1_ID);
+        Vote today = service.create(USER_ID, RESTAURANT1_ID);
 
         List<VoteTo> voteTos1 = service.getVoteTosBetweenInclusive(DATE_290420, DATE_300420, USER_ID);
         List<VoteTo> voteTos2 = service.getVoteTosBetweenInclusive(DATE_300420, LocalDate.now(), USER_ID);
@@ -138,7 +131,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void getVoteTosBetweenInclusiveBetweenWithNull() {
 
-        Vote today = service.save(USER_ID, RESTAURANT1_ID);
+        Vote today = service.create(USER_ID, RESTAURANT1_ID);
         List<VoteTo> voteTos1 = service.getVoteTosBetweenInclusive(DATE_300420, null, USER_ID);
         List<VoteTo> voteTos2 = service.getVoteTosBetweenInclusive(null, DATE_300420, ADMIN_ID);
         List<VoteTo> voteTos3 = service.getVoteTosBetweenInclusive(null, null, USER_ID);
@@ -150,7 +143,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void getWithRestaurantToday() {
-        service.save(ADMIN_ID, RESTAURANT2_ID);
+        service.create(ADMIN_ID, RESTAURANT2_ID);
         RESTAURANT_MATCHER.assertMatch(service.getWithRestaurantToday(ADMIN_ID).getRestaurant(), RESTAURANT2);
     }
 
@@ -163,7 +156,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     @Transactional
     void getVoteToToday() {
-        Vote vote = service.save(ADMIN_ID, RESTAURANT2_ID);
+        Vote vote = service.create(ADMIN_ID, RESTAURANT2_ID);
         VoteTo today = service.getVoteToToday(ADMIN_ID);
         VoteTo voteTo = VoteUtil.createTo(vote);
         VOTE_TO_MATCHER.assertMatch(today, voteTo);

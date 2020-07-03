@@ -9,9 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cherniak.menuvotingsystem.model.Vote;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +17,9 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface JpaVoteRepository extends JpaRepository<Vote, Long> {
 
-
     @Modifying
     @Query("DELETE FROM Vote v WHERE v.date=:date AND v.user.id=:userId")
     int delete(@Param("date") LocalDate date, @Param("userId") long userId);
-
 
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.id=:id AND v.user.id=:userId")
     Optional<Vote> findByDateAndUserIdWithRestaurant(@Param("id") long id, @Param("userId") long userId);

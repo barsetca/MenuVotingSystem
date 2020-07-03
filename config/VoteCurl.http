@@ -31,16 +31,26 @@ POST http://localhost:8080/mvs/rest/user/votes/byRestaurant?restaurantId=100002
 Authorization: Basic user@yandex.ru password
 Content-Type: application/json
 
+###create vote for 100002 ---------------------------------------------------------------------------------------------
+# curl -X POST -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/byRestaurant?restaurantId=100002 --user admin@gmail.com:admin
+#POST http://localhost:8080/mvs/rest/user/votes/byRestaurant?restaurantId=100002
+#Authorization: Basic admin@gmail.com admin
+#Content-Type: application/json
+
+###
+
 ###getAll(check create)------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/user/votes --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/votes
 Authorization: Basic user@yandex.ru password
 
-###create Conflict vote by restaurant not exist restaurantId=1---------------------------------------------------------
+###create VALIDATION_ERROR vote by restaurant already exists---------------------------------------------------------
 # curl -X POST -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/by?restaurantId=1 --user user@yandex.ru:password
-POST http://localhost:8080/mvs/rest/user/votes/byRestaurant?restaurantId=1
+POST http://localhost:8080/mvs/rest/user/votes/byRestaurant?restaurantId=100002
 Authorization: Basic user@yandex.ru password
 Content-Type: application/json
+
+
 
 ###update  vote (vote in favor of another one) for 100002 (only LocalDate.now before 11-00 - the constant timeBorder is set in the **\ru\cherniak\menuvotingsystem\util\DateTimeUtil
 # curl -X PUT -H "Content-Type:application/json" http://localhost:8080/mvs/rest/user/votes/by?restaurantId=100002 --user user@yandex.ru:password

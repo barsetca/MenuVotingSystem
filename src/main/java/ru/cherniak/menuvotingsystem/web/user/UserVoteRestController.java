@@ -13,6 +13,7 @@ import ru.cherniak.menuvotingsystem.AuthorizedUser;
 import ru.cherniak.menuvotingsystem.model.Vote;
 import ru.cherniak.menuvotingsystem.service.VoteService;
 import ru.cherniak.menuvotingsystem.to.VoteTo;
+import ru.cherniak.menuvotingsystem.util.ValidationUtil;
 import ru.cherniak.menuvotingsystem.util.VoteUtil;
 
 import java.net.URI;
@@ -65,7 +66,7 @@ public class UserVoteRestController {
                                                      @AuthenticationPrincipal AuthorizedUser authUser) {
         long userId = authUser.getId();
         log.info("createWithLocation by user {} restaurant {}", userId, restaurantId);
-        Vote created = voteService.save(userId, restaurantId);
+        Vote created = voteService.create(userId, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_USER_VOTES + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -78,7 +79,7 @@ public class UserVoteRestController {
                        @AuthenticationPrincipal AuthorizedUser authUser) {
         long userId = authUser.getId();
         log.info("update by user {} restaurant {}", userId, restaurantId);
-        voteService.save(userId, restaurantId);
+        ValidationUtil.checkNotFoundWithId(voteService.update(userId, restaurantId), userId);
     }
 
     @DeleteMapping

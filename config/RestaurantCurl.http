@@ -64,15 +64,10 @@ Authorization: Basic admin@gmail.com admin
 DELETE http://localhost:8080/mvs/rest/admin/restaurants/1
 Authorization: Basic admin@gmail.com admin
 
-###getAllWithDishes ---------------------------------------------------------------------------------------------------
+###getAllWithTodayMenu ---------------------------------------------------------------------------------------------------
 # curl http://localhost:8080/mvs/rest/admin/restaurants/dishes --user admin@gmail.com:admin
 GET http://localhost:8080/mvs/rest/admin/restaurants/dishes
 Authorization: Basic admin@gmail.com admin
-
-###getAllWithDishes (403 – Forbidden) ---------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants/dishes --user user@yandex.ru:password
-GET http://localhost:8080/mvs/rest/admin/restaurants/dishes
-Authorization: Basic user@yandex.ru password
 
 ###
 
@@ -116,9 +111,19 @@ Authorization: Basic user@yandex.ru password
 GET http://localhost:8080/mvs/rest/user/restaurants/byName?name=unknownName
 Authorization: Basic user@yandex.ru password
 
-###getAllWithTodayMenu ------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/user/restaurants/today --user user@yandex.ru:password
+###getAllWithTodayMenu (ROLE_USER) ------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants/dishes//today --user user@yandex.ru:password
 GET http://localhost:8080/mvs/rest/user/restaurants/dishes/today
 Authorization: Basic user@yandex.ru password
+
+###getAllWithTodayMenu (ROLE_ADMIN) ------------------------------------------------------------------------------------
+# curl http://localhost:8080/mvs/rest/user/restaurants/dishes/today --user admin@gmail.com:admin
+GET http://localhost:8080/mvs/rest/user/restaurants/dishes/today
+Authorization: Basic admin@gmail.com admin
+
+###
+
+
+
 
 ###
