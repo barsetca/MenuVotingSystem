@@ -102,10 +102,10 @@ public class ExceptionInfoHandler {
             if (rootMsg.toLowerCase().contains("users_unique_email_idx")) {
                 rootMsg = "User with this email already exists";
             }
-            if (rootMsg.toLowerCase().contains("votes_unique_date_user_id_idx")) {
+            if (rootMsg.toLowerCase().contains("votes_unique_user_id_date_idx")) {
                 rootMsg = "Vote with this date already exists";
             }
-            if (rootMsg.toLowerCase().contains("dishes_unique_date_name_restaurant_id_idx")) {
+            if (rootMsg.toLowerCase().contains("dishes_unique_restaurant_id_date_name_idx")) {
                 rootMsg = "Dish with this name on the date already exists";
             }
 

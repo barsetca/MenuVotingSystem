@@ -44,7 +44,7 @@ public abstract class AbstractDishController {
 
     public List<Dish> getTodayMenu(long restaurantId) {
         log.info("getTodayMenu of restaurant {}", restaurantId);
-        return dishService.getTodayMenu(restaurantId);
+        return dishService.getTodayMenuByRestaurant(restaurantId);
     }
 
     public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate,

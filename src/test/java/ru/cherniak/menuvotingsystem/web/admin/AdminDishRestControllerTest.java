@@ -7,7 +7,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.cherniak.menuvotingsystem.DishTestData;
 import ru.cherniak.menuvotingsystem.TestUtil;
 import ru.cherniak.menuvotingsystem.model.Dish;
 import ru.cherniak.menuvotingsystem.service.DishService;
@@ -138,7 +137,7 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        DISH_MATCHER.assertMatch(dishService.getDayMenu(DATE_290420, RESTAURANT1_ID), DISH_2);
+        DISH_MATCHER.assertMatch(dishService.getDayMenuByRestaurant(DATE_290420, RESTAURANT1_ID), DISH_2);
     }
 
     @Test

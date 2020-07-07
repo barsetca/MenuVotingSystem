@@ -14,7 +14,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(
-        columnNames = {"date", "name", "restaurant_id"}, name = "dishes_unique_date_name_restaurant_id_idx")})
+        columnNames = {"date", "name", "restaurant_id"}, name = "dishes_unique_restaurant_id_date_name_idx")})
 public class Dish extends AbstractBaseNameId {
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp")

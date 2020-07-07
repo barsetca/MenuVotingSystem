@@ -25,7 +25,7 @@ class UserDishRestControllerTest extends AbstractControllerTest {
     DishService dishService;
 
     @Test
-    void getTodayMenu() throws Exception {
+    void getTodayMenuByRestaurant() throws Exception {
         Dish today1 = dishService.create(getCreatedToday(), RESTAURANT1_ID);
         Dish newDish = getCreatedToday();
         newDish.setName("Второе Имя");

@@ -76,12 +76,12 @@ public class DishService {
         return dishRepository.findAllByRestaurantId(restaurantId, SORT_DATE_NAME);
     }
 
-    public List<Dish> getDayMenu(@Nullable LocalDate date, long restaurantId) {
+    public List<Dish> getDayMenuByRestaurant(@Nullable LocalDate date, long restaurantId) {
         return dishRepository.findAllByDateAndRestaurantId(date, restaurantId, SORT_NAME);
     }
 
-    public List<Dish> getTodayMenu(long restaurantId) {
-        return getDayMenu(LocalDate.now(), restaurantId);
+    public List<Dish> getTodayMenuByRestaurant(long restaurantId) {
+        return getDayMenuByRestaurant(LocalDate.now(), restaurantId);
     }
 
     public List<Dish> getAllByRestaurantBetweenDatesInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, long restaurantId) {

@@ -1,8 +1,6 @@
 package ru.cherniak.menuvotingsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.domain.Sort;
@@ -42,20 +40,18 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
         return prepareAndSave(user);
     }
 
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
         checkNotFound(prepareAndSave(user), "user= " + user);
     }
 
-    @CacheEvict(value = "users", allEntries = true)
+
     @Transactional
     public void updateTo(UserTo userTo) {
         User user = get(userTo.id());
@@ -63,7 +59,6 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    @CacheEvict(value = "users", allEntries = true)
     public void delete(long id) /*throws NotFoundException*/ {
         checkNotFoundWithId(userRepository.delete(id) != 0, id);
     }
@@ -77,12 +72,10 @@ public class UserService implements UserDetailsService {
         return checkNotFound(userRepository.getByEmail(email), "email= " + email);
     }
 
-    @Cacheable("users")
     public List<User> getAll() {
         return userRepository.findAll(SORT_NAME_EMAIL);
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void enable(long id, boolean enabled) {
         User user = checkNotFoundWithId(get(id), id);

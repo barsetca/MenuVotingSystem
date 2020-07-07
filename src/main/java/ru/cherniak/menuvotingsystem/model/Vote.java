@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(
-        columnNames = {"date", "user_id"}, name = "votes_unique_date_user_id_idx")})
+        columnNames = {"date", "user_id"}, name = "votes_unique_user_id_date_idx")})
 public class Vote extends AbstractBase {
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp")

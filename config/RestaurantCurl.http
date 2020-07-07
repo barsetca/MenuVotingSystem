@@ -64,11 +64,6 @@ Authorization: Basic admin@gmail.com admin
 DELETE http://localhost:8080/mvs/rest/admin/restaurants/1
 Authorization: Basic admin@gmail.com admin
 
-###getAllWithTodayMenu ---------------------------------------------------------------------------------------------------
-# curl http://localhost:8080/mvs/rest/admin/restaurants/dishes --user admin@gmail.com:admin
-GET http://localhost:8080/mvs/rest/admin/restaurants/dishes
-Authorization: Basic admin@gmail.com admin
-
 ###
 
 ###UserRestaurantRestController----------------------------------------------------------------------------------------
